@@ -11,6 +11,8 @@ all: asteroids
 asteroids: asteroids.o
 	$(CC) $(LDFLAGS) -o asteroids asteroids.o $(LDLIBS)
 asteroids.o: asteroids.cpp
+clean:
+	rm -f asteroids asteroids.o
 
 .SUFFIXES: .cpp .o
 .cpp.o:
