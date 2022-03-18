@@ -1,75 +1,54 @@
 // Plays an asteroids game
 
 #include <iostream>
+#include <string>
+#include <exception>
+
 #include <SDL.h>
 
-using std::cout;    using std::endl;
-
-void handle_input(bool *running);
-void close(SDL_Renderer* renderer, SDL_Window* window);
+#include "handle_input.h"
+#include "SDL_Exception.h"
+#include "utility.h"
 
 int main()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        cout << "Failed to initialise SDL: " << SDL_GetError() << endl;
-        return -1;
-    }
+    try {
+        const int INIT_FLAGS = SDL_INIT_VIDEO;
+        init(INIT_FLAGS);
 
-    const int SCREEN_WIDTH = 960;
-    const int SCREEN_HEIGHT = 540;
-    SDL_Window *window = nullptr;
-    SDL_Renderer *renderer = nullptr;
+        SDL_Window *window = nullptr;
+        const std::string TITLE = "Asteroids";
+        const int SCREEN_WIDTH = 960;
+        const int SCREEN_HEIGHT = 540;
+        const int WINDOW_FLAGS = 0;
 
-    window = SDL_CreateWindow("Asteroids",
-                              SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              SCREEN_WIDTH, SCREEN_HEIGHT,
-                              0);
-    if (!window) {
-        cout << "Failed to create window: " << SDL_GetError() << endl;
-        return -1;
-    }
+        window = create_window(TITLE.c_str(),
+                               SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                               SCREEN_WIDTH, SCREEN_HEIGHT,
+                               WINDOW_FLAGS);
 
-    renderer = SDL_CreateRenderer(window, -1,
-                                  SDL_RENDERER_ACCELERATED);
+        SDL_Renderer *renderer = nullptr;
+        const int RENDERER_FLAGS = SDL_RENDERER_ACCELERATED;
 
-    if (!renderer) {
-        cout << "Failed to create renderer: " << SDL_GetError() << endl;
-        return -1;
-    }
+        renderer = create_renderer(window, -1, RENDERER_FLAGS);
 
-    // set background color to white
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        // set background color to white
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-    bool still_running = true;
-    while (still_running) {
-        SDL_RenderClear(renderer);
-        handle_input(&still_running);
-        SDL_RenderPresent(renderer);
-    }
-
-    close(renderer, window);
-
-    return 0;
-}
-
-void handle_input(bool *running)
-{
-    SDL_Event ev;
-    while (SDL_PollEvent(&ev)) {
-        if (ev.type == SDL_QUIT) {
-            *running = false;
+        bool running = true;
+        while (running) {
+            SDL_RenderClear(renderer);
+            handle_input(&running);
+            SDL_RenderPresent(renderer);
         }
-        else if (ev.type == SDL_KEYDOWN) {
-            if (ev.key.keysym.sym == SDLK_ESCAPE) {
-                *running = false;
-            }
-        }
-    }
-}
 
-void close(SDL_Renderer *renderer, SDL_Window *window)
-{
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+        close(renderer, window);
+
+        return 0;
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
 }
