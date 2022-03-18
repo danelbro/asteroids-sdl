@@ -1,12 +1,11 @@
 #include <SDL.h>
 
-#include "SDL_Exception.h"
 #include "utility.h"
 
 void init(Uint32 flags)
 {
     if (SDL_Init(flags) != 0)
-        throw SDL_Exception();
+        throw Sdl_exception();
 }
 
 SDL_Window* create_window(const char* title, int x, int y,
@@ -17,7 +16,7 @@ SDL_Window* create_window(const char* title, int x, int y,
     window = SDL_CreateWindow(title, x, y, w, h ,flags);
 
     if (!window)
-        throw SDL_Exception();
+        throw Sdl_exception();
 
     return window;
 }
@@ -28,7 +27,7 @@ SDL_Renderer* create_renderer(SDL_Window* window, int index, Uint32 flags)
     rend = SDL_CreateRenderer(window, index, flags);
 
     if (!rend)
-        throw SDL_Exception();
+        throw Sdl_exception();
 
     return rend;
 }

@@ -7,7 +7,6 @@
 #include <SDL.h>
 
 #include "handle_input.h"
-#include "SDL_Exception.h"
 #include "utility.h"
 
 int main()
