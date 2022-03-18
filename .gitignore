@@ -1,0 +1,10 @@
+# Ignore all
+*
+
+# Unignore source files
+!*.cpp
+!*.h
+!*.c
+!*.hpp
+!Makefile
+!.gitignore
