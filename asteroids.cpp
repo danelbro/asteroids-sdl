@@ -33,7 +33,7 @@ int main()
 
         renderer = create_renderer(window, -1, renderer_flags);
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 0x10, 0x13, 0x26, 0xff);
 
         SDL_Texture* player = nullptr;
         player = load_media("player-0.png", renderer, player);

@@ -52,10 +52,21 @@ SDL_Renderer* create_renderer(SDL_Window* window, int index, Uint32 flags)
 SDL_Texture* load_media(std::string path, SDL_Renderer* rend,
                         SDL_Texture* tex)
 {
-    tex = IMG_LoadTexture(rend, path.c_str());
+    SDL_Surface *img = nullptr;
+    img = IMG_Load(path.c_str());
+
+    if (!img)
+        throw Img_exception();
+
+    SDL_SetColorKey(img, SDL_TRUE, SDL_MapRGB(img->format, 0, 255, 255));
+
+    tex = SDL_CreateTextureFromSurface(rend, img);
 
     if (!tex)
         throw Img_exception();
+
+    SDL_FreeSurface(img);
+    img = nullptr;
 
     return tex;
 }
