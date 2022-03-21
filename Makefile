@@ -3,7 +3,7 @@
 
 CC = g++
 SDL_CFLAGS = $(shell sdl2-config --cflags)
-CFLAGS = -g -Og -Wall -Wextra -pedantic $(SDL_CFLAGS)
+CFLAGS = -g -Og -Wall -Wextra -pedantic -std=c++17 $(SDL_CFLAGS)
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = $(SDL_LDFLAGS) -lSDL2_image
 
