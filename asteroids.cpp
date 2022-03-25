@@ -9,8 +9,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "handle_input.h"
-#include "utility.h"
+#include "handle_input.hpp"
+#include "utility.hpp"
 
 int main()
 {
@@ -50,7 +50,7 @@ int main()
         player_rect.y = (screen_height / 2) - (player_rect.h / 2);
 
         double player_vel_x = 0.0, player_vel_y = 0.0;
-        const double delta_vel = 1.0, max_vel = 15.0;
+        const double delta_vel = 0.5, max_vel = 15.0;
         SDL_Rect dest;
         std::vector<bool> key_state(DIR_TOTAL, false);
 
@@ -108,14 +108,14 @@ int main()
                 player_rect.y = dest.y;
 
             // apply friction
-            player_vel_x *= 0.95;
-            player_vel_y *= 0.95;
+            player_vel_x *= 0.97;
+            player_vel_y *= 0.97;
 
             // clamp movement
-            if (std::abs(player_vel_x) < 0.3) {
+            if (std::abs(player_vel_x) < 0.15) {
                 player_vel_x = 0;
             }
-            if (std::abs(player_vel_y) < 0.3) {
+            if (std::abs(player_vel_y) < 0.15) {
                 player_vel_y = 0;
             }
 

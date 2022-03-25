@@ -10,9 +10,9 @@ LDLIBS = $(SDL_LDFLAGS) -lSDL2_image
 all: asteroids
 asteroids: asteroids.o handle_input.o utility.o
 	$(CC) $(LDFLAGS) -o asteroids asteroids.o handle_input.o utility.o $(LDLIBS)
-asteroids.o: asteroids.cpp handle_input.h utility.h
-handle_input.o: handle_input.cpp handle_input.h
-utility.o: utility.cpp utility.h
+asteroids.o: asteroids.cpp handle_input.hpp utility.hpp
+handle_input.o: handle_input.cpp handle_input.hpp
+utility.o: utility.cpp utility.hpp
 clean:
 	rm -f asteroids *.o
 

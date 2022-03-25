@@ -1,4 +1,4 @@
-#include "handle_input.h"
+#include "handle_input.hpp"
 
 #include <SDL.h>
 
