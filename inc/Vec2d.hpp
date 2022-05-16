@@ -4,6 +4,17 @@ struct Vec2d {
     double magnitude() const;
     double magnitude_squared() const;
 
+    Vec2d operator*(double x);
+    // dot product
+    double operator*(Vec2d otherVec);
+
+    Vec2d operator/(double x);
+
+    Vec2d operator+(Vec2d otherVec);
+
+    Vec2d operator-();
+    Vec2d operator-(Vec2d otherVec);
+
     Vec2d normalize();
     Vec2d normalizeInPlace();
     Vec2d update(double new_x, double new_y);

@@ -56,3 +56,32 @@ Vec2d Vec2d::rotate_deg(double deg)
 {
     return rotate_rad(deg * (M_PI / 180.0));
 }
+
+Vec2d Vec2d::operator*(double n)
+{
+    return Vec2d{ x * n, y * n };
+}
+double Vec2d::operator*(Vec2d otherVec)
+{
+    return x * otherVec.x + y * otherVec.y;
+}
+
+Vec2d Vec2d::operator/(double n)
+{
+    return Vec2d{ x / n, y / n };
+}
+
+Vec2d Vec2d::operator+(Vec2d otherVec)
+{
+    return Vec2d{ x + otherVec.x, y + otherVec.y };
+}
+
+Vec2d Vec2d::operator-()
+{
+    return Vec2d{ *this * -1 };
+}
+
+Vec2d Vec2d::operator-(Vec2d otherVec)
+{
+    return Vec2d{ x - otherVec.x, y - otherVec.y };
+}

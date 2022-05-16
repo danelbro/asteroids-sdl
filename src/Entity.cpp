@@ -59,16 +59,12 @@ void Player::update(std::array<bool, K_TOTAL> keyState)
     else
         velocity_direction = velocity.normalize();
 
-    auto totalForcesX{ ((acceleration_mag * facing_direction.x)
-                       + (drag * -velocity_direction.x)) };
-    auto totalForcesY{ ((acceleration_mag * facing_direction.y)
-                       + (drag * -velocity_direction.y)) };
+    auto totalForces{ ((facing_direction * acceleration_mag)
+                       + (-velocity_direction * drag)) };
 
-    auto accelerationX{ totalForcesX / mass };
-    auto accelerationY{ totalForcesY / mass };
+    auto acceleration{ totalForces / mass };
 
-    velocity.x += accelerationX;
-    velocity.y += accelerationY;
+    velocity = velocity + acceleration;
 
     rect.x -= velocity.x;
     rect.y -= velocity.y;
