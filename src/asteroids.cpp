@@ -20,40 +20,35 @@
 
 extern const SdlColor bg;
 
-int main()
-try
+void asteroids()
 {
     using std::chrono::high_resolution_clock;
     using std::chrono::duration;
 
-    // Colours
-
-    // SDL initialisation
-    constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
-    constexpr unsigned imgFlags = IMG_INIT_PNG;
-    init(sdlFlags, imgFlags);
-
     // Window initialisation
-    SDL_Window *window = nullptr;
+    std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
     char title[] = "Asteroids";
     const Box screen{ 960, 720 };
     constexpr unsigned windowFlags = 0;
-    window = createWindow(title,
-                           SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                           screen.w, screen.h, windowFlags);
+    window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
+        createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                     screen.w, screen.h, windowFlags)};
 
     // Renderer intialisation
-    SDL_Renderer *renderer = nullptr;
+    std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer> renderer{ nullptr };
     constexpr int rendererFlags = SDL_RENDERER_ACCELERATED;
-    renderer = createRenderer(window, -1, rendererFlags);
-    SDL_SetRenderDrawColor(renderer, bg.r, bg.g, bg.b, bg.a);
+    renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
+        createRenderer(window.get(), -1, rendererFlags)};
+
+    SDL_SetRenderDrawColor(renderer.get(), bg.r, bg.g, bg.b, bg.a);
 
     // Gameworld initialisation
     constexpr double fluidDensity{ 0.1 };
     GameWorld gameWorld{ screen, fluidDensity };
     // Make player
     std::vector<std::unique_ptr<Entity>> entities{ };
-    entities.push_back(std::make_unique<Player>("assets/player-0.png", renderer,
+    entities.push_back(std::make_unique<Player>("assets/player-0.png",
+                                                renderer.get(),
                                                 gameWorld));
 
     // Set up for main loop
@@ -79,10 +74,21 @@ try
             lag -= fps;
         }
 
-        render(entities, renderer, lag / fps);
+        render(entities, renderer.get(), lag / fps);
     }
+}
 
-    close(renderer, window);
+int main()
+try
+{
+    // SDL initialisation
+    constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
+    constexpr unsigned imgFlags = IMG_INIT_PNG;
+    init(sdlFlags, imgFlags);
+
+    asteroids();
+
+    SDL_Quit();
     return 0;
 }
 catch (std::exception &e)

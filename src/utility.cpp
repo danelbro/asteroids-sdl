@@ -76,9 +76,3 @@ SDL_Texture* loadMedia(std::string path, SDL_Renderer* rend)
     return tex;
 }
 
-void close(SDL_Renderer *renderer, SDL_Window *window)
-{
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
