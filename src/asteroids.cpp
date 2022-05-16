@@ -53,7 +53,7 @@ try
     GameWorld gameWorld{ screen, fluidDensity };
     // Make player
     std::vector<std::unique_ptr<Entity>> entities{ };
-    entities.push_back(std::make_unique<Player>("player-0.png", renderer,
+    entities.push_back(std::make_unique<Player>("assets/player-0.png", renderer,
                                                 &gameWorld));
 
     // Set up for main loop
