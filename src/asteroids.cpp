@@ -45,6 +45,7 @@ void asteroids()
     // Gameworld initialisation
     constexpr double fluidDensity{ 0.1 };
     GameWorld gameWorld{ screen, fluidDensity };
+
     // Make player
     std::vector<std::unique_ptr<Entity>> entities{ };
     entities.push_back(std::make_unique<Player>("assets/player-0.png",
@@ -55,11 +56,12 @@ void asteroids()
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
     std::array<bool, K_TOTAL> keyState{ };
     std::fill(keyState.begin(), keyState.end(), false);
-    bool isRunning{ true };
-    constexpr double fps { 1000.0 / 60 };
-    auto previous{ high_resolution_clock::now() };
-    double lag{ 0.0 };
 
+    constexpr double fps { 1000.0 / 60 };
+    double lag{ 0.0 };
+    bool isRunning{ true };
+
+    auto previous{ high_resolution_clock::now() };
     while (isRunning) {
         auto current{ high_resolution_clock::now() };
         auto elapsed{ duration<double, std::milli> {current - previous} };
