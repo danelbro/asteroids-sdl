@@ -2,8 +2,9 @@
 .SUFFIXES:
 
 CC = g++
+OPT = -g -Og
 SDL_CFLAGS = $(shell sdl2-config --cflags)
-CFLAGS = -g -Og -Wall -Wextra -pedantic -std=c++17 $(SDL_CFLAGS)
+CFLAGS = $(OPT) -Wall -Wextra -Weffc++ -Wsign-conversion -pedantic -std=c++17 $(SDL_CFLAGS)
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = $(SDL_LDFLAGS) -lSDL2_image
 

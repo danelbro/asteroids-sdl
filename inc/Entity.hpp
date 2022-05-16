@@ -3,6 +3,7 @@
 // Entity class representing an on-screen object
 
 #include <array>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -16,25 +17,35 @@ struct GameWorld {
     double fluidDensity{ };
 };
 
+// Idea from https://stackoverflow.com/questions/29424877/couple-of-questions-about-sdl-window-and-unique-ptr
+struct SDL_TextureDestroyer
+{
+    void operator()(SDL_Texture* t) const
+    {
+        SDL_DestroyTexture(t);
+    }
+};
+
 class Entity {
 public:
     virtual void update(std::array<bool, K_TOTAL> keyState) = 0;
     virtual void render(SDL_Renderer *renderer, double progress) = 0;
+    virtual ~Entity() = default;
 
-    SDL_Texture * getTex() const { return texture; }
+    SDL_Texture * getTex() const { return texture.get(); }
     SDL_Rect getRect() const { return rect; }
 
 protected:
-    Entity(std::string path, SDL_Renderer *renderer, GameWorld *new_gameWorld);
-    SDL_Texture *texture{ nullptr };
+    Entity(std::string path, SDL_Renderer *renderer, GameWorld &new_gameWorld);
+    std::unique_ptr<SDL_Texture, SDL_TextureDestroyer> texture{ nullptr };
     SDL_Rect rect{ };
     SDL_Rect old_rect{ };
-    GameWorld *gameWorld{ };
+    GameWorld &gameWorld;
 };
 
 class Player : public Entity {
 public:
-    Player(std::string path, SDL_Renderer* renderer, GameWorld *new_gameWorld);
+    Player(std::string path, SDL_Renderer* renderer, GameWorld &new_gameWorld);
 
     void accelerate();
     void turnLeft();

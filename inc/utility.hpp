@@ -37,5 +37,4 @@ SDL_Renderer* createRenderer(SDL_Window *window, int index, Uint32 flags);
 SDL_Texture* loadMedia(std::string path, SDL_Renderer* renderer);
 
 // Free SDL resources
-void close(SDL_Renderer *renderer, SDL_Window *window,
-           std::vector<std::unique_ptr<Entity>> &entities);
+void close(SDL_Renderer *renderer, SDL_Window *window);

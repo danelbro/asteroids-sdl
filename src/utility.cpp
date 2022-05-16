@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <sys/types.h>
 #include <vector>
 
 #include <SDL.h>
@@ -18,12 +19,13 @@ const char* ImgException::what() const throw() {
     return IMG_GetError();
 }
 
-void init(Uint32 sdlFlags, Uint32 imgFlags)
+void init(u_int32_t sdlFlags, u_int32_t imgFlags)
 {
     if (SDL_Init(sdlFlags) != 0)
         throw SdlException();
 
-    if (!(IMG_Init(imgFlags) & imgFlags)) {
+    if (!(static_cast<u_int32_t>(IMG_Init(static_cast<int>(imgFlags)))
+          & imgFlags)) {
         throw ImgException();
     }
 }
@@ -74,12 +76,8 @@ SDL_Texture* loadMedia(std::string path, SDL_Renderer* rend)
     return tex;
 }
 
-void close(SDL_Renderer *renderer, SDL_Window *window,
-           std::vector<std::unique_ptr<Entity>> &entities)
+void close(SDL_Renderer *renderer, SDL_Window *window)
 {
-    for (auto &ent : entities)
-        SDL_DestroyTexture(ent->getTex());
-
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

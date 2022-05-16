@@ -54,7 +54,7 @@ try
     // Make player
     std::vector<std::unique_ptr<Entity>> entities{ };
     entities.push_back(std::make_unique<Player>("assets/player-0.png", renderer,
-                                                &gameWorld));
+                                                gameWorld));
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
@@ -82,7 +82,7 @@ try
         render(entities, renderer, lag / fps);
     }
 
-    close(renderer, window, entities);
+    close(renderer, window);
     return 0;
 }
 catch (std::exception &e)

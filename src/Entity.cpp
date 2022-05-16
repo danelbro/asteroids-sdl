@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include <SDL.h>
@@ -15,22 +16,22 @@ extern const SdlColor bg;
 extern const SdlColor debug;
 
 Entity::Entity(std::string path, SDL_Renderer *renderer,
-               GameWorld *new_gameWorld)
+               GameWorld &new_gameWorld)
     : texture{ nullptr }, rect{ }, old_rect{ rect }, gameWorld{ new_gameWorld }
 {
-    texture = loadMedia(path, renderer);
-    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    texture = std::unique_ptr<SDL_Texture, SDL_TextureDestroyer> {loadMedia(path, renderer)};
+    SDL_QueryTexture(texture.get(), NULL, NULL, &rect.w, &rect.h);
 }
 
 Player::Player(std::string path, SDL_Renderer *renderer,
-               GameWorld *new_gameWorld)
+               GameWorld &new_gameWorld)
     : Entity{ path, renderer, new_gameWorld }, velocity{ 0, 0 },
       facing_direction{ 1, 0 }, velocity_direction{ facing_direction },
       turnSpeed{ 10.0 }, mass{ 100.0 }, thrust_power{ 45.0 },
       acceleration_mag{ 0.0 }, turnAmount{ 0.0 }, isInHyperspace{ false }
 {
-    setPos((gameWorld->screen.w / 2) - (rect.w / 2),
-           (gameWorld->screen.h / 2) - (rect.h / 2));
+    setPos((gameWorld.screen.w / 2) - (rect.w / 2),
+           (gameWorld.screen.h / 2) - (rect.h / 2));
 }
 
 void Player::update(std::array<bool, K_TOTAL> keyState)
@@ -51,7 +52,7 @@ void Player::update(std::array<bool, K_TOTAL> keyState)
     facing_direction = facing_direction.rotate_deg(turnAmount);
     facing_direction.normalizeInPlace();
 
-    double drag { 0.5 * gameWorld->fluidDensity * velocity.magnitude_squared() };
+    double drag { 0.5 * gameWorld.fluidDensity * velocity.magnitude_squared() };
 
     if (velocity.magnitude() == 0)
         velocity_direction.update(0, 0);
@@ -72,7 +73,7 @@ void Player::update(std::array<bool, K_TOTAL> keyState)
     rect.x -= velocity.x;
     rect.y -= velocity.y;
 
-    collide(rect, gameWorld->screen);
+    collide(rect, gameWorld.screen);
 
     acceleration_mag = 0;
     turnAmount = 0;
@@ -85,14 +86,14 @@ void Player::render(SDL_Renderer *renderer, double progress)
     dest.x += velocity.x * progress;
     dest.y += velocity.y * progress;
 
-    collide(dest, gameWorld->screen);
+    collide(dest, gameWorld.screen);
 
     auto directionAngleRad = std::atan2(facing_direction.x, facing_direction.y);
     auto directionAngle = directionAngleRad * (180 / M_PI);
 
     // SDL_SetRenderDrawColor(renderer, debug.r, debug.g, debug.b, debug.a);
     // SDL_RenderFillRect(renderer, &dest);
-    SDL_RenderCopyEx(renderer, texture, NULL, &dest,
+    SDL_RenderCopyEx(renderer, texture.get(), NULL, &dest,
                      -directionAngle, NULL, SDL_FLIP_NONE);
     // SDL_SetRenderDrawColor(renderer, bg.r, bg.g, bg.b, bg.a);
 }
