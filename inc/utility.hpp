@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SDL_render.h"
+#include "SDL_video.h"
 #include <exception>
 #include <memory>
 #include <string>
@@ -7,7 +9,30 @@
 
 #include <SDL.h>
 
-#include "Entity.hpp"
+// Idea from https://stackoverflow.com/questions/29424877/couple-of-questions-about-sdl-window-and-unique-ptr
+struct SDL_TextureDestroyer
+{
+    void operator()(SDL_Texture* t) const
+    {
+        SDL_DestroyTexture(t);
+    }
+};
+
+struct SDL_WindowDestroyer
+{
+    void operator()(SDL_Window* w) const
+    {
+        SDL_DestroyWindow(w);
+    }
+};
+
+struct SDL_RendererDestroyer
+{
+    void operator()(SDL_Renderer* r) const
+    {
+        SDL_DestroyRenderer(r);
+    }
+};
 
 // wrapper around std::exception to make SDL exception handling smoother
 class SdlException : public std::exception
@@ -35,6 +60,3 @@ SDL_Renderer* createRenderer(SDL_Window *window, int index, Uint32 flags);
 // Load an image from path into texture on renderer, with an associated rect
 // Throw an ImgException if loading fails.
 SDL_Texture* loadMedia(std::string path, SDL_Renderer* renderer);
-
-// Free SDL resources
-void close(SDL_Renderer *renderer, SDL_Window *window);

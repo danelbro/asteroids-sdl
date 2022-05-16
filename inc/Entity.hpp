@@ -11,19 +11,11 @@
 
 #include "DirFlag.hpp"
 #include "Vec2d.hpp"
+#include "utility.hpp"
 
 struct GameWorld {
     Box screen{ };
     double fluidDensity{ };
-};
-
-// Idea from https://stackoverflow.com/questions/29424877/couple-of-questions-about-sdl-window-and-unique-ptr
-struct SDL_TextureDestroyer
-{
-    void operator()(SDL_Texture* t) const
-    {
-        SDL_DestroyTexture(t);
-    }
 };
 
 class Entity {
