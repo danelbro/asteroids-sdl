@@ -76,6 +76,12 @@ Vec2d Vec2d::operator+(Vec2d otherVec)
     return Vec2d{ x + otherVec.x, y + otherVec.y };
 }
 
+Vec2d Vec2d::operator+=(Vec2d otherVec)
+{
+    *this = *this + otherVec;
+    return *this;
+}
+
 Vec2d Vec2d::operator-()
 {
     return Vec2d{ *this * -1 };

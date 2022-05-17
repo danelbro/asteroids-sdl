@@ -1,26 +1,46 @@
-#ifndef ASTEROIDS_PLAYER_H
-#define ASTEROIDS_PLAYER_H
+#pragma once
 
-#include <vector>
+#include <array>
+#include <string>
 
 #include <SDL.h>
 
-#include "Vec2d.h"
+#include "Engine.hpp"
+#include "Entity.hpp"
+#include "Gun.hpp"
+#include "Hyperdrive.hpp"
+#include "PhysicsComponent.hpp"
+#include "Vec2d.hpp"
 
-class Player {
+class Engine;
+
+class Player : public Entity {
 public:
-    Player();
-    ~Player();
-    void update(double delta_time);
-    void respawn(int respawn_length, int speed, Vec2d new_pos, bool reset);
-    void engine_on();
-    void engine_off();
-    void turn(int turn_dir);
-    void hyperspace(int number_of_asteroids);
-private:
-    void reset(Vec2d pos);
-    void calc_velocity(double delta_time);
-    void update_image(double delta_time);
-};
+    Player(std::string path, SDL_Renderer* renderer, GameWorld &new_gameWorld);
 
-#endif /* ASTEROIDS_PLAYER_H */
+    Engine engine();
+    Gun gun();
+    Hyperdrive hyperdrive();
+    PhysicsComponent &physicsComponent;
+
+    // void respawn(Vecd2d new_pos, bool reset=true) {};
+    void set_turnAmount(double turnSpeed) { turnAmount = turnSpeed; }
+    void set_accelerationMag(double power) { accelerationMag = power; }
+
+    void update() override;
+    void render(SDL_Renderer *renderer, double progress) override;
+private:
+    void collide(SDL_Rect &dest, Box screen);
+    void updateImage();
+
+    void setPos(int x, int y) { rect.x = x; rect.y = y; }
+    void setPos(SDL_Rect newRect) { rect = newRect; }
+
+    Vec2d velocity;
+    Vec2d facing_direction;
+    Vec2d velocity_direction;
+    const double mass;
+    double accelerationMag;
+    double turnAmount;
+    bool isInHyperspace;
+};

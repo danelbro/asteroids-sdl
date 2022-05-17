@@ -12,6 +12,8 @@ struct Vec2d {
 
     Vec2d operator+(Vec2d otherVec);
 
+    Vec2d operator+=(Vec2d otherVec);
+
     Vec2d operator-();
     Vec2d operator-(Vec2d otherVec);
 
@@ -24,10 +26,4 @@ struct Vec2d {
 
     double x{ };
     double y{ };
-};
-
-// Like a Rect, but without a position
-struct Box {
-    int w{ };
-    int h{ };
 };
