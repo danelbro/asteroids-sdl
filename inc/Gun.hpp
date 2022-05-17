@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Bullet.hpp"
-#include "Entity.hpp"
+#include "Ship.hpp"
 
 class Gun {
 public:
@@ -10,5 +10,5 @@ public:
     Bullet fire();
 
 private:
-    Entity &owner;
+    Ship &owner;
 };

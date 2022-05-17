@@ -5,7 +5,7 @@ Player::Player(std::string path, SDL_Renderer *renderer,
     : Entity{ path, renderer, new_gameWorld }, velocity{ 0, 0 },
       facing_direction{ 1, 0 }, velocity_direction{ facing_direction },
       turnSpeed{ 10.0 }, mass{ 100.0 }, thrust_power{ 45.0 },
-      accelerationMag{ 0.0 }, turnAmount{ 0.0 }, isInHyperspace{ false }
+      acceleration{ 0.0 }, turnAmount{ 0.0 }, isInHyperspace{ false }
 {
     setPos((gameWorld.screen.w / 2) - (rect.w / 2),
            (gameWorld.screen.h / 2) - (rect.h / 2));
@@ -25,7 +25,7 @@ void Player::update()
     else
         velocity_direction = velocity.normalize();
 
-    auto totalForces{ ((facing_direction * accelerationMag)
+    auto totalForces{ ((facing_direction * acceleration)
                        + (-velocity_direction * drag)) };
 
     auto acceleration{ totalForces / mass };
@@ -37,7 +37,7 @@ void Player::update()
 
     collide(rect, gameWorld.screen);
 
-    accelerationMag = 0;
+    acceleration = 0;
     turnAmount = 0;
 }
 
