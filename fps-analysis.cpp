@@ -2,7 +2,6 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <stdexcept>
 #include <numeric>
 #include <vector>
@@ -10,7 +9,7 @@
 int main()
 try
 {
-    std::string name = "fps.log";
+    std::string name{ "fps.log" };
     std::ifstream fpsLog{ name };
     if (!fpsLog)
         throw std::runtime_error("Can't open input file " + name);
@@ -20,12 +19,15 @@ try
         values.push_back(value);
     }
 
-    auto minmax = std::minmax_element(values.begin(), values.end());
+    auto minmax{ std::minmax_element(values.begin(), values.end()) };
 
-    double average = static_cast<double>(
-        std::accumulate(values.begin(), values.end(), 0)) / values.size();
-    double lowest = values.at(std::distance(values.begin(), minmax.first));
-    double highest = values.at(std::distance(values.begin(), minmax.second));
+    double average{
+        static_cast<double>(std::accumulate(values.begin(), values.end(), 0))
+        / values.size() };
+    auto lowElem{ std::distance(values.begin(), minmax.first) };
+    auto highElem{ std::distance(values.begin(), minmax.second) };
+    double lowest{ values.at(static_cast<unsigned long>(lowElem)) };
+    double highest{ values.at(static_cast<unsigned long>(highElem))} ;
 
     std::cout << "Total frames: " << values.size() << '\n'
               << "Average framerate: " << average << '\n'
