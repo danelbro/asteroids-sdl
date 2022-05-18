@@ -12,3 +12,4 @@
 !/inc
 !/assets
 !*.png
+!*.sh
