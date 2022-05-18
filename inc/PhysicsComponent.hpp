@@ -1,27 +1,42 @@
 #pragma once
 
-#include "Entity.hpp"
+#include <SDL.h>
+
+#include "Box.hpp"
 #include "Vec2d.hpp"
+
+class Entity;
 
 class PhysicsComponent {
 public:
-    PhysicsComponent();
+    PhysicsComponent(double mass, Entity *new_owner)
+        : m_mass { mass }, m_accelerationMag{ 0.0 }, m_acceleration{ 0.0, 0.0 },
+          m_velocity{ 0, 0 }, m_turnAmount{ 0.0 },
+          m_facingDirection{ -1.0, 0.0 }, m_velocityDirection{ 0.0, 0.0 },
+          owner { new_owner }
+        {}
 
-    void setFrameAcceleration(double power) { accelerationMag = power; }
-    void setFrameTurn(double turnSpeed) { turnAmount = turnSpeed; }
+    void setFrameAcceleration(double power) { m_accelerationMag = power; }
+    void setFrameTurn(double turnSpeed) { m_turnAmount = turnSpeed; }
 
-    Vec2d facing_direction() const { return m_facing_direction; }
+    Vec2d facing_direction() const { return m_facingDirection; }
     Vec2d velocity() const { return m_velocity; }
 
+    void setOwner(Entity *new_owner) { owner = new_owner; }
+
+    void update();
+
 private:
-    const double mass;
-    double accelerationMag;
-    Vec2d acceleration;
+    void checkBounds(SDL_Rect &rect, Box screen);
+
+    const double m_mass;
+    double m_accelerationMag;
+    Vec2d m_acceleration;
     Vec2d m_velocity;
 
-    double turnAmount;
-    Vec2d m_facing_direction;
-    Vec2d velocity_direction;
+    double m_turnAmount;
+    Vec2d m_facingDirection;
+    Vec2d m_velocityDirection;
 
-    Entity &owner;
+    Entity *owner;
 };

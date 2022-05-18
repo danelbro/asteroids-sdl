@@ -8,31 +8,35 @@
 
 #include <SDL.h>
 
+#include "Box.hpp"
 #include "KeyFlag.hpp"
-#include "GameWorld.hpp"
-#include "Vec2d.hpp"
 #include "utility.hpp"
+#include "Vec2d.hpp"
+
+struct GameWorld;
 
 class Entity {
 public:
-    virtual void update() = 0;
-    virtual void render(SDL_Renderer *renderer, double progress) = 0;
+    virtual void render(SDL_Renderer *renderer) = 0;
     virtual ~Entity() = default;
 
-    SDL_Texture * texture() const { return m_texture.get(); }
-    SDL_Rect rect() const { return m_rect; }
+    Entity(const Entity&) = delete;
+    Entity& operator=(const Entity&) = delete;
 
+    SDL_Texture * texture() const { return m_texture.get(); }
+    SDL_Rect & rect() { return m_rect; }
+    SDL_Rect & oldRect() { return m_oldRect; }
+
+    void setRect(int x, int y) { m_rect.x = x; m_rect.y = y;}
     void setRect(SDL_Rect newRect) { m_rect = newRect; }
 
-    GameWorld const &gameWorld;
-
+    GameWorld const *gameWorld;
 
 protected:
-    Entity(std::string path, SDL_Renderer *renderer, GameWorld &new_gameWorld);
-    const std::unique_ptr<SDL_Texture, SDL_TextureDestroyer> m_texture{ nullptr };
+    Entity(std::string path, SDL_Renderer *renderer, GameWorld *new_gameWorld);
     void collide(SDL_Rect &dest, Box screen);
 
-
+    const std::unique_ptr<SDL_Texture, SDL_TextureDestroyer> m_texture{ nullptr };
     SDL_Rect m_rect{ };
-    SDL_Rect old_rect{ };
+    SDL_Rect m_oldRect{ };
 };

@@ -9,16 +9,28 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = $(SDL_LDFLAGS) -lSDL2_image
 
 all: asteroids
-asteroids: obj/asteroids.o obj/utility.o obj/GameLoop.o obj/Entity.o obj/Vec2d.o
-	$(CC) $(LDFLAGS) -o asteroids obj/asteroids.o obj/utility.o obj/GameLoop.o obj/Entity.o obj/Vec2d.o $(LDLIBS)
-obj/asteroids.o: src/asteroids.cpp inc/Colors.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/GameLoop.hpp inc/utility.hpp inc/Vec2d.hpp
+asteroids: obj/asteroids.o obj/Engine.o obj/Entity.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
+	$(CC) $(LDFLAGS) -o asteroids obj/asteroids.o obj/Engine.o obj/Entity.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o $(LDLIBS)
+obj/asteroids.o: src/asteroids.cpp inc/Colors.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/GameLoop.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) -o obj/asteroids.o -c src/asteroids.cpp
-obj/utility.o: src/utility.cpp inc/utility.hpp inc/Entity.hpp
-	$(CC) $(CFLAGS) -o obj/utility.o -c src/utility.cpp
-obj/GameLoop.o: src/GameLoop.cpp inc/GameLoop.hpp inc/KeyFlag.hpp inc/Entity.hpp
-	$(CC) $(CFLAGS) -o obj/GameLoop.o -c src/GameLoop.cpp
-obj/Entity.o: src/Entity.cpp inc/Entity.hpp inc/KeyFlag.hpp inc/utility.hpp inc/Vec2d.hpp
+obj/Engine.o: src/Engine.cpp inc/Engine.hpp inc/Ship.hpp
+	$(CC) $(CFLAGS) -o obj/Engine.o -c src/Engine.cpp
+obj/Entity.o: src/Entity.cpp inc/Entity.hpp inc/Colors.hpp inc/KeyFlag.hpp inc/GameWorld.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) -o obj/Entity.o -c src/Entity.cpp
+obj/GameLoop.o: src/GameLoop.cpp inc/GameLoop.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/PhysicsComponent.hpp
+	$(CC) $(CFLAGS) -o obj/GameLoop.o -c src/GameLoop.cpp
+obj/Gun.o: src/Gun.cpp inc/Gun.hpp inc/Gun.hpp inc/Ship.hpp
+	$(CC) $(CFLAGS) -o obj/Gun.o -c src/Gun.cpp
+obj/Hyperdrive.o: src/Hyperdrive.cpp inc/Hyperdrive.hpp inc/Player.hpp
+	$(CC) $(CFLAGS) -o obj/Hyperdrive.o -c src/Hyperdrive.cpp
+obj/PhysicsComponent.o: src/PhysicsComponent.cpp inc/PhysicsComponent.hpp inc/Box.hpp inc/Entity.hpp inc/Vec2d.hpp
+	$(CC) $(CFLAGS) -o obj/PhysicsComponent.o -c src/PhysicsComponent.cpp
+obj/Player.o: src/Player.cpp inc/Player.hpp inc/GameWorld.hpp inc/Hyperdrive.hpp inc/PhysicsComponent.hpp inc/Ship.hpp inc/Vec2d.hpp
+	$(CC) $(CFLAGS) -o obj/Player.o -c src/Player.cpp
+obj/Ship.o: src/Ship.cpp inc/Ship.hpp inc/Engine.hpp inc/GameWorld.hpp inc/Gun.hpp inc/PhysicsComponent.hpp
+	$(CC) $(CFLAGS) -o obj/Ship.o -c src/Ship.cpp
+obj/utility.o: src/utility.cpp inc/utility.hpp
+	$(CC) $(CFLAGS) -o obj/utility.o -c src/utility.cpp
 obj/Vec2d.o: src/Vec2d.cpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) -o obj/Vec2d.o -c src/Vec2d.cpp
 clean:

@@ -9,6 +9,5 @@ public:
 
     AIComponent *aiComponent;
 
-    void update() override;
-    void render(SDL_Renderer *renderer, double progress);
+    void render(SDL_Renderer *renderer) override;
 };

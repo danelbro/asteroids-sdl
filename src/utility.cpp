@@ -9,8 +9,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "../inc/Entity.hpp"
-
 const char* SdlException::what() const throw() {
     return SDL_GetError();
 }

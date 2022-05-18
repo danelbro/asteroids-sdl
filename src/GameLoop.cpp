@@ -6,15 +6,36 @@
 
 #include <SDL.h>
 
-#include "../inc/DirFlag.hpp"
+#include "../inc/KeyFlag.hpp"
 #include "../inc/Entity.hpp"
+#include "../inc/PhysicsComponent.hpp"
+#include "../inc/Player.hpp"
 
-bool handleInput(std::vector<std::unique_ptr<Entity>> &entities,
-                 std::array<bool, K_TOTAL> &key_state)
+bool processInput(Player *player, std::array<bool, K_TOTAL> &key_state)
 {
-    for (auto &e : entities)
-        e.get();
+    bool isRunning = handleInput(key_state);
 
+    if (key_state[K_UP])
+        player->engine.on();
+    else if (!key_state[K_UP])
+        player->engine.off();
+
+    if (key_state[K_LEFT])
+        player->engine.turnLeft();
+    if (key_state[K_RIGHT])
+        player->engine.turnRight();
+
+    if (key_state[K_SPACE])
+        player->gun.fire();
+
+    if (key_state[K_LSHIFT])
+        player->hyperdrive.warp();
+
+    return isRunning;
+}
+
+bool handleInput(std::array<bool, K_TOTAL> &key_state)
+{
     SDL_Event ev;
     bool isRunning{ true };
 
@@ -78,18 +99,17 @@ bool handleInput(std::vector<std::unique_ptr<Entity>> &entities,
     return isRunning;
 }
 
-void updateAll(std::vector<std::unique_ptr<Entity>> &entities,
-               std::array<bool, K_TOTAL> key_state)
+void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager)
 {
-    for (auto &entity : entities)
-        entity->update(key_state);
+    for (auto &physComp : physicsManager)
+        physComp->update();
 }
 
-void render(std::vector<std::unique_ptr<Entity>> &entities,
-            SDL_Renderer *renderer, double progress)
+void render(std::vector<std::shared_ptr<Entity>> &entities,
+            SDL_Renderer *renderer)
 {
     SDL_RenderClear(renderer);
     for (auto &entity : entities)
-        entity->render(renderer, progress);
+        entity->render(renderer);
     SDL_RenderPresent(renderer);
 }

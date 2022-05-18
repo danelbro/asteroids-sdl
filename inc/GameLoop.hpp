@@ -6,15 +6,17 @@
 
 #include <SDL.h>
 
-#include "DirFlag.hpp"
-#include "Entity.hpp"
+#include "KeyFlag.hpp"
 
-// Quit the game on certain inputs
-bool handleInput(std::vector<std::unique_ptr<Entity>> &entities,
-                 std::array<bool, K_TOTAL> &key_state);
+class Entity;
+class PhysicsComponent;
+class Player;
 
-void updateAll(std::vector<std::unique_ptr<Entity>> &entities,
-               std::array<bool, K_TOTAL> key_state);
+bool processInput(Player *player, std::array<bool, K_TOTAL> &key_state);
 
-void render(std::vector<std::unique_ptr<Entity>> &entities,
-            SDL_Renderer *renderer, double progress);
+bool handleInput(std::array<bool, K_TOTAL> &key_state);
+
+void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager);
+
+void render(std::vector<std::shared_ptr<Entity>> &entities,
+            SDL_Renderer *renderer);

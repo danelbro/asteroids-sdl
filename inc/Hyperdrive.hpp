@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Entity.hpp"
+class Player;
 
 class Hyperdrive {
 public:
-    Hyperdrive();
+    Hyperdrive(Player *new_owner, double warpTimer);
 
     void warp();
 
 private:
-    Entity &owner;
+    bool isWarping;
+    double m_warpTimer;
+    Player *owner;
 };

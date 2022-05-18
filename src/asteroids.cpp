@@ -2,8 +2,10 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstdint>
 #include <exception>
-#include <iostream>
+#include <fstream>
+#include <stdexcept>
 #include <string>
 #include <memory>
 #include <vector>
@@ -12,13 +14,18 @@
 #include <SDL_image.h>
 
 #include "../inc/Colors.hpp"
-#include "../inc/DirFlag.hpp"
+#include "../inc/KeyFlag.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/GameLoop.hpp"
+#include "../inc/GameWorld.hpp"
+#include "../inc/PhysicsComponent.hpp"
+#include "../inc/Player.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
 extern const SdlColor bg;
+
+std::ofstream errorLogger("exception.log");
 
 void asteroids()
 {
@@ -46,37 +53,59 @@ void asteroids()
     constexpr double fluidDensity{ 0.1 };
     GameWorld gameWorld{ screen, fluidDensity };
 
+    // Make physics manager
+    std::vector<std::unique_ptr<PhysicsComponent>> physicsManager{ };
+
     // Make player
-    std::vector<std::unique_ptr<Entity>> entities{ };
-    entities.push_back(std::make_unique<Player>("assets/player-0.png",
-                                                renderer.get(),
-                                                gameWorld));
+    constexpr double playerEnginePower{ 25.0 };
+    constexpr double playerTurnSpeed{ 7.5 };
+    constexpr double playerShotPower{ 20.0 };
+    constexpr double playerMass{ 150.0 };
+    physicsManager.push_back(std::make_unique<PhysicsComponent>(
+            playerMass, nullptr )
+    );
+
+    constexpr double playerWarpTimer{ 1.0 };
+    constexpr int playerLives{ 3 };
+    std::vector<std::shared_ptr<Entity>> entities{ };
+    std::shared_ptr<Player> player{
+        std::make_shared<Player> ("assets/player-0.png",
+                                  renderer.get(),
+                                  &gameWorld, playerEnginePower,
+                                  playerTurnSpeed,
+                                  playerShotPower,
+                                  physicsManager.at(0).get(),
+                                  playerWarpTimer,
+                                  playerLives) };
+    entities.push_back(player);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
     std::array<bool, K_TOTAL> keyState{ };
     std::fill(keyState.begin(), keyState.end(), false);
 
-    constexpr double fps { 1000.0 / 60 };
-    double lag{ 0.0 };
+    constexpr double fps{ 60.0 };
+    constexpr double msPerFrame { 1000.0 / fps };
     bool isRunning{ true };
 
-    auto previous{ high_resolution_clock::now() };
+    std::ofstream logger("fps.log");
+    if (!logger)
+        throw std::runtime_error("Couldn't initialise logger");
+
+    auto frameStart{ high_resolution_clock::now() };
+    auto frameEnd{ high_resolution_clock::now() };
     while (isRunning) {
-        auto current{ high_resolution_clock::now() };
-        auto elapsed{ duration<double, std::milli> {current - previous} };
-        previous = current;
-        lag += elapsed.count();
+        frameStart = high_resolution_clock::now();
 
-        isRunning = handleInput(entities, keyState);
+        isRunning = processInput(player.get(), keyState);
+        updateAll(physicsManager);
+        render(entities, renderer.get());
 
-        while (lag >= fps)
-        {
-            updateAll(entities, keyState);
-            lag -= fps;
-        }
-
-        render(entities, renderer.get(), lag / fps);
+        frameEnd = high_resolution_clock::now();
+        auto elapsed{ duration<double, std::milli> {frameEnd - frameStart} };
+        double delay = msPerFrame - elapsed.count();
+        SDL_Delay(static_cast<uint32_t>( delay > 0 ? delay : 0 ));
+        logger << 1000 / elapsed.count() << '\n';
     }
 }
 
@@ -95,11 +124,11 @@ try
 }
 catch (std::exception &e)
 {
-    std::cerr << "exception: " << e.what() << '\n';
+    errorLogger << "exception: " << e.what() << '\n';
     return 1;
 }
 catch (...)
 {
-    std::cerr << "unknown exception\n";
+    errorLogger << "unknown exception\n";
     return 2;
 }

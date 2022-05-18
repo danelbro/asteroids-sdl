@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Bullet.hpp"
-#include "Ship.hpp"
+class Ship;
 
 class Gun {
 public:
-    Gun();
+    Gun(Ship *new_owner, double shotPower)
+        : owner{ new_owner }, m_shotPower{ shotPower }
+        {}
 
-    Bullet fire();
+    void fire();
 
 private:
-    Ship &owner;
+    Ship *owner;
+    double m_shotPower;
 };

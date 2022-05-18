@@ -1,19 +1,17 @@
 #pragma once
 
-#include "Ship.hpp"
-
-class Player;
+class Ship;
 
 class Engine {
 public:
-    Engine(Ship &newOwner, double newPower, double newTurnSpeed);
+    Engine(Ship *newOwner, double newPower, double newTurnSpeed);
     void on();
     void off();
     void turnLeft();
     void turnRight();
 
 private:
-    Ship &owner;
+    Ship *owner;
     double power;
     double turnSpeed;
 };

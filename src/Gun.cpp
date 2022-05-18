@@ -1,8 +1,8 @@
 #include "../inc/Gun.hpp"
 
-#include "../inc/Bullet.hpp"
+#include <iostream>
 
-Bullet Gun::fire()
+void Gun::fire()
 {
-    return Bullet();
+    std::cout << "Bang!";
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL.h>
+
 #include "Entity.hpp"
 #include "PhysicsComponent.hpp"
 
@@ -9,7 +11,6 @@ public:
 
     PhysicsComponent *physicsComponent;
 
-    void update() override;
-    void render(int *renderer, double progress) override;
+    void render(SDL_Renderer *renderer) override;
 
 };
