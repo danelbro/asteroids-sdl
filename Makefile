@@ -29,7 +29,7 @@ obj/Player.o: src/Player.cpp inc/Player.hpp inc/GameWorld.hpp inc/Hyperdrive.hpp
 	$(CC) $(CFLAGS) -o obj/Player.o -c src/Player.cpp
 obj/Ship.o: src/Ship.cpp inc/Ship.hpp inc/Engine.hpp inc/GameWorld.hpp inc/Gun.hpp inc/PhysicsComponent.hpp
 	$(CC) $(CFLAGS) -o obj/Ship.o -c src/Ship.cpp
-obj/utility.o: src/utility.cpp inc/utility.hpp
+obj/utility.o: src/utility.cpp inc/utility.hpp inc/Colors.hpp
 	$(CC) $(CFLAGS) -o obj/utility.o -c src/utility.cpp
 obj/Vec2d.o: src/Vec2d.cpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) -o obj/Vec2d.o -c src/Vec2d.cpp

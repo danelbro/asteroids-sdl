@@ -1,13 +1,17 @@
 #include "../inc/utility.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <sstream>
 #include <string>
-#include <sys/types.h>
 #include <vector>
 
 #include <SDL.h>
 #include <SDL_image.h>
+
+#include "../inc/Colors.hpp"
+
+extern const SdlColor debug;
 
 const char* SdlException::what() const throw() {
     return SDL_GetError();
@@ -17,12 +21,12 @@ const char* ImgException::what() const throw() {
     return IMG_GetError();
 }
 
-void init(u_int32_t sdlFlags, u_int32_t imgFlags)
+void init(uint32_t sdlFlags, uint32_t imgFlags)
 {
     if (SDL_Init(sdlFlags) != 0)
         throw SdlException();
 
-    if (!(static_cast<u_int32_t>(IMG_Init(static_cast<int>(imgFlags)))
+    if (!(static_cast<uint32_t>(IMG_Init(static_cast<int>(imgFlags)))
           & imgFlags)) {
         throw ImgException();
     }
@@ -61,7 +65,8 @@ SDL_Texture* loadMedia(std::string path, SDL_Renderer* rend)
     if (!img)
         throw ImgException();
 
-    SDL_SetColorKey(img, SDL_TRUE, SDL_MapRGB(img->format, 0, 255, 255));
+    SDL_SetColorKey(img, SDL_TRUE,
+                    SDL_MapRGB(img->format, debug.r, debug.b, debug.g));
 
     tex = SDL_CreateTextureFromSurface(rend, img);
 
