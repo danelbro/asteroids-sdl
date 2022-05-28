@@ -1,5 +1,6 @@
 #include "../inc/Player.hpp"
 
+#include <cmath>
 #include <vector>
 
 #include <SDL.h>
@@ -33,18 +34,25 @@ void Player::render(SDL_Renderer *renderer)
     SDL_SetRenderDrawColor(renderer,
                            m_color.r, m_color.g, m_color.b, m_color.a);
 
-    for (unsigned i{ 0 }; i < m_shape.size(); ++i) {
-        if (i == m_shape.size() - 1) {
+    double angle{ std::atan2(physicsComponent->facing_direction().x,
+                             physicsComponent->facing_direction().y) };
+
+    std::vector<Vec2d> transShape{ };
+    for (auto p : m_shape)
+        transShape.push_back(p.rotate_deg(angle));
+
+    for (unsigned i{ 0 }; i < transShape.size(); ++i) {
+        if (i == transShape.size() - 1) {
             DrawWrapLine(renderer,
                          gameWorld->screen,
-                         m_pos.x + m_shape[i].x, m_pos.y + m_shape[i].y,
-                         m_pos.x + m_shape[0].x, m_pos.y + m_shape[0].y);
+                         m_pos.x + transShape[i].x, m_pos.y + transShape[i].y,
+                         m_pos.x + transShape[0].x, m_pos.y + transShape[0].y);
         }
         else {
             DrawWrapLine(renderer,
                          gameWorld->screen,
-                         m_pos.x + m_shape[i].x, m_pos.y + m_shape[i].y,
-                         m_pos.x + m_shape[i + 1].x, m_pos.y + m_shape[i+1].y);
+                         m_pos.x + transShape[i].x, m_pos.y + transShape[i].y,
+                         m_pos.x + transShape[i + 1].x, m_pos.y + transShape[i+1].y);
         }
     }
 

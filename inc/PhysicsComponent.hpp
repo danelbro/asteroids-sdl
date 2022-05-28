@@ -12,7 +12,7 @@ public:
     PhysicsComponent(double mass, Entity *new_owner)
         : m_mass { mass }, m_accelerationMag{ 0.0 }, m_acceleration{ 0.0, 0.0 },
           m_velocity{ 0, 0 }, m_turnAmount{ 0.0 },
-          m_facingDirection{ -1.0, 0.0 }, m_velocityDirection{ 0.0, 0.0 },
+          m_facingDirection{ 0.0, -1.0 }, m_velocityDirection{ 0.0, 0.0 },
           owner { new_owner }
         {}
 
@@ -27,8 +27,6 @@ public:
     void update();
 
 private:
-    void checkBounds(SDL_Rect &rect, Box screen);
-
     const double m_mass;
     double m_accelerationMag;
     Vec2d m_acceleration;
