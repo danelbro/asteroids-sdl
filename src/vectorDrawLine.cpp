@@ -1,5 +1,7 @@
 #include <SDL.h>
 
+#include "../inc/Box.hpp"
+
 void DrawWrapLine(SDL_Renderer *rend, Box screen,
                   double x1, double y1,
                   double x2, double y2)
@@ -17,8 +19,8 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
         }
         for (y = y1; y <= y2; ++y)
             SDL_RenderDrawPoint(rend,
-                                wrapCoord(static_cast<int>(x1), screen.width),
-                                wrapCoord(static_cast<int>(y), screen.height));
+                                wrapCoord(static_cast<int>(x1), screen.w),
+                                wrapCoord(static_cast<int>(y), screen.h));
     }
     else {
         double m{ dy / dx };
@@ -32,8 +34,8 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
             for (x = x1; x <= x2; ++x) {
                 y = (m * x) + c;
                 SDL_RenderDrawPoint(rend,
-                                    wrapCoord(static_cast<int>(x), screen.width),
-                                    wrapCoord(static_cast<int>(y), screen.height));
+                                    wrapCoord(static_cast<int>(x), screen.w),
+                                    wrapCoord(static_cast<int>(y), screen.h));
             }
         }
         else {
@@ -45,8 +47,9 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
             for (y = y1; y <= y2; ++y) {
                 x = (y - c) / m;
                 SDL_RenderDrawPoint(rend,
-                                    wrapCoord(static_cast<int>(x), screen.width),
-                                    wrapCoord(static_cast<int>(y), screen.height));
-}
+                                    wrapCoord(static_cast<int>(x), screen.w),
+                                    wrapCoord(static_cast<int>(y), screen.h));
+            }
+        }
     }
 }
