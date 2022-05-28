@@ -57,6 +57,9 @@ void asteroids()
     std::vector<std::unique_ptr<PhysicsComponent>> physicsManager{ };
 
     // Make player
+    const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
+    const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
+    const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff };
     constexpr double playerEnginePower{ 25.0 };
     constexpr double playerTurnSpeed{ 7.5 };
     constexpr double playerShotPower{ 20.0 };
@@ -69,9 +72,9 @@ void asteroids()
     constexpr int playerLives{ 3 };
     std::vector<std::shared_ptr<Entity>> entities{ };
     std::shared_ptr<Player> player{
-        std::make_shared<Player> ("assets/player-0.png",
-                                  renderer.get(),
-                                  &gameWorld, playerEnginePower,
+        std::make_shared<Player> (&gameWorld, playerPos,
+                                  playerShape, playerCol,
+                                  playerEnginePower,
                                   playerTurnSpeed,
                                   playerShotPower,
                                   physicsManager.at(0).get(),

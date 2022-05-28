@@ -5,12 +5,12 @@
 #include "../inc/Gun.hpp"
 #include "../inc/PhysicsComponent.hpp"
 
-Ship::Ship(std::string path, SDL_Renderer *renderer,
-           GameWorld *new_gameWorld,
+Ship::Ship(GameWorld *new_gameWorld, Vec2d pos,
+           std::vector<Vec2d> shape, SdlColor color,
            double power, double turnSpeed,
            double shotPower,
            PhysicsComponent *new_physicsComponent)
-    : Entity{ path, renderer, new_gameWorld },
+    : Entity{ new_gameWorld, pos, shape, color },
       engine(this, power, turnSpeed),
       gun(this, shotPower),
       physicsComponent{ new_physicsComponent }

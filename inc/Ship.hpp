@@ -1,10 +1,13 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
+#include "Colors.hpp"
 #include "Engine.hpp"
 #include "Entity.hpp"
 #include "Gun.hpp"
+#include "Vec2d.hpp"
 
 struct GameWorld;
 class PhysicsComponent;
@@ -22,8 +25,9 @@ public:
     virtual void render(SDL_Renderer *renderer) = 0;
 
 protected:
-    Ship(std::string path, SDL_Renderer *renderer,
-         GameWorld *new_gameWorld, double power, double turnSpeed,
+    Ship(GameWorld *new_gameWorld, Vec2d pos,
+         std::vector<Vec2d> shape, SdlColor color,
+         double power, double turnSpeed,
          double shotPower,
          PhysicsComponent *new_physicsComponent);
 };

@@ -3,9 +3,11 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SDL.h>
 
+#include "Colors.hpp"
 #include "Hyperdrive.hpp"
 #include "Ship.hpp"
 #include "Vec2d.hpp"
@@ -16,8 +18,9 @@ class PhysicsComponent;
 
 class Player : public Ship {
 public:
-    Player(std::string path, SDL_Renderer* renderer,
-           GameWorld *new_gameWorld, double power, double turnSpeed,
+    Player(GameWorld *new_gameWorld, Vec2d pos,
+           std::vector<Vec2d> shape, SdlColor color,
+           double power, double turnSpeed,
            double shotPower,
            PhysicsComponent *new_physicsComponent,
            double warpTimer, int new_lives);

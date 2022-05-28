@@ -9,8 +9,6 @@
 
 void PhysicsComponent::update()
 {
-    owner->oldRect() = owner->rect();
-
     m_facingDirection = m_facingDirection.rotate_deg(m_turnAmount);
     m_facingDirection.normalizeInPlace();
 
@@ -29,25 +27,8 @@ void PhysicsComponent::update()
 
     m_velocity = m_velocity + m_acceleration;
 
-    owner->rect().x -= m_velocity.x;
-    owner->rect().y -= m_velocity.y;
-
-    checkBounds(owner->rect(), owner->gameWorld->screen);
+    owner->pos() += m_velocity;
 
     m_accelerationMag = 0;
     m_turnAmount = 0;
-}
-
-void PhysicsComponent::checkBounds(SDL_Rect &dest, Box screen)
-{
-    if (dest.x < -owner->rect().w)
-        dest.x = screen.w;
-    else if (dest.x > screen.w)
-        dest.x = -owner->rect().w;
-
-    if (dest.y < -owner->rect().h)
-        dest.y = screen.h;
-    else if (dest.y > screen.h)
-        dest.y = -owner->rect().h;
-
 }

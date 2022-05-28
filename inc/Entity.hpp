@@ -1,16 +1,16 @@
 #pragma once
 
 // Entity class representing an on-screen object
+// to be drawn with vector graphics
 
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SDL.h>
 
-#include "Box.hpp"
-#include "KeyFlag.hpp"
-#include "utility.hpp"
+#include "Colors.hpp"
 #include "Vec2d.hpp"
 
 struct GameWorld;
@@ -21,22 +21,20 @@ public:
     virtual ~Entity() = default;
 
     Entity(const Entity&) = delete;
-    Entity& operator=(const Entity&) = delete;
+    Entity & operator=(const Entity&) = delete;
 
-    SDL_Texture * texture() const { return m_texture.get(); }
-    SDL_Rect & rect() { return m_rect; }
-    SDL_Rect & oldRect() { return m_oldRect; }
-
-    void setRect(int x, int y) { m_rect.x = x; m_rect.y = y;}
-    void setRect(SDL_Rect newRect) { m_rect = newRect; }
+    Vec2d & pos() { return m_pos; }
 
     GameWorld const *gameWorld;
 
 protected:
-    Entity(std::string path, SDL_Renderer *renderer, GameWorld *new_gameWorld);
-    void collide(SDL_Rect &dest, Box screen);
+    Entity(GameWorld *new_gameWorld, Vec2d pos,
+           std::vector<Vec2d> shape, SdlColor color)
+    : gameWorld{ new_gameWorld }, m_pos{ pos },
+      m_shape{ shape }, m_color{ color }
+        {}
 
-    const std::unique_ptr<SDL_Texture, SDL_TextureDestroyer> m_texture{ nullptr };
-    SDL_Rect m_rect{ };
-    SDL_Rect m_oldRect{ };
+    Vec2d m_pos;
+    std::vector<Vec2d> m_shape;
+    SdlColor m_color;
 };
