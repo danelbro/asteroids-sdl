@@ -1,6 +1,16 @@
+#include "../inc/DrawWrapLine.hpp"
+
 #include <SDL.h>
 
 #include "../inc/Box.hpp"
+
+int wrapCoord(int p, int dim)
+{
+    if (p < 0)
+        return dim + p;
+    else
+        return p % dim;
+}
 
 void DrawWrapLine(SDL_Renderer *rend, Box screen,
                   double x1, double y1,
