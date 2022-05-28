@@ -10,16 +10,15 @@ class Entity;
 class PhysicsComponent {
 public:
     PhysicsComponent(double mass, Entity *new_owner)
-        : m_mass { mass }, m_accelerationMag{ 0.0 }, m_acceleration{ 0.0, 0.0 },
-          m_velocity{ 0, 0 }, m_turnAmount{ 0.0 },
-          m_facingDirection{ 0.0, -1.0 }, m_velocityDirection{ 0.0, 0.0 },
+        : m_mass { mass }, m_impulse{ 0.0 }, m_acceleration{ 0.0, 0.0 },
+          m_velocity{ 0, 0 }, m_angle{ 0.0 },
           owner { new_owner }
         {}
 
-    void setFrameAcceleration(double power) { m_accelerationMag = power; }
-    void setFrameTurn(double turnSpeed) { m_turnAmount = turnSpeed; }
+    void setFrameImpulse(double power) { m_impulse = power; }
+    void turn(double turnSpeed);
 
-    Vec2d facing_direction() const { return m_facingDirection; }
+    Vec2d angle() const { return m_angle; }
     Vec2d velocity() const { return m_velocity; }
 
     void setOwner(Entity *new_owner) { owner = new_owner; }
@@ -28,13 +27,11 @@ public:
 
 private:
     const double m_mass;
-    double m_accelerationMag;
+    double m_impulse;
     Vec2d m_acceleration;
     Vec2d m_velocity;
 
-    double m_turnAmount;
-    Vec2d m_facingDirection;
-    Vec2d m_velocityDirection;
+    double m_angle; // between 0 and 360
 
     Entity *owner;
 };

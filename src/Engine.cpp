@@ -9,20 +9,20 @@ Engine::Engine(Ship *newOwner, double newPower, double newTurnSpeed)
 
 void Engine::on()
 {
-    owner->physicsComponent->setFrameAcceleration(power);
+    owner->physicsComponent->setFrameImpulse(power);
 }
 
 void Engine::off()
 {
-    owner->physicsComponent->setFrameAcceleration(0.0);
+    owner->physicsComponent->setFrameImpulse(0.0);
 }
 
 void Engine::turnLeft()
 {
-    owner->physicsComponent->setFrameTurn(turnSpeed * -1);
+    owner->physicsComponent->turn(turnSpeed * -1);
 }
 
 void Engine::turnRight()
 {
-    owner->physicsComponent->setFrameTurn(turnSpeed);
+    owner->physicsComponent->turn(turnSpeed);
 }
