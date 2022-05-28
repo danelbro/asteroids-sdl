@@ -60,6 +60,7 @@ void asteroids()
     const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
     const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
     const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff };
+    constexpr double playerScale{ 1.0 };
     constexpr double playerEnginePower{ 25.0 };
     constexpr double playerTurnSpeed{ 7.5 };
     constexpr double playerShotPower{ 20.0 };
@@ -73,7 +74,7 @@ void asteroids()
     std::vector<std::shared_ptr<Entity>> entities{ };
     std::shared_ptr<Player> player{
         std::make_shared<Player> (&gameWorld, playerPos,
-                                  playerShape, playerCol,
+                                  playerShape, playerCol, playerScale,
                                   playerEnginePower,
                                   playerTurnSpeed,
                                   playerShotPower,

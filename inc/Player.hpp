@@ -19,7 +19,7 @@ class PhysicsComponent;
 class Player : public Ship {
 public:
     Player(GameWorld *new_gameWorld, Vec2d pos,
-           std::vector<Vec2d> shape, SdlColor color,
+           std::vector<Vec2d> shape, SdlColor color, double scale,
            double power, double turnSpeed,
            double shotPower,
            PhysicsComponent *new_physicsComponent,

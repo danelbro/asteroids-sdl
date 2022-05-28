@@ -13,12 +13,12 @@
 #include "../inc/Vec2d.hpp"
 
 Player::Player(GameWorld *new_gameWorld, Vec2d pos,
-               std::vector<Vec2d> shape, SdlColor color,
+               std::vector<Vec2d> shape, SdlColor color, double scale,
                double power, double turnSpeed,
                double shotPower,
                PhysicsComponent* new_physicsComponent,
                double warpTimer, int new_lives)
-    : Ship{ new_gameWorld, pos, shape, color,
+    : Ship{ new_gameWorld, pos, shape, color, scale,
     power, turnSpeed, shotPower, new_physicsComponent},
       hyperdrive{ this, warpTimer }, isVisible{ true },
       isControllable{ true }, lives{ new_lives }

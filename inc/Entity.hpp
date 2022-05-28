@@ -29,12 +29,13 @@ public:
 
 protected:
     Entity(GameWorld *new_gameWorld, Vec2d pos,
-           std::vector<Vec2d> shape, SdlColor color)
+           std::vector<Vec2d> shape, SdlColor color, double scale)
     : gameWorld{ new_gameWorld }, m_pos{ pos },
-      m_shape{ shape }, m_color{ color }
+      m_shape{ shape }, m_color{ color }, m_scale{ scale }
         {}
 
     Vec2d m_pos;
     std::vector<Vec2d> m_shape;
     SdlColor m_color;
+    double m_scale;
 };
