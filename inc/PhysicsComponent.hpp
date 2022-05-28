@@ -18,7 +18,7 @@ public:
     void setFrameImpulse(double power) { m_impulse = power; }
     void turn(double turnSpeed);
 
-    Vec2d angle() const { return m_angle; }
+    double angle() const { return m_angle; }
     Vec2d velocity() const { return m_velocity; }
 
     void setOwner(Entity *new_owner) { owner = new_owner; }

@@ -36,7 +36,7 @@ void Player::render(SDL_Renderer *renderer)
 
     std::vector<Vec2d> transShape{ };
     for (auto p : m_shape)
-        transShape.push_back(p.rotate_deg(physicsComponent->angle()));
+        transShape.push_back(p.rotate_deg(physicsComponent->angle()) * m_scale);
 
     for (unsigned i{ 0 }; i < transShape.size(); ++i) {
         if (i == transShape.size() - 1) {

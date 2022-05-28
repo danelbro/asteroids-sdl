@@ -46,15 +46,26 @@ Vec2d Vec2d::update(Vec2d new_vec)
 
 Vec2d Vec2d::rotate_rad(double rad)
 {
+    double new_x = (x * std::cos(rad)) - (y * std::sin(rad));
+    double new_y = (x * std::sin(rad)) + (y * std::cos(rad));
+
+    return Vec2d{ new_x, new_y };
+}
+
+void Vec2d::rotate_rad_ip(double rad)
+{
     x = (x * std::cos(rad)) - (y * std::sin(rad));
     y = (x * std::sin(rad)) + (y * std::cos(rad));
-
-    return *this;
 }
 
 Vec2d Vec2d::rotate_deg(double deg)
 {
     return rotate_rad(deg * (M_PI / 180.0));
+}
+
+void Vec2d::rotate_deg_ip(double deg)
+{
+    rotate_rad_ip(deg * (M_PI / 180.0));
 }
 
 Vec2d Vec2d::operator*(double n)

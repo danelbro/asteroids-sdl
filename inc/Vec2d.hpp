@@ -21,8 +21,10 @@ struct Vec2d {
     Vec2d normalizeInPlace();
     Vec2d update(double new_x, double new_y);
     Vec2d update(Vec2d new_vec);
-    Vec2d rotate_deg(double deg);
     Vec2d rotate_rad(double rad);
+    void rotate_rad_ip(double rad);
+    Vec2d rotate_deg(double deg);
+    void rotate_deg_ip(double deg);
 
     double x{ };
     double y{ };
