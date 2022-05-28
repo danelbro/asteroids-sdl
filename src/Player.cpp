@@ -34,12 +34,9 @@ void Player::render(SDL_Renderer *renderer)
     SDL_SetRenderDrawColor(renderer,
                            m_color.r, m_color.g, m_color.b, m_color.a);
 
-    double angle{ std::atan2(physicsComponent->facing_direction().x,
-                             physicsComponent->facing_direction().y) };
-
     std::vector<Vec2d> transShape{ };
     for (auto p : m_shape)
-        transShape.push_back(p.rotate_rad(angle));
+        transShape.push_back(p.rotate_deg(physicsComponent->angle()));
 
     for (unsigned i{ 0 }; i < transShape.size(); ++i) {
         if (i == transShape.size() - 1) {
