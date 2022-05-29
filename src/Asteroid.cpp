@@ -1,6 +1,8 @@
 #include "../inc/Asteroid.hpp"
 
 #include <cmath>
+#include <ctime>
+#include <random>
 #include <vector>
 
 #include <SDL.h>
@@ -18,14 +20,24 @@ Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos,
       physicsComponent{ new_physicsComponent }, radius{ new_radius }
 {
     physicsComponent->setOwner(this);
-    physicsComponent->setFrameImpulse(60.0);
-    physicsComponent->turn(120.0);
 
-    int numPoints{ 12 };
-    double sliceAngle{ (360.0 / numPoints) * (M_PI / 180.0) };
+    std::random_device randDev;
+    std::mt19937 rng(randDev());
+    std::mt19937::result_type seed_val{ static_cast<unsigned long>(std::time(NULL)) };
+    rng.seed(seed_val);
+
+    std::uniform_real_distribution<double> impulseDist(50.0, 100.0);
+    physicsComponent->setFrameImpulse(impulseDist(rng));
+
+    std::uniform_real_distribution<double> angleDist(0.0, 360.0);
+    physicsComponent->setAngle(angleDist(rng));
+
+    std::uniform_real_distribution<double> cragDist(-5.0, 5.0);
+    int numPoints{ 13 };
+    double sliceAngle{ (2 * M_PI / numPoints) };
     for (int i{ 0 }; i < numPoints; ++i)
-        m_shape.push_back(Vec2d{std::sin(sliceAngle * i) * radius,
-                                -std::cos(sliceAngle * i) * radius});
+        m_shape.push_back(Vec2d{std::sin(sliceAngle * i) * (radius + cragDist(rng)),
+                                -std::cos(sliceAngle * i) * (radius + cragDist(rng))});
 }
 
 void Asteroid::render(SDL_Renderer *renderer)

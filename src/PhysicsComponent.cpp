@@ -44,3 +44,14 @@ void PhysicsComponent::update()
     wrap(owner->pos(), owner->gameWorld->screen);
     m_impulse = 0;
 }
+
+void PhysicsComponent::setAngle(double angle)
+{
+    if (angle < 0)
+        m_angle = 360 + angle;
+    else if (angle >= 360)
+        m_angle = angle - 360;
+    else
+        m_angle = angle;
+
+}
