@@ -33,6 +33,11 @@ void asteroids()
     using std::chrono::high_resolution_clock;
     using std::chrono::duration;
 
+    std::random_device randDev;
+    std::mt19937 rng(randDev());
+    std::mt19937::result_type seed_val{ static_cast<unsigned long>(std::time(NULL)) };
+    rng.seed(seed_val);
+
     // Window initialisation
     std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
     char title[] = "Asteroids";
@@ -99,7 +104,7 @@ void asteroids()
                                                   asteroidShape, asteroidCol,
                                                   asteroidScale,
                                                   physicsManager.at(1).get(),
-                                                  asteroidRadius));
+                                                  asteroidRadius, rng));
 
 
     // Set up for main loop

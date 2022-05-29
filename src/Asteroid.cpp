@@ -15,16 +15,11 @@
 Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos,
                    std::vector<Vec2d> shape, SdlColor color,
                    double scale, PhysicsComponent *new_physicsComponent,
-                   double new_radius)
+                   double new_radius, std::mt19937 &rng)
     : Entity(new_gameWorld, pos, shape, color, scale),
       physicsComponent{ new_physicsComponent }, radius{ new_radius }
 {
     physicsComponent->setOwner(this);
-
-    std::random_device randDev;
-    std::mt19937 rng(randDev());
-    std::mt19937::result_type seed_val{ static_cast<unsigned long>(std::time(NULL)) };
-    rng.seed(seed_val);
 
     std::uniform_real_distribution<double> impulseDist(50.0, 100.0);
     physicsComponent->setFrameImpulse(impulseDist(rng));
