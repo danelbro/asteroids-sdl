@@ -11,7 +11,6 @@
 #include <vector>
 
 #include <SDL.h>
-#include <SDL_image.h>
 
 #include "../inc/Asteroid.hpp"
 #include "../inc/Colors.hpp"
@@ -142,8 +141,7 @@ try
 {
     // SDL initialisation
     constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
-    constexpr unsigned imgFlags = IMG_INIT_PNG;
-    init(sdlFlags, imgFlags);
+    init(sdlFlags);
 
     asteroids();
 

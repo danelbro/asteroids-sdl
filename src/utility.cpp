@@ -17,19 +17,10 @@ const char* SdlException::what() const throw() {
     return SDL_GetError();
 }
 
-const char* ImgException::what() const throw() {
-    return IMG_GetError();
-}
-
-void init(uint32_t sdlFlags, uint32_t imgFlags)
+void init(uint32_t sdlFlags)
 {
     if (SDL_Init(sdlFlags) != 0)
         throw SdlException();
-
-    if (!(static_cast<uint32_t>(IMG_Init(static_cast<int>(imgFlags)))
-          & imgFlags)) {
-        throw ImgException();
-    }
 }
 
 SDL_Window* createWindow(const char* title, int x, int y,
@@ -55,27 +46,3 @@ SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags)
 
     return rend;
 }
-
-SDL_Texture* loadMedia(std::string path, SDL_Renderer* rend)
-{
-    SDL_Texture *tex = nullptr;
-    SDL_Surface *img = nullptr;
-    img = IMG_Load(path.c_str());
-
-    if (!img)
-        throw ImgException();
-
-    SDL_SetColorKey(img, SDL_TRUE,
-                    SDL_MapRGB(img->format, debug.r, debug.b, debug.g));
-
-    tex = SDL_CreateTextureFromSurface(rend, img);
-
-    if (!tex)
-        throw ImgException();
-
-    SDL_FreeSurface(img);
-    img = nullptr;
-
-    return tex;
-}
-
