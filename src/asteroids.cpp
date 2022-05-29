@@ -13,6 +13,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "../inc/Asteroid.hpp"
 #include "../inc/Colors.hpp"
 #include "../inc/KeyFlag.hpp"
 #include "../inc/Entity.hpp"
@@ -59,7 +60,7 @@ void asteroids()
     // Make player
     const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
     const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
-    const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff };
+    const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff }; // yellow
     constexpr double playerScale{ 1.0 };
     constexpr double playerEnginePower{ 25.0 };
     constexpr double playerTurnSpeed{ 7.5 };
@@ -82,6 +83,24 @@ void asteroids()
                                   playerWarpTimer,
                                   playerLives) };
     entities.push_back(player);
+
+    // Make an asteroid
+    Vec2d asteroidPos{ player->pos().x - 100, player->pos().y + 100};
+    std::vector<Vec2d> asteroidShape{ };
+    SdlColor asteroidCol{ 0xff, 0xff, 0xff, 0xff }; // white
+    double asteroidScale{ 3.0 };
+    double asteroidMass{ 100.0 };
+    physicsManager.push_back(std::make_unique<PhysicsComponent>(
+            asteroidMass, nullptr )
+    );
+    double asteroidRadius{ 25.0 };
+
+    entities.push_back(std::make_shared<Asteroid>(&gameWorld, asteroidPos,
+                                                  asteroidShape, asteroidCol,
+                                                  asteroidScale,
+                                                  physicsManager.at(1).get(),
+                                                  asteroidRadius));
+
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html

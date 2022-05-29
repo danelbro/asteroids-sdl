@@ -2,7 +2,7 @@
 .SUFFIXES:
 
 CC = g++
-OPT = -g -Og
+OPT = -g
 SDL_CFLAGS = $(shell sdl2-config --cflags)
 CFLAGS = $(OPT) -Wall -Wextra -Weffc++ -Wsign-conversion -pedantic -std=c++17
 SDL_LDFLAGS = $(shell sdl2-config --libs)
@@ -11,10 +11,12 @@ LDLIBS = -lSDL2_image
 all: asteroids
 tool: fps-analysis.cpp
 	$(CC) $(CFLAGS) -o fps-analysis fps-analysis.cpp
-asteroids: obj/asteroids.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
-	$(CC) $(LDFLAGS) -o asteroids obj/asteroids.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o $(SDL_LDFLAGS) $(LDLIBS)
+asteroids: obj/asteroids.o obj/Asteroid.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
+	$(CC) $(LDFLAGS) -o asteroids obj/Asteroid.o obj/asteroids.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o $(SDL_LDFLAGS) $(LDLIBS)
 obj/asteroids.o: src/asteroids.cpp inc/Colors.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/GameLoop.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/asteroids.o -c src/asteroids.cpp
+obj/Asteroid.o: src/Asteroid.cpp inc/Asteroid.hpp inc/Colors.hpp inc/DrawWrapLine.hpp inc/Entity.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/Vec2d.hpp
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Asteroid.o -c src/Asteroid.cpp
 obj/DrawWrapLine.o: src/DrawWrapLine.cpp inc/DrawWrapLine.hpp inc/Box.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/DrawWrapLine.o -c src/DrawWrapLine.cpp
 obj/Engine.o: src/Engine.cpp inc/Engine.hpp inc/Ship.hpp
