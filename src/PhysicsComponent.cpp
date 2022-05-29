@@ -33,14 +33,14 @@ void wrap(Vec2d &pos, Box screen)
         pos.y -= screen.h;
 }
 
-void PhysicsComponent::update()
+void PhysicsComponent::update(double elapsed)
 {
     Vec2d dirVector{ std::sin((m_angle * M_PI) / 180),
                      -std::cos((m_angle * M_PI) / 180) };
     auto totalForces{ dirVector * m_impulse };
-    m_acceleration = totalForces / m_mass;
-    m_velocity += m_acceleration;
-    owner->pos() += m_velocity;
+    m_acceleration = totalForces / m_mass * elapsed;
+    m_velocity += m_acceleration * elapsed;
+    owner->pos() += m_velocity * elapsed;
     wrap(owner->pos(), owner->gameWorld->screen);
     m_impulse = 0;
 }

@@ -24,7 +24,7 @@ public:
     void setAngle(double angle);
     void setOwner(Entity *new_owner) { owner = new_owner; }
 
-    void update();
+    void update(double elapsed);
 
 private:
     const double m_mass;

@@ -119,20 +119,19 @@ void asteroids()
     if (!logger)
         throw std::runtime_error("Couldn't initialise logger");
 
-    auto frameStart{ high_resolution_clock::now() };
-    auto frameEnd{ high_resolution_clock::now() };
+    double simTime{ 0 };
+    auto start{ high_resolution_clock::now().time_since_epoch().count() };
     while (isRunning) {
-        frameStart = high_resolution_clock::now();
-
         isRunning = processInput(player.get(), keyState);
-        updateAll(physicsManager);
-        render(entities, renderer.get());
 
-        frameEnd = high_resolution_clock::now();
-        auto elapsed{ duration<double, std::milli> {frameEnd - frameStart} };
-        double delay = msPerFrame - elapsed.count();
-        SDL_Delay(static_cast<uint32_t>( delay > 0 ? delay : 0 ));
-        logger << 1000 / elapsed.count() << '\n';
+        auto realTime{ high_resolution_clock::now().time_since_epoch().count()
+                       - start };
+        while (simTime <= realTime) {
+            updateAll(physicsManager, msPerFrame);
+            simTime += msPerFrame;
+        }
+
+        render(entities, renderer.get());
     }
 }
 

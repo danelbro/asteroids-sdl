@@ -99,10 +99,11 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager)
+void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
+    double elapsed)
 {
     for (auto &physComp : physicsManager)
-        physComp->update();
+        physComp->update(elapsed);
 }
 
 void render(std::vector<std::shared_ptr<Entity>> &entities,
