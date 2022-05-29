@@ -1,17 +1,6 @@
 #include "../inc/utility.hpp"
 
-#include <cstdint>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include <SDL.h>
-#include <SDL_image.h>
-
-#include "../inc/Colors.hpp"
-
-extern const SdlColor debug;
 
 const char* SdlException::what() const throw() {
     return SDL_GetError();

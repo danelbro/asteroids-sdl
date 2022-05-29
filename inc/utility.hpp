@@ -1,9 +1,6 @@
 #pragma once
 
 #include <exception>
-#include <memory>
-#include <string>
-#include <vector>
 
 #include <SDL.h>
 
