@@ -15,13 +15,14 @@
 Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos,
                    std::vector<Vec2d> shape, SdlColor color,
                    double scale, PhysicsComponent *new_physicsComponent,
+                   double impulseMin, double impulseMax,
                    double new_radius, std::mt19937 &rng)
     : Entity(new_gameWorld, pos, shape, color, scale),
       physicsComponent{ new_physicsComponent }, radius{ new_radius }
 {
     physicsComponent->setOwner(this);
 
-    std::uniform_real_distribution<double> impulseDist(50.0, 100.0);
+    std::uniform_real_distribution<double> impulseDist(impulseMin, impulseMax);
     physicsComponent->setFrameImpulse(impulseDist(rng));
 
     std::uniform_real_distribution<double> angleDist(0.0, 360.0);

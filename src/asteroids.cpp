@@ -66,14 +66,12 @@ void asteroids()
     const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
     const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff }; // yellow
     constexpr double playerScale{ 1.0 };
-    constexpr double playerEnginePower{ 25.0 };
-    constexpr double playerTurnSpeed{ 7.5 };
-    constexpr double playerShotPower{ 20.0 };
-    constexpr double playerMass{ 150.0 };
+    constexpr double playerEnginePower{ 5000.0 };
+    constexpr double playerTurnSpeed{ 0.04 };
+    constexpr double playerShotPower{ 300.0 };
+    constexpr double playerMass{ 0.1 };
     physicsManager.push_back(std::make_unique<PhysicsComponent>(
-            playerMass, nullptr )
-    );
-
+                                 playerMass, nullptr));
     constexpr double playerWarpTimer{ 1.0 };
     constexpr int playerLives{ 3 };
     std::vector<std::shared_ptr<Entity>> entities{ };
@@ -89,20 +87,24 @@ void asteroids()
     entities.push_back(player);
 
     // Make an asteroid
-    Vec2d asteroidPos{ player->pos().x - 100, player->pos().y + 100};
+    double asteroidRadius{ 25.0 };
+    Vec2d asteroidPos{ player->pos().x - (asteroidRadius * 2 + 100),
+        player->pos().y + (asteroidRadius * 2 + 100) };
     std::vector<Vec2d> asteroidShape{ };
     SdlColor asteroidCol{ 0xff, 0xff, 0xff, 0xff }; // white
     double asteroidScale{ 3.0 };
-    double asteroidMass{ 100.0 };
+    double asteroidMass{ 1.0 };
     physicsManager.push_back(std::make_unique<PhysicsComponent>(
-            asteroidMass, nullptr )
-    );
-    double asteroidRadius{ 25.0 };
+                                 asteroidMass, nullptr));
+    double asteroidImpulseMin{ 250'000.0 };
+    double asteroidImpulseMax{ 500'000.0 };
 
     entities.push_back(std::make_shared<Asteroid>(&gameWorld, asteroidPos,
                                                   asteroidShape, asteroidCol,
                                                   asteroidScale,
                                                   physicsManager.at(1).get(),
+                                                  asteroidImpulseMin,
+                                                  asteroidImpulseMax,
                                                   asteroidRadius, rng));
 
 
@@ -111,24 +113,30 @@ void asteroids()
     std::array<bool, K_TOTAL> keyState{ };
     std::fill(keyState.begin(), keyState.end(), false);
 
-    constexpr double fps{ 60.0 };
-    constexpr double msPerFrame { 1000.0 / fps };
     bool isRunning{ true };
 
     std::ofstream logger("fps.log");
     if (!logger)
         throw std::runtime_error("Couldn't initialise logger");
 
-    double simTime{ 0 };
-    auto start{ high_resolution_clock::now().time_since_epoch().count() };
+    double t{ 0.0 };
+    const double dt{ 0.01 };
+
+    auto currentTime{ high_resolution_clock::now() };
+    double accumulator{ 0.0 };
     while (isRunning) {
+        auto newTime{ high_resolution_clock::now() };
+        auto frameTime{ duration<double>(newTime - currentTime) };
+        currentTime = newTime;
+
+        accumulator += frameTime.count();
+
         isRunning = processInput(player.get(), keyState);
 
-        auto realTime{ high_resolution_clock::now().time_since_epoch().count()
-                       - start };
-        while (simTime <= realTime) {
-            updateAll(physicsManager, msPerFrame);
-            simTime += msPerFrame;
+        while (accumulator >= dt) {
+            updateAll(physicsManager, t, dt);
+            accumulator -= dt;
+            t += dt;
         }
 
         render(entities, renderer.get());

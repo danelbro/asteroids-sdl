@@ -99,11 +99,21 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
-    double elapsed)
+// TODO: remove. Just for suppressing warnings
+double animate(double t)
 {
+    return t+1;
+}
+
+void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
+               double t, double dt)
+{
+    // TODO: remove. Just for suppressing warnings
+    for (int i = 0; i <= 0; ++i)
+        animate(t);
+
     for (auto &physComp : physicsManager)
-        physComp->update(elapsed);
+        physComp->update(dt);
 }
 
 void render(std::vector<std::shared_ptr<Entity>> &entities,

@@ -16,6 +16,7 @@ public:
     Asteroid(GameWorld *new_gameWorld, Vec2d pos,
              std::vector<Vec2d> shape, SdlColor color,
              double scale, PhysicsComponent *new_physicsComponent,
+             double impulseMin, double impulseMax,
              double new_radius, std::mt19937 &rng);
 
     Asteroid(const Asteroid&) = delete;
