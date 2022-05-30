@@ -7,10 +7,11 @@ SDL_CFLAGS = $(shell sdl2-config --cflags)
 CFLAGS = $(OPT) -Wall -Wextra -Weffc++ -Wsign-conversion -pedantic -std=c++17
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = -lSDL2_image
+OBJ = obj/asteroids.o obj/Asteroid.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
 
 all: asteroids
-asteroids: obj/asteroids.o obj/Asteroid.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
-	$(CC) $(LDFLAGS) -o asteroids obj/Asteroid.o obj/asteroids.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o $(SDL_LDFLAGS) $(LDLIBS)
+asteroids: $(OBJ)
+	$(CC) $(LDFLAGS) -o asteroids $(OBJ) $(SDL_LDFLAGS) $(LDLIBS)
 obj/asteroids.o: src/asteroids.cpp inc/Colors.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/GameLoop.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/asteroids.o -c src/asteroids.cpp
 obj/Asteroid.o: src/Asteroid.cpp inc/Asteroid.hpp inc/Colors.hpp inc/DrawWrapLine.hpp inc/Entity.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/Vec2d.hpp
@@ -37,7 +38,3 @@ obj/Vec2d.o: src/Vec2d.cpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Vec2d.o -c src/Vec2d.cpp
 clean:
 	rm -f asteroids obj/*.o
-
-.SUFFIXES: .cpp .o
-.cpp.o:
-	$(CC) $(CFLAGS) $(SDL_CFLAGS)-c $<
