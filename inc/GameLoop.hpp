@@ -12,7 +12,7 @@ class Entity;
 class PhysicsComponent;
 class Player;
 
-bool processInput(Player *player, std::array<bool, K_TOTAL> &key_state);
+bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state);
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 

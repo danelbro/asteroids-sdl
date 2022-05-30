@@ -17,12 +17,12 @@ void Engine::off()
     owner->physicsComponent->setFrameImpulse(0.0);
 }
 
-void Engine::turnLeft()
+void Engine::turnLeft(double dt)
 {
-    owner->physicsComponent->turn(turnSpeed * -1);
+    owner->physicsComponent->turn(turnSpeed * -1, dt);
 }
 
-void Engine::turnRight()
+void Engine::turnRight(double dt)
 {
-    owner->physicsComponent->turn(turnSpeed);
+    owner->physicsComponent->turn(turnSpeed, dt);
 }

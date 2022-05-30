@@ -10,9 +10,9 @@
 #include "../inc/Entity.hpp"
 #include "../inc/Vec2d.hpp"
 
-void PhysicsComponent::turn(double turnSpeed)
+void PhysicsComponent::turn(double turnSpeed, double dt)
 {
-    m_angle += turnSpeed;
+    m_angle += turnSpeed * dt;
 
     if (m_angle < 0)
         m_angle = 360 + m_angle;

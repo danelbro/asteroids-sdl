@@ -22,6 +22,7 @@
 #include "../inc/Player.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
+#include "SDL_render.h"
 
 extern const SdlColor bg;
 
@@ -48,7 +49,7 @@ void asteroids()
 
     // Renderer intialisation
     std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer> renderer{ nullptr };
-    constexpr int rendererFlags = SDL_RENDERER_ACCELERATED;
+    constexpr int rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
     renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
         createRenderer(window.get(), -1, rendererFlags)};
 
@@ -67,8 +68,8 @@ void asteroids()
     const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff }; // yellow
     constexpr double playerScale{ 1.0 };
     constexpr double playerEnginePower{ 5000.0 };
-    constexpr double playerTurnSpeed{ 0.04 };
-    constexpr double playerShotPower{ 300.0 };
+    constexpr double playerTurnSpeed{ 300.0 };
+    constexpr double playerShotPower{ 5000.0 };
     constexpr double playerMass{ 0.1 };
     physicsManager.push_back(std::make_unique<PhysicsComponent>(
                                  playerMass, nullptr));
@@ -131,9 +132,9 @@ void asteroids()
 
         accumulator += frameTime.count();
 
-        isRunning = processInput(player.get(), keyState);
-
         while (accumulator >= dt) {
+            isRunning = processInput(player.get(), dt, keyState);
+            if (!isRunning) break;
             updateAll(physicsManager, t, dt);
             accumulator -= dt;
             t += dt;
@@ -146,7 +147,6 @@ void asteroids()
 int main()
 try
 {
-    // SDL initialisation
     constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
     init(sdlFlags);
 

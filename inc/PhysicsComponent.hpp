@@ -16,7 +16,7 @@ public:
         {}
 
     void setFrameImpulse(double power) { m_impulse = power; }
-    void turn(double turnSpeed);
+    void turn(double turnSpeed, double dt);
 
     double angle() const { return m_angle; }
     Vec2d velocity() const { return m_velocity; }

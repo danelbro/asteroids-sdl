@@ -7,8 +7,8 @@ public:
     Engine(Ship *newOwner, double newPower, double newTurnSpeed);
     void on();
     void off();
-    void turnLeft();
-    void turnRight();
+    void turnLeft(double dt);
+    void turnRight(double dt);
 
 private:
     Ship *owner;

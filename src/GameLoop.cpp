@@ -11,7 +11,7 @@
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
 
-bool processInput(Player *player, std::array<bool, K_TOTAL> &key_state)
+bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state)
 {
     bool isRunning = handleInput(key_state);
 
@@ -21,9 +21,9 @@ bool processInput(Player *player, std::array<bool, K_TOTAL> &key_state)
         player->engine.off();
 
     if (key_state[K_LEFT])
-        player->engine.turnLeft();
+        player->engine.turnLeft(dt);
     if (key_state[K_RIGHT])
-        player->engine.turnRight();
+        player->engine.turnRight(dt);
 
     if (key_state[K_SPACE])
         player->gun.fire();
