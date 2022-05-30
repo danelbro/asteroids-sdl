@@ -9,8 +9,6 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = -lSDL2_image
 
 all: asteroids
-tool: fps-analysis.cpp
-	$(CC) $(CFLAGS) -o fps-analysis fps-analysis.cpp
 asteroids: obj/asteroids.o obj/Asteroid.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o
 	$(CC) $(LDFLAGS) -o asteroids obj/Asteroid.o obj/asteroids.o obj/DrawWrapLine.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/Player.o obj/Ship.o obj/utility.o obj/Vec2d.o $(SDL_LDFLAGS) $(LDLIBS)
 obj/asteroids.o: src/asteroids.cpp inc/Colors.hpp inc/KeyFlag.hpp inc/Entity.hpp inc/GameLoop.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/utility.hpp inc/Vec2d.hpp
