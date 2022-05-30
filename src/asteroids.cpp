@@ -22,7 +22,6 @@
 #include "../inc/Player.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
-#include "SDL_render.h"
 
 extern const SdlColor bg;
 
@@ -92,7 +91,7 @@ void asteroids()
     Vec2d asteroidPos{ player->pos().x - (asteroidRadius * 2 + 100),
         player->pos().y + (asteroidRadius * 2 + 100) };
     std::vector<Vec2d> asteroidShape{ };
-    SdlColor asteroidCol{ 0xff, 0xff, 0xff, 0xff }; // white
+    SdlColor asteroidCol{ 0xff, 0xff, 0xff, 0xff }; // black
     double asteroidScale{ 3.0 };
     double asteroidMass{ 1.0 };
     physicsManager.push_back(std::make_unique<PhysicsComponent>(
