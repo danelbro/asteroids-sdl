@@ -13,3 +13,4 @@
 !/assets
 !*.png
 !*.sh
+!*.md
