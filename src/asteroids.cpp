@@ -46,13 +46,13 @@ void asteroids()
     constexpr unsigned windowFlags = 0;
     window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
         createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                     screen.w, screen.h, windowFlags)};
+                     screen.w, screen.h, windowFlags) };
 
     // Renderer intialisation
     std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer> renderer{ nullptr };
     constexpr int rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
     renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
-        createRenderer(window.get(), -1, rendererFlags)};
+        createRenderer(window.get(), -1, rendererFlags) };
 
     SDL_SetRenderDrawColor(renderer.get(), bg.r, bg.g, bg.b, bg.a);
 
