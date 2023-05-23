@@ -15,8 +15,9 @@
 
 #include "../inc/Asteroid.hpp"
 #include "../inc/Colors.hpp"
-#include "../inc/KeyFlag.hpp"
 #include "../inc/Entity.hpp"
+#include "../inc/EntityManager.hpp"
+#include "../inc/KeyFlag.hpp"
 #include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
@@ -59,10 +60,13 @@ void asteroids()
     constexpr double fluidDensity{ 0.1 };
     GameWorld gameWorld{ screen, fluidDensity };
 
-    // Make physics manager
+    // Make physicsManager
     std::vector<std::unique_ptr<PhysicsComponent>> physicsManager{ };
 
-    // Make player
+    // Make EntityManager
+    EntityManager entityManager(physicsManager);
+
+    // Player propoerties
     const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
     const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
     const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff }; // yellow
@@ -71,43 +75,18 @@ void asteroids()
     constexpr double playerTurnSpeed{ 300.0 };
     constexpr double playerShotPower{ 5000.0 };
     constexpr double playerMass{ 0.1 };
-    physicsManager.push_back(std::make_unique<PhysicsComponent>(
-                                 playerMass, nullptr));
     constexpr double playerWarpTimer{ 1.0 };
     constexpr int playerLives{ 3 };
-    std::vector<std::shared_ptr<Entity>> entities{ };
+
     std::shared_ptr<Player> player{
-        std::make_shared<Player> (&gameWorld, playerPos,
-                                  playerShape, playerCol, playerScale,
-                                  playerEnginePower,
-                                  playerTurnSpeed,
-                                  playerShotPower,
-                                  physicsManager.at(0).get(),
-                                  playerWarpTimer,
-                                  playerLives) };
-    entities.push_back(player);
+        entityManager.make_player(
+            &gameWorld, playerPos, playerShape,
+            playerCol, playerScale, playerMass,
+            playerEnginePower, playerTurnSpeed, playerShotPower,
+            playerWarpTimer, playerLives)
+    };
 
-    // Make an asteroid
-    double asteroidRadius{ 25.0 };
-    Vec2d asteroidPos{ player->pos().x - (asteroidRadius * 2 + 100),
-        player->pos().y + (asteroidRadius * 2 + 100) };
-    std::vector<Vec2d> asteroidShape{ };
-    SdlColor asteroidCol{ 0xff, 0xff, 0xff, 0xff }; // black
-    double asteroidScale{ 3.0 };
-    double asteroidMass{ 1.0 };
-    physicsManager.push_back(std::make_unique<PhysicsComponent>(
-                                 asteroidMass, nullptr));
-    double asteroidImpulseMin{ 250'000.0 };
-    double asteroidImpulseMax{ 500'000.0 };
-
-    entities.push_back(std::make_shared<Asteroid>(&gameWorld, asteroidPos,
-                                                  asteroidShape, asteroidCol,
-                                                  asteroidScale,
-                                                  physicsManager.at(1).get(),
-                                                  asteroidImpulseMin,
-                                                  asteroidImpulseMax,
-                                                  asteroidRadius, rng));
-
+    entityManager.make_asteroids(&gameWorld, 3, 3.0, rng);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
@@ -140,7 +119,7 @@ void asteroids()
             t += dt;
         }
 
-        render(entities, renderer.get());
+        render(entityManager.entities, renderer.get());
     }
 }
 
