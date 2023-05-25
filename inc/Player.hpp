@@ -12,7 +12,6 @@
 #include "Ship.hpp"
 #include "Vec2d.hpp"
 
-class Engine;
 struct GameWorld;
 class PhysicsComponent;
 
