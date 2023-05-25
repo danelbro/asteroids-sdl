@@ -112,7 +112,7 @@ void asteroids()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
-            isRunning = processInput(player.get(), dt, keyState);
+            isRunning = processInput(player.get(), dt, keyState, &entityManager);
             if (!isRunning) break;
             updateAll(physicsManager, t, dt);
             accumulator -= dt;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EntityManager.hpp"
+
 class Ship;
 
 class Gun {
@@ -8,7 +10,7 @@ public:
         : owner{ new_owner }, m_shotPower{ shotPower }
         {}
 
-    void fire();
+    void fire(EntityManager *entMan);
 
 private:
     Ship *owner;
