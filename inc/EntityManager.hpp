@@ -21,7 +21,8 @@ class EntityManager {
 public:
 	EntityManager(std::vector<std::unique_ptr<PhysicsComponent>> &physMan);
 
-	void make_bullet(Vec2d origin, double power, Vec2d angle);
+	void make_bullet(GameWorld* new_GameWorld, Vec2d origin,
+		double power, double angle, Ship* new_owner);
 
 	void make_asteroid(GameWorld* new_GameWorld, Vec2d pos,
 		std::vector<Vec2d> shape, SdlColor color, double scale, double mass,

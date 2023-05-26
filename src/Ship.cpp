@@ -4,14 +4,22 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/Gun.hpp"
 #include "../inc/PhysicsComponent.hpp"
+#include "../inc/Vec2d.hpp"
 
 Ship::Ship(GameWorld *new_gameWorld, Vec2d pos,
            std::vector<Vec2d> shape, SdlColor color, double scale,
            double power, double turnSpeed,
            double shotPower,
            PhysicsComponent *new_physicsComponent)
-    : Entity{ new_gameWorld, pos, shape, color, scale },
+    : PhysicsEntity{ new_gameWorld, pos, shape, color, scale, new_physicsComponent },
       engine(this, power, turnSpeed),
-      gun(this, shotPower),
-      physicsComponent{ new_physicsComponent }
+      gun(this, shotPower)
 {}
+
+Vec2d Ship::nose() const
+{
+    Vec2d p = m_shape.at(0);
+    Vec2d transP = p.rotate_deg(physicsComponent->angle()) * m_scale;
+
+    return { {m_pos.x + transP.x}, {m_pos.y + transP.y} };
+}

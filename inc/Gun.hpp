@@ -1,6 +1,7 @@
 #pragma once
 
 class EntityManager;
+class GameWorld;
 class Ship;
 
 class Gun {
@@ -9,7 +10,8 @@ public:
         : owner{ new_owner }, m_shotPower{ shotPower }
         {}
 
-    void fire(EntityManager *entMan);
+    void fire(GameWorld* new_GameWorld, EntityManager* entMan, Ship* firingShip);
+    bool fired{ false };
 
 private:
     Ship *owner;

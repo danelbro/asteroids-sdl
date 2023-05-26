@@ -28,7 +28,6 @@ public:
 
     void respawn(Vec2d new_pos, bool reset=true);
 
-    void render(SDL_Renderer *renderer) override;
 private:
     bool isVisible;
     bool isControllable;

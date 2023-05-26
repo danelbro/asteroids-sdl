@@ -73,7 +73,7 @@ void asteroids()
     constexpr double playerScale{ 1.0 };
     constexpr double playerEnginePower{ 5000.0 };
     constexpr double playerTurnSpeed{ 300.0 };
-    constexpr double playerShotPower{ 5000.0 };
+    constexpr double playerShotPower{ 20000.0 };
     constexpr double playerMass{ 0.1 };
     constexpr double playerWarpTimer{ 1.0 };
     constexpr int playerLives{ 3 };
@@ -112,7 +112,8 @@ void asteroids()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
-            isRunning = processInput(player.get(), dt, keyState, &entityManager);
+            isRunning = processInput(&gameWorld, player.get(), dt, 
+                keyState, &entityManager);
             if (!isRunning) break;
             updateAll(physicsManager, t, dt);
             accumulator -= dt;

@@ -11,15 +11,28 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
+#include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
 
 EntityManager::EntityManager(std::vector<std::unique_ptr<PhysicsComponent>> &physMan)
 	:m_physMan{ physMan }
 {}
 
-void EntityManager::make_bullet(Vec2d origin, double power, Vec2d angle)
+void EntityManager::make_bullet(GameWorld *new_GameWorld, Vec2d origin, 
+	double power, double angle, Ship *new_owner)
 {
-	return;
+	constexpr double mass{ 0.003 };
+	constexpr double scale{ 1.0 };
+
+	const std::vector<Vec2d> shape{ {-1, -4}, {1, -4}, {1, 4}, {-1, 4} };
+	const SdlColor color{ 0xff, 0xff, 0xff, 0xff }; // white
+
+	m_physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
+	m_physMan.back()->setAngle(angle);
+	m_physMan.back()->setFrameImpulse(power);
+
+	entities.push_back(std::make_shared<Bullet>(new_GameWorld, origin, shape,
+		color, scale, m_physMan.back().get(), new_owner));
 }
 
 

@@ -3,6 +3,8 @@
 struct Vec2d {
     double magnitude() const;
     double magnitude_squared() const;
+    double angle() const;
+    double angleDeg() const;
 
     Vec2d operator*(double x);
     // dot product

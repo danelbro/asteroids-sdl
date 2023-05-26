@@ -9,10 +9,12 @@
 #include "../inc/KeyFlag.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/EntityManager.hpp"
+#include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
 
-bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state, EntityManager *entMan)
+bool processInput(GameWorld *gameworld, Player *player, double dt, 
+    std::array<bool, K_TOTAL> &key_state, EntityManager *entMan)
 {
     bool isRunning = handleInput(key_state);
 
@@ -27,7 +29,10 @@ bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_stat
         player->engine.turnRight(dt);
 
     if (key_state[K_SPACE])
-        player->gun.fire(entMan);
+        if (!player->gun.fired)
+            player->gun.fire(gameworld, entMan, player);
+    if (!key_state[K_SPACE])
+        player->gun.fired = false;
 
     if (key_state[K_LSHIFT])
         player->hyperdrive.warp();
