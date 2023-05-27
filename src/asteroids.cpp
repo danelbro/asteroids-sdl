@@ -17,6 +17,7 @@
 #include "../inc/Colors.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/EntityManager.hpp"
+#include "../inc/PhysicsManager.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
@@ -42,7 +43,7 @@ void asteroids()
     // Window initialisation
     std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
     char title[] = "Asteroids";
-    const Box screen{ 960, 720 };
+    const Box screen{ 853, 640 };
     constexpr unsigned windowFlags = 0;
     window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
         createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -60,11 +61,11 @@ void asteroids()
     constexpr double fluidDensity{ 0.1 };
     GameWorld gameWorld{ screen, fluidDensity };
 
-    // Make physicsManager
-    std::vector<std::unique_ptr<PhysicsComponent>> physicsManager{ };
-
     // Make EntityManager
-    EntityManager entityManager(physicsManager);
+    EntityManager entityManager{};
+
+    // Make PhysicsManager
+    PhysicsManager physicsManager{};
 
     // Player propoerties
     const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
@@ -79,14 +80,14 @@ void asteroids()
     constexpr int playerLives{ 3 };
 
     std::shared_ptr<Player> player{
-        entityManager.make_player(
+        physicsManager.make_player(
             &gameWorld, playerPos, playerShape,
             playerCol, playerScale, playerMass,
             playerEnginePower, playerTurnSpeed, playerShotPower,
             playerWarpTimer, playerLives)
     };
 
-    entityManager.make_asteroids(&gameWorld, 3, 3.0, rng);
+    physicsManager.make_asteroids(&gameWorld, 3, 3.0, rng);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
@@ -113,14 +114,14 @@ void asteroids()
 
         while (accumulator >= dt) {
             isRunning = processInput(&gameWorld, player.get(), dt, 
-                keyState, &entityManager);
+                keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
-            updateAll(physicsManager, t, dt);
+            updateAll(&entityManager, &physicsManager, t, dt);
             accumulator -= dt;
             t += dt;
         }
 
-        render(entityManager.entities, renderer.get());
+        render(&entityManager, &physicsManager, renderer.get());
     }
 }
 

@@ -15,7 +15,9 @@ double Vec2d::magnitude_squared() const
 
 double Vec2d::angle() const
 {
-    return M_PI - atan2(x, y);
+    Vec2d oldVec{x, y};
+    Vec2d normVec = oldVec.normalize();
+    return M_PI - atan2(normVec.x, normVec.y);
 }
 
 double Vec2d::angleDeg() const

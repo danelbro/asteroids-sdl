@@ -19,12 +19,14 @@ struct GameWorld;
 class Entity {
 public:
     virtual void render(SDL_Renderer* renderer) = 0;
+    virtual void update(double t, double dt) = 0;
     virtual ~Entity() = default;
 
     Entity(const Entity&) = delete;
     Entity & operator=(const Entity&) = delete;
 
     Vec2d & pos() { return m_pos; }
+    bool kill_it() const { return kill_me; }
 
     GameWorld const *gameWorld;
 
@@ -41,4 +43,5 @@ protected:
     std::vector<Vec2d> m_shape;
     SdlColor m_color;
     double m_scale;
+    bool kill_me{ false };
 };

@@ -24,6 +24,8 @@ public:
            PhysicsComponent *new_physicsComponent,
            double warpTimer, int new_lives);
 
+    void update(double t, double dt) override { return; }
+
     Hyperdrive hyperdrive;
 
     void respawn(Vec2d new_pos, bool reset=true);

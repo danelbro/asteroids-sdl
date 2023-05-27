@@ -11,10 +11,12 @@
 #include "../inc/EntityManager.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
+#include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
 
-bool processInput(GameWorld *gameworld, Player *player, double dt, 
-    std::array<bool, K_TOTAL> &key_state, EntityManager *entMan)
+bool processInput(GameWorld* gameworld, Player* player, double dt,
+    std::array<bool, K_TOTAL>& key_state,
+    EntityManager* entMan, PhysicsManager* physMan)
 {
     bool isRunning = handleInput(key_state);
 
@@ -30,7 +32,7 @@ bool processInput(GameWorld *gameworld, Player *player, double dt,
 
     if (key_state[K_SPACE])
         if (!player->gun.fired)
-            player->gun.fire(gameworld, entMan, player);
+            player->gun.fire(gameworld, physMan, player);
     if (!key_state[K_SPACE])
         player->gun.fired = false;
 
@@ -105,28 +107,28 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-// TODO: remove. Just for suppressing warnings
-double animate(double t)
+void updateAll(EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt)
 {
-    return t+1;
-}
+    for (auto &ent : entMan->entities)
+        ent->update(t, dt);
+    for (auto& physEnt : physMan->physEntities)
+        physEnt->update(t, dt);
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
-               double t, double dt)
-{
-    // TODO: remove. Just for suppressing warnings
-    for (int i = 0; i <= 0; ++i)
-        animate(t);
+    entMan->clean_up();
+    physMan->clean_up();
 
-    for (auto &physComp : physicsManager)
+    for (auto &physComp : physMan->physMan)
         physComp->update(dt);
 }
 
-void render(std::vector<std::shared_ptr<Entity>> &entities,
-            SDL_Renderer *renderer)
+void render(EntityManager* entMan, PhysicsManager* physMan,
+    SDL_Renderer* renderer)
 {
     SDL_RenderClear(renderer);
-    for (auto &entity : entities)
+    for (auto &entity : entMan->entities)
         entity->render(renderer);
+    for (auto& physEntity : physMan->physEntities)
+        physEntity->render(renderer);
     SDL_RenderPresent(renderer);
 }
