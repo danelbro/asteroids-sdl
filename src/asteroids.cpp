@@ -26,8 +26,6 @@
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
-extern const SdlColor bg;
-
 std::ofstream errorLogger("exception.log");
 
 void asteroids()
@@ -55,7 +53,8 @@ void asteroids()
     renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
         createRenderer(window.get(), -1, rendererFlags) };
 
-    SDL_SetRenderDrawColor(renderer.get(), bg.r, bg.g, bg.b, bg.a);
+    SDL_SetRenderDrawColor(renderer.get(), customCols::bg.r, customCols::bg.g, 
+        customCols::bg.b, customCols::bg.a);
 
     // Gameworld initialisation
     constexpr double fluidDensity{ 0.1 };
@@ -67,25 +66,8 @@ void asteroids()
     // Make PhysicsManager
     PhysicsManager physicsManager{};
 
-    // Player propoerties
-    const Vec2d playerPos{ screen.w / 2.0, screen.h / 2.0 };
-    const std::vector<Vec2d> playerShape{ {0, -30}, {20, 30}, {-20, 30} };
-    const SdlColor playerCol{ 0xff, 0xff, 0x00, 0xff }; // yellow
-    constexpr double playerScale{ 1.0 };
-    constexpr double playerEnginePower{ 5000.0 };
-    constexpr double playerTurnSpeed{ 300.0 };
-    constexpr double playerShotPower{ 20000.0 };
-    constexpr double playerMass{ 0.1 };
-    constexpr double playerWarpTimer{ 1.0 };
-    constexpr int playerLives{ 3 };
-
-    std::shared_ptr<Player> player{
-        physicsManager.make_player(
-            &gameWorld, playerPos, playerShape,
-            playerCol, playerScale, playerMass,
-            playerEnginePower, playerTurnSpeed, playerShotPower,
-            playerWarpTimer, playerLives)
-    };
+    // Make Player
+    std::shared_ptr<Player> player{physicsManager.make_player(&gameWorld)};
 
     physicsManager.make_asteroids(&gameWorld, 3, 3.0, rng);
 
