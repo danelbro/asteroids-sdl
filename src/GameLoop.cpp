@@ -6,7 +6,7 @@
 
 #include <SDL.h>
 
-#include "../inc/KeyFlag.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/EntityManager.hpp"
 #include "../inc/GameWorld.hpp"

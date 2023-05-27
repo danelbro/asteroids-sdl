@@ -8,7 +8,7 @@
 
 #include "EntityManager.hpp"
 #include "GameWorld.hpp"
-#include "KeyFlag.hpp"
+#include "FlagEnums.hpp"
 
 class Entity;
 class PhysicsComponent;

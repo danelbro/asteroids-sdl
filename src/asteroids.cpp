@@ -17,7 +17,7 @@
 #include "../inc/Colors.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/EntityManager.hpp"
-#include "../inc/KeyFlag.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"

@@ -9,3 +9,11 @@ enum KeyFlag {
     K_LSHIFT,
     K_TOTAL
 };
+
+enum EntityFlag {
+    PLAYER,
+    ASTEROID,
+    ENEMY,
+    BULLET,
+    E_TYPE_TOTAL
+};

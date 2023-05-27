@@ -8,6 +8,7 @@
 #include <SDL.h>
 
 #include "../inc/GameWorld.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"
 
@@ -16,7 +17,7 @@ Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos,
                    double scale, PhysicsComponent *new_physicsComponent,
                    double impulseMin, double impulseMax,
                    double new_radius, std::mt19937 &rng)
-    : PhysicsEntity(new_gameWorld, pos, shape, color, scale, new_physicsComponent),
+    : PhysicsEntity(ASTEROID, new_gameWorld, pos, shape, color, scale, new_physicsComponent),
       radius{ new_radius }
 {
     physicsComponent->setOwner(this);
