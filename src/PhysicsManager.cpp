@@ -21,7 +21,7 @@ void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 	double power, double angle, Ship* new_owner)
 {
 	constexpr double mass{ 0.003 };
-	constexpr double scale{ 4.0 };
+	constexpr double scale{ 1.0 };
 	constexpr double lifespan{ 2.0 }; // seconds
 
 	const std::vector<Vec2d> shape{ {0, -3}, {2, 3}, {-2, 3} };
