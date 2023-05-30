@@ -77,6 +77,7 @@ void asteroids()
     std::fill(keyState.begin(), keyState.end(), false);
 
     bool isRunning{ true };
+    bool playerIsAlive{ true };
 
     std::ofstream logger("fps.log");
     if (!logger)
@@ -95,10 +96,11 @@ void asteroids()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
-            isRunning = processInput(&gameWorld, player, dt, 
+            if (playerIsAlive)
+                isRunning = processInput(&gameWorld, player, dt, 
                 keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
-            updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);
+            playerIsAlive = updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);
             accumulator -= dt;
             t += dt;
         }

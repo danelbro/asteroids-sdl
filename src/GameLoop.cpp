@@ -20,24 +20,31 @@ bool processInput(GameWorld* gameworld, Player* player, double dt,
 {
     bool isRunning = handleInput(key_state);
 
-    if (key_state[K_UP])
-        player->engine.on();
-    else if (!key_state[K_UP])
-        player->engine.off();
+    bool playerIsAlive = false;
+    for (auto& ent : physMan->physEntities)
+        if (ent->type == PLAYER)
+            playerIsAlive = true;
 
-    if (key_state[K_LEFT])
-        player->engine.turnLeft(dt);
-    if (key_state[K_RIGHT])
-        player->engine.turnRight(dt);
+    if (playerIsAlive) {
+        if (key_state[K_UP])
+            player->engine.on();
+        else if (!key_state[K_UP])
+            player->engine.off();
 
-    if (key_state[K_SPACE])
-        if (!player->gun.fired)
-            player->gun.fire(gameworld, physMan, player);
-    if (!key_state[K_SPACE])
-        player->gun.fired = false;
+        if (key_state[K_LEFT])
+            player->engine.turnLeft(dt);
+        if (key_state[K_RIGHT])
+            player->engine.turnRight(dt);
 
-    if (key_state[K_LSHIFT])
-        player->hyperdrive.warp();
+        if (key_state[K_SPACE])
+            if (!player->gun.fired)
+                player->gun.fire(gameworld, physMan, player);
+        if (!key_state[K_SPACE])
+            player->gun.fired = false;
+
+        if (key_state[K_LSHIFT])
+            player->hyperdrive.warp();
+    }
 
     return isRunning;
 }
@@ -107,7 +114,7 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-void updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
+bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     double t, double dt, std::mt19937 rng)
 {
     for (auto &ent : entMan->entities)
@@ -115,7 +122,7 @@ void updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     for (auto& physEnt : physMan->physEntities)
         physEnt->update(t, dt);
 
-    physMan->check_player_hit();
+    bool playerIsAlive{ physMan->check_player_hit() };
     physMan->check_asteroids_hit();
 
     entMan->clean_up();
@@ -123,6 +130,8 @@ void updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
 
     for (auto &physComp : physMan->physMan)
         physComp->update(dt);
+
+    return playerIsAlive;
 }
 
 void render(EntityManager* entMan, PhysicsManager* physMan,
