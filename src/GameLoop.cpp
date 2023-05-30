@@ -115,6 +115,9 @@ void updateAll(EntityManager* entMan, PhysicsManager* physMan,
     for (auto& physEnt : physMan->physEntities)
         physEnt->update(t, dt);
 
+    physMan->check_player_hit();
+    physMan->check_asteroids_hit();
+
     entMan->clean_up();
     physMan->clean_up();
 
