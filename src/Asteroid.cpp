@@ -21,4 +21,5 @@ Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos, std::vector<Vec2d> shape
     physicsComponent->setOwner(this);
     physicsComponent->setFrameImpulse(impulse);
     physicsComponent->setAngle(angle);
+    // fill = true;
 }

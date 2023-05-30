@@ -63,3 +63,46 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
         }
     }
 }
+
+void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Renderer* renderer)
+{
+    SdlColor old{};
+    SDL_GetRenderDrawColor(renderer, &old.r, &old.g, &old.b, &old.a);
+    SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+
+    std::vector<double> ys{};
+    for (auto p : poly)
+        ys.push_back(p.y);
+    std::sort(ys.begin(), ys.end());
+    double y_min{ ys.front() };
+    double y_max{ ys.back() };
+
+    Vec2d pixel{};
+
+    for (pixel.y = y_min; pixel.y < y_max; pixel.y++) {
+        size_t i{}, j{};
+        std::vector<double> nodesX;
+        
+        j = poly.size() - 1;
+        for (i = 0; i < poly.size(); i++) {
+            if (poly.at(i).y < pixel.y && poly.at(j).y >= pixel.y
+                || poly.at(j).y < pixel.y && poly.at(i).y >= pixel.y)
+                nodesX.push_back(
+                    poly.at(i).x
+                    + (pixel.y - poly.at(i).y)
+                    / (poly.at(j).y - poly.at(i).y)
+                    * (poly.at(j).x - poly.at(i).x));
+            j = i;
+        }
+
+
+        std::sort(nodesX.begin(), nodesX.end());
+
+        for (i = 0; i < nodesX.size(); i += 2) {
+            for (pixel.x = nodesX.at(i); pixel.x < nodesX.at(i + 1); pixel.x += 1)
+                DrawWrapLine(renderer, gw->screen, pixel.x, pixel.y, nodesX.at(i + 1), pixel.y);
+        }
+    }
+
+    SDL_SetRenderDrawColor(renderer, old.r, old.g, old.b, old.a);
+}

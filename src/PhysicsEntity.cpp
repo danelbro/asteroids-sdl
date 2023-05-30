@@ -45,6 +45,14 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
         }
     }
 
+    std::vector<Vec2d> fillShape = transShape;
+    for (auto& p : fillShape) {
+        p.x += m_pos.x;
+        p.y += m_pos.y;
+    }
+    if (fill)
+        ScanFill(gameWorld, fillShape, m_color, renderer);
+
     SDL_SetRenderDrawColor(renderer,
         oldColor.r, oldColor.g, oldColor.b, oldColor.a);
 }
