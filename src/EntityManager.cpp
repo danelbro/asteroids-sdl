@@ -7,6 +7,6 @@ EntityManager::EntityManager()
 void EntityManager::clean_up()
 {
 	for (size_t i{ 0 }; i < entities.size(); i++)
-		if (entities[i]->kill_it())
+		if (entities[i]->toBeKilled())
 			entities.erase(entities.begin() + i);
 }

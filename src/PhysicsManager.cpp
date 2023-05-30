@@ -13,6 +13,7 @@
 #include "../inc/Player.hpp"
 #include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
+#include "../inc/VectorDraw.hpp"
 
 PhysicsManager::PhysicsManager()
 	: physEntities{ }, physMan{ }
@@ -36,7 +37,7 @@ void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 }
 
 
-void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
+void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale, Vec2d pos,
 	std::mt19937& rng)
 {
 	const double mass{ 1.0 };
@@ -46,12 +47,8 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
 	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
 	double radius{ radiusDist(rng) };
 
-	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
-	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
-	Vec2d pos{ xDist(rng), yDist(rng) };
-
-	constexpr double impulseMin{ 250'000.0 };
-	constexpr double impulseMax{ 500'000.0 };
+	constexpr double impulseMin{ 750'000.0 };
+	constexpr double impulseMax{ 1'500'000.0 };
 	std::uniform_real_distribution<double> impulseDist(impulseMin, impulseMax);
 	double impulse{ impulseDist(rng) };
 
@@ -83,11 +80,23 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
 }
 
 void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
-	double scale, std::mt19937& rng)
+	double scale, char flag, std::mt19937 & rng, Vec2d pos)
 {
+	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
+	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
+	Vec2d new_pos{ };
+
 	for (int i{ num }; i > 0; i--)
 	{
-		make_asteroid(new_GameWorld, scale, rng);
+		if (flag == 'n') {
+			new_pos.x = xDist(rng);
+			new_pos.y = yDist(rng);
+
+			make_asteroid(new_GameWorld, scale, new_pos, rng);
+		}
+		else {
+			make_asteroid(new_GameWorld, scale, pos, rng);
+		}
 	}
 }
 
@@ -123,14 +132,36 @@ void PhysicsManager::clean_up(GameWorld* gw, std::mt19937 rng)
 {
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity* phys = physEntities[i].get();
-		if (phys->kill_it())
+		if (phys->toBeKilled())
 		{
 			if (phys->type == ASTEROID && phys->scale() > 1.0) {
-				make_asteroids(gw, 2, phys->scale() - 1.0, rng);
+				make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, phys->pos());
 			}
 
 			physMan.erase(physMan.begin() + i);
 			physEntities.erase(physEntities.begin() + i);
+		}
+	}
+}
+
+void PhysicsManager::check_player_hit()
+{
+	return;
+}
+
+void PhysicsManager::check_asteroids_hit()
+{
+	for (auto& bul : physEntities) {
+		if (bul->type == BULLET) {
+			for (auto& ast : physEntities) {
+				if (ast->type == ASTEROID) {
+					bool hit{ PointInPolygon(bul->pos(), ast->fillShape()) };
+					if (hit) {
+						ast->kill_it();
+						bul->kill_it();
+					}
+				}
+			}
 		}
 	}
 }
