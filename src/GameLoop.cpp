@@ -107,8 +107,8 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-void updateAll(EntityManager* entMan, PhysicsManager* physMan,
-    double t, double dt)
+void updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt, std::mt19937 rng)
 {
     for (auto &ent : entMan->entities)
         ent->update(t, dt);
@@ -119,7 +119,7 @@ void updateAll(EntityManager* entMan, PhysicsManager* physMan,
     physMan->check_asteroids_hit();
 
     entMan->clean_up();
-    physMan->clean_up();
+    physMan->clean_up(gw, rng);
 
     for (auto &physComp : physMan->physMan)
         physComp->update(dt);
