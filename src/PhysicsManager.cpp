@@ -30,7 +30,7 @@ void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 	physMan.back()->setAngle(angle);
 	physMan.back()->setFrameImpulse(power);
 
-	physEntities.push_back(std::make_shared<Bullet>(new_GameWorld, origin, shape,
+	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin, shape,
 		customCols::bullet_col, scale, physMan.back().get(), new_owner, lifespan));
 }
 
@@ -77,7 +77,7 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	physEntities.push_back(std::make_shared<Asteroid>(new_GameWorld, pos, shape,
+	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos, shape,
 		customCols::asteroid_col, scale, physMan.back().get(), impulse, angle, radius));
 }
 
@@ -95,7 +95,7 @@ void PhysicsManager::make_enemy()
 	return;
 }
 
-std::shared_ptr<Player> PhysicsManager::make_player(GameWorld* gameWorld)
+Player* PhysicsManager::make_player(GameWorld* gameWorld)
 {
 	const Vec2d pos{ gameWorld->screen.w / 2.0, gameWorld->screen.h / 2.0 };
 	const std::vector<Vec2d> shape{ {0, -30}, {20, 30}, {-20, 30} };
@@ -109,14 +109,13 @@ std::shared_ptr<Player> PhysicsManager::make_player(GameWorld* gameWorld)
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	std::shared_ptr<Player> player{
-		std::make_shared<Player>(gameWorld, pos, shape, customCols::player_col, scale,
-		power, turnSpeed, shotPower, physMan.back().get(), warpTimer, lives)
-	};
+	std::unique_ptr<Player> player(new Player{ gameWorld, pos, shape, customCols::player_col, scale,
+		power, turnSpeed, shotPower, physMan.back().get(), warpTimer, lives });
 
-	physEntities.push_back(player);
+	Player* plPtr = player.get();
+	physEntities.push_back(std::move(player));
 
-	return player;
+	return plPtr;
 }
 
 void PhysicsManager::clean_up()

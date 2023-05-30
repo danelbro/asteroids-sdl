@@ -34,13 +34,13 @@ public:
 
 	void make_enemy();
 
-	std::shared_ptr<Player> make_player(GameWorld* new_GameWorld);
+	Player* make_player(GameWorld* new_GameWorld);
 
 	void clean_up();
 
 	void check_player_hit() { return; }
 	void check_asteroids_hit() { return; }
 
-	std::vector<std::shared_ptr<Entity>> physEntities;
+	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;
 	std::vector<std::unique_ptr<PhysicsComponent>> physMan;
 };

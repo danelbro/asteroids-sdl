@@ -67,7 +67,7 @@ void asteroids()
     PhysicsManager physicsManager{};
 
     // Make Player
-    std::shared_ptr<Player> player{physicsManager.make_player(&gameWorld)};
+    Player* player{physicsManager.make_player(&gameWorld)};
 
     physicsManager.make_asteroids(&gameWorld, 3, 3.0, rng);
 
@@ -95,7 +95,7 @@ void asteroids()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
-            isRunning = processInput(&gameWorld, player.get(), dt, 
+            isRunning = processInput(&gameWorld, player, dt, 
                 keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
             updateAll(&entityManager, &physicsManager, t, dt);
