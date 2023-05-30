@@ -20,31 +20,24 @@ bool processInput(GameWorld* gameworld, Player* player, double dt,
 {
     bool isRunning = handleInput(key_state);
 
-    bool playerIsAlive = false;
-    for (auto& ent : physMan->physEntities)
-        if (ent->type == PLAYER)
-            playerIsAlive = true;
+    if (key_state[K_UP])
+        player->engine.on();
+    else if (!key_state[K_UP])
+        player->engine.off();
 
-    if (playerIsAlive) {
-        if (key_state[K_UP])
-            player->engine.on();
-        else if (!key_state[K_UP])
-            player->engine.off();
+    if (key_state[K_LEFT])
+        player->engine.turnLeft(dt);
+    if (key_state[K_RIGHT])
+        player->engine.turnRight(dt);
 
-        if (key_state[K_LEFT])
-            player->engine.turnLeft(dt);
-        if (key_state[K_RIGHT])
-            player->engine.turnRight(dt);
+    if (key_state[K_SPACE])
+        if (!player->gun.fired)
+            player->gun.fire(gameworld, physMan, player);
+    if (!key_state[K_SPACE])
+        player->gun.fired = false;
 
-        if (key_state[K_SPACE])
-            if (!player->gun.fired)
-                player->gun.fire(gameworld, physMan, player);
-        if (!key_state[K_SPACE])
-            player->gun.fired = false;
-
-        if (key_state[K_LSHIFT])
-            player->hyperdrive.warp();
-    }
+    if (key_state[K_LSHIFT])
+        player->hyperdrive.warp();
 
     return isRunning;
 }
