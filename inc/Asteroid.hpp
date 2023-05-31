@@ -22,5 +22,7 @@ public:
     Asteroid(const Asteroid&) = delete;
     Asteroid & operator=(const Asteroid&) = delete;
 
+    void update(double t, double dt) override { return; }
+
     double radius;
 };

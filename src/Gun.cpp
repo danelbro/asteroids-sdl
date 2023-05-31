@@ -4,15 +4,17 @@
 
 #include "../inc/EntityManager.hpp"
 #include "../inc/GameWorld.hpp"
+#include "../inc/PhysicsComponent.hpp"
+#include "../inc/PhysicsManager.hpp"
 #include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
 
-void Gun::fire(GameWorld *new_GameWorld, EntityManager *entMan, Ship *firingShip)
+void Gun::fire(GameWorld *new_GameWorld, PhysicsManager *physMan, Ship *firingShip)
 {
     Vec2d origin{ owner->nose() };
-    double angle{ owner->physicsComponent->facing().angleDeg() };
+    double angle{ owner->physicsComponent->angle() };
 
-    entMan->make_bullet(new_GameWorld, origin, m_shotPower, angle, firingShip);
+    physMan->make_bullet(new_GameWorld, origin, m_shotPower, angle, firingShip);
 
     fired = true;
 }

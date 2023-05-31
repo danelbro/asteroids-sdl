@@ -9,18 +9,20 @@
 #include "EntityManager.hpp"
 #include "GameWorld.hpp"
 #include "FlagEnums.hpp"
+#include "PhysicsManager.hpp"
 
 class Entity;
 class PhysicsComponent;
 class Player;
 
-bool processInput(GameWorld *GameWorld, Player *player, double dt, 
-    std::array<bool, K_TOTAL> &key_state, EntityManager *entMan);
+bool processInput(GameWorld* GameWorld, Player* player, double dt,
+    std::array<bool, K_TOTAL>& key_state, 
+    EntityManager* entMan, PhysicsManager* physMan);
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
-               double t, double dt);
+void updateAll(EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt);
 
-void render(std::vector<std::shared_ptr<Entity>> &entities,
+void render(EntityManager* entMan, PhysicsManager* physMan,
             SDL_Renderer *renderer);
