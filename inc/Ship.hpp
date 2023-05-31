@@ -24,6 +24,8 @@ public:
 
     virtual void render(SDL_Renderer *renderer) = 0;
 
+    Vec2d& nose() { return m_shape.at(1); }
+
 protected:
     Ship(GameWorld *new_gameWorld, Vec2d pos,
          std::vector<Vec2d> shape, SdlColor color, double scale,

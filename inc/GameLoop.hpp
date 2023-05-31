@@ -6,13 +6,14 @@
 
 #include <SDL.h>
 
+#include "EntityManager.hpp"
 #include "KeyFlag.hpp"
 
 class Entity;
 class PhysicsComponent;
 class Player;
 
-bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state);
+bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state, EntityManager *entMan);
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 

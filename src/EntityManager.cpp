@@ -17,7 +17,7 @@ EntityManager::EntityManager(std::vector<std::unique_ptr<PhysicsComponent>> &phy
 	:m_physMan{ physMan }
 {}
 
-void EntityManager::make_bullet()
+void EntityManager::make_bullet(Vec2d origin, double power, Vec2d angle)
 {
 	return;
 }
@@ -37,8 +37,8 @@ void EntityManager::make_asteroid(GameWorld* new_GameWorld, Vec2d pos,
 void EntityManager::make_asteroids(GameWorld* new_GameWorld, int num,
 	double scale, std::mt19937& rng)
 {
-	constexpr double radiusMin = 5.0;
-	constexpr double radiusMax = 30.0;
+	constexpr double radiusMin = 20.0;
+	constexpr double radiusMax = 25.0;
 	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
 
 	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
