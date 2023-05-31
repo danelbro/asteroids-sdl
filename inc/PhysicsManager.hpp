@@ -26,19 +26,15 @@ public:
 	void make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 		double power, double angle, Ship* new_owner);
 
-	void make_asteroid(GameWorld* new_GameWorld, Vec2d pos,
-		std::vector<Vec2d> shape, SdlColor color, double scale, double mass,
-		double impulseMin, double impulseMax, double radius, std::mt19937& rng);
+	void make_asteroid(GameWorld* new_GameWorld, double scale,
+		std::mt19937& rng);
 
 	void make_asteroids(GameWorld* new_GameWorld, int num,
 		double scale, std::mt19937& rng);
 
 	void make_enemy();
 
-	std::shared_ptr<Player> make_player(GameWorld* new_GameWorld, Vec2d pos,
-		std::vector<Vec2d> shape, SdlColor color, double scale, double mass,
-		double power, double turnSpeed, double shotPower,
-		double warpTimer, int new_lives);
+	std::shared_ptr<Player> make_player(GameWorld* new_GameWorld);
 
 	void clean_up();
 

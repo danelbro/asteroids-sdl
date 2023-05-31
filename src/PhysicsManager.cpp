@@ -21,54 +21,62 @@ void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 	double power, double angle, Ship* new_owner)
 {
 	constexpr double mass{ 0.003 };
-	constexpr double scale{ 1.0 };
+	constexpr double scale{ 4.0 };
 	constexpr double lifespan{ 2.0 }; // seconds
 
-	const std::vector<Vec2d> shape{ {-1, -4}, {1, -4}, {1, 4}, {-1, 4} };
-	const SdlColor color{ 0xff, 0xff, 0xff, 0xff }; // white
+	const std::vector<Vec2d> shape{ {0, -3}, {2, 3}, {-2, 3} };
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 	physMan.back()->setAngle(angle);
 	physMan.back()->setFrameImpulse(power);
 
 	physEntities.push_back(std::make_shared<Bullet>(new_GameWorld, origin, shape,
-		color, scale, physMan.back().get(), new_owner, lifespan));
+		customCols::bullet_col, scale, physMan.back().get(), new_owner, lifespan));
 }
 
 
-void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, Vec2d pos,
-	std::vector<Vec2d> shape, SdlColor color, double scale, double mass,
-	double impulseMin, double impulseMax, double radius, std::mt19937& rng)
+void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
+	std::mt19937& rng)
 {
+	const double mass{ 1.0 };
+
+	constexpr double radiusMin = 20.0;
+	constexpr double radiusMax = 25.0;
+	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
+	double radius{ radiusDist(rng) };
+
+	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
+	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
+	Vec2d pos{ xDist(rng), yDist(rng) };
+
+	constexpr double impulseMin{ 250'000.0 };
+	constexpr double impulseMax{ 500'000.0 };
+	std::uniform_real_distribution<double> impulseDist(impulseMin, impulseMax);
+	double impulse{ impulseDist(rng) };
+
+	std::uniform_real_distribution<double> angleDist(0.0, 360.0);
+	double angle{ angleDist(rng) };
+
+	std::vector<Vec2d> shape{ };
+	int vertexes{ 13 };
+	std::uniform_real_distribution<double> cragDist(-5.0, 5.0);
+	double sliceAngle{ (2 * M_PI / vertexes) };
+	for (int i{ 0 }; i < vertexes; ++i)
+		shape.push_back(Vec2d{ std::sin(sliceAngle * i) * (radius + cragDist(rng)),
+			-std::cos(sliceAngle * i) * (radius + cragDist(rng)) });
+
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	physEntities.push_back(std::make_shared<Asteroid>(new_GameWorld, pos,
-		shape, color, scale, physMan.back().get(), impulseMin, impulseMax,
-		radius, rng));
+	physEntities.push_back(std::make_shared<Asteroid>(new_GameWorld, pos, shape,
+		customCols::asteroid_col, scale, physMan.back().get(), impulse, angle, radius));
 }
 
 void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 	double scale, std::mt19937& rng)
 {
-	constexpr double radiusMin = 20.0;
-	constexpr double radiusMax = 25.0;
-	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
-
-	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
-	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
-
-	const SdlColor color{ 0xff, 0xff, 0xff, 0xff }; // white
-
-	const double mass{ 1.0 };
-	constexpr double impulseMin{ 250'000.0 };
-	constexpr double impulseMax{ 500'000.0 };
-
 	for (int i{ num }; i > 0; i--)
 	{
-		Vec2d pos{ xDist(rng), yDist(rng) };
-		std::vector<Vec2d> shape{ };
-		make_asteroid(new_GameWorld, pos, shape, color, scale,
-			mass, impulseMin, impulseMax, radiusDist(rng), rng);
+		make_asteroid(new_GameWorld, scale, rng);
 	}
 }
 
@@ -77,16 +85,23 @@ void PhysicsManager::make_enemy()
 	return;
 }
 
-std::shared_ptr<Player> PhysicsManager::make_player(GameWorld* new_GameWorld,
-	Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale, double mass,
-	double power, double turnSpeed, double shotPower,
-	double warpTimer, int new_lives)
+std::shared_ptr<Player> PhysicsManager::make_player(GameWorld* gameWorld)
 {
+	const Vec2d pos{ gameWorld->screen.w / 2.0, gameWorld->screen.h / 2.0 };
+	const std::vector<Vec2d> shape{ {0, -30}, {20, 30}, {-20, 30} };
+	constexpr double scale{ 1.0 };
+	constexpr double power{ 5000.0 };
+	constexpr double turnSpeed{ 300.0 };
+	constexpr double shotPower{ 20000.0 };
+	constexpr double mass{ 0.1 };
+	constexpr double warpTimer{ 1.0 };
+	constexpr int lives{ 3 };
+
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
 	std::shared_ptr<Player> player{
-		std::make_shared<Player>(new_GameWorld, pos, shape, color, scale,
-		power, turnSpeed, shotPower, physMan.back().get(), warpTimer, new_lives)
+		std::make_shared<Player>(gameWorld, pos, shape, customCols::player_col, scale,
+		power, turnSpeed, shotPower, physMan.back().get(), warpTimer, lives)
 	};
 
 	physEntities.push_back(player);
