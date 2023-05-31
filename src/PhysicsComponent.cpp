@@ -40,8 +40,10 @@ void PhysicsComponent::update(double dt)
     auto totalForces{ m_dir_vector * m_impulse };
     m_acceleration = (totalForces / m_mass) * dt;
     m_velocity += m_acceleration * dt;
-    owner->pos() += m_velocity * dt;
-    wrap(owner->pos(), owner->gameWorld->screen);
+    if (owner) {
+        owner->pos() += m_velocity * dt;
+        wrap(owner->pos(), owner->gameWorld->screen);
+    }
     m_impulse = 0;
 }
 
