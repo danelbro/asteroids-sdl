@@ -108,7 +108,7 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
 }
 
 bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
-    double t, double dt, std::mt19937 rng)
+    double t, double dt, std::mt19937& rng)
 {
     for (auto &ent : entMan->entities)
         ent->update(t, dt);

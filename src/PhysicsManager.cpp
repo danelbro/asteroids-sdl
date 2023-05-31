@@ -80,7 +80,7 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale, Vec2d
 }
 
 void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
-	double scale, char flag, std::mt19937 & rng, Vec2d pos)
+	double scale, char flag, std::mt19937& rng, Vec2d pos)
 {
 	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
 	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
@@ -128,7 +128,7 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 	return plPtr;
 }
 
-void PhysicsManager::clean_up(GameWorld* gw, std::mt19937 rng)
+void PhysicsManager::clean_up(GameWorld* gw, std::mt19937& rng)
 {
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity* phys = physEntities[i].get();
