@@ -144,9 +144,23 @@ void PhysicsManager::clean_up(GameWorld* gw, std::mt19937 rng)
 	}
 }
 
-void PhysicsManager::check_player_hit()
+bool PhysicsManager::check_player_hit()
 {
-	return;
+	for (auto& plr : physEntities) {
+		if (plr->type == PLAYER) {
+			for (auto& ast : physEntities) {
+				if (ast->type == ASTEROID) {
+					bool hit{ PointInPolygon(plr->pos(), ast->fillShape()) };
+					if (hit) {
+						plr->kill_it();
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 void PhysicsManager::check_asteroids_hit()

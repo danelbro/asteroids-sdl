@@ -22,7 +22,7 @@ bool processInput(GameWorld* GameWorld, Player* player, double dt,
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 
-void updateAll(GameWorld *gw, EntityManager* entMan, PhysicsManager* physMan,
+bool updateAll(GameWorld *gw, EntityManager* entMan, PhysicsManager* physMan,
     double t, double dt, std::mt19937 rng);
 
 void render(EntityManager* entMan, PhysicsManager* physMan,
