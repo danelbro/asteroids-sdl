@@ -41,7 +41,7 @@ void asteroids()
     // Window initialisation
     std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
     char title[] = "Asteroids";
-    const Box screen{ 853, 640 };
+    const Box screen{ 960, 720 };
     constexpr unsigned windowFlags = 0;
     window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
         createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
