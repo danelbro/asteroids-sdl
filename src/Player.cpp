@@ -5,6 +5,7 @@
 #include <SDL.h>
 
 #include "../inc/Colors.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Ship.hpp"
@@ -16,7 +17,7 @@ Player::Player(GameWorld *new_gameWorld, Vec2d pos,
                double shotPower,
                PhysicsComponent* new_physicsComponent,
                double warpTimer, int new_lives)
-    : Ship{ new_gameWorld, pos, shape, color, scale,
+    : Ship{PLAYER, new_gameWorld, pos, shape, color, scale,
     power, turnSpeed, shotPower, new_physicsComponent},
       hyperdrive{ this, warpTimer }, isVisible{ true },
       isControllable{ true }, lives{ new_lives }

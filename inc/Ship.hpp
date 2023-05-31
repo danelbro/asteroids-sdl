@@ -5,6 +5,7 @@
 
 #include "Colors.hpp"
 #include "Engine.hpp"
+#include "FlagEnums.hpp"
 #include "PhysicsEntity.hpp"
 #include "Gun.hpp"
 #include "Vec2d.hpp"
@@ -23,7 +24,7 @@ public:
     Vec2d nose() const;
 
 protected:
-    Ship(GameWorld *new_gameWorld, Vec2d pos,
+    Ship(EntityFlag new_type, GameWorld *new_gameWorld, Vec2d pos,
          std::vector<Vec2d> shape, SdlColor color, double scale,
          double power, double turnSpeed,
          double shotPower,

@@ -4,16 +4,17 @@
 
 #include <SDL.h>
 
-#include "../inc/VectorDraw.hpp"
 #include "../inc/Entity.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"
+#include "../inc/VectorDraw.hpp"
 
-PhysicsEntity::PhysicsEntity(GameWorld* new_gameWorld, Vec2d pos,
-	std::vector<Vec2d> shape, SdlColor color, double scale,
+PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld* new_gameWorld, 
+    Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
 	PhysicsComponent* new_physicsComponent)
-	: Entity{ new_gameWorld, pos, shape, color, scale },
+	: Entity{ new_type, new_gameWorld, pos, shape, color, scale },
 	physicsComponent{ new_physicsComponent }
 {}
 
@@ -29,7 +30,7 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
     for (auto p : m_shape)
         transShape.push_back(p.rotate_deg(physicsComponent->angle()) * m_scale);
 
-    for (unsigned i{ 0 }; i < transShape.size(); ++i) {
+    for (size_t i{ 0 }; i < transShape.size(); ++i) {
         if (i == transShape.size() - 1) {
             DrawWrapLine(renderer,
                 gameWorld->screen,
