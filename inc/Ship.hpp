@@ -5,14 +5,14 @@
 
 #include "Colors.hpp"
 #include "Engine.hpp"
-#include "Entity.hpp"
+#include "PhysicsEntity.hpp"
 #include "Gun.hpp"
 #include "Vec2d.hpp"
 
 struct GameWorld;
 class PhysicsComponent;
 
-class Ship : public Entity {
+class Ship : public PhysicsEntity {
 public:
     Engine engine;
     Gun gun;
@@ -20,11 +20,7 @@ public:
     Ship(const Ship&) = delete;
     Ship & operator=(const Ship&) = delete;
 
-    PhysicsComponent *physicsComponent;
-
-    virtual void render(SDL_Renderer *renderer) = 0;
-
-    Vec2d& nose() { return m_shape.at(1); }
+    Vec2d nose() const;
 
 protected:
     Ship(GameWorld *new_gameWorld, Vec2d pos,

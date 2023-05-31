@@ -6,7 +6,7 @@ const char* SdlException::what() const throw() {
     return SDL_GetError();
 }
 
-void init(uint32_t sdlFlags)
+void init(Uint32 sdlFlags)
 {
     if (SDL_Init(sdlFlags) != 0)
         throw SdlException();

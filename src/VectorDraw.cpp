@@ -1,4 +1,4 @@
-#include "../inc/DrawWrapLine.hpp"
+#include "../inc/VectorDraw.hpp"
 
 #include <SDL.h>
 
