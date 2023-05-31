@@ -1,8 +1,13 @@
 #include "../inc/VectorDraw.hpp"
 
+#include <algorithm>
+#include <vector>
+
 #include <SDL.h>
 
 #include "../inc/Box.hpp"
+#include "../inc/GameWorld.hpp"
+#include "../inc/Vec2d.hpp"
 
 int wrapCoord(int p, int dim)
 {
@@ -62,6 +67,11 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
             }
         }
     }
+}
+
+bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
+{
+    return false;
 }
 
 void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Renderer* renderer)

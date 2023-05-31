@@ -38,6 +38,9 @@ public:
 
 	void clean_up();
 
+	void check_player_hit() { return; }
+	void check_asteroids_hit() { return; }
+
 	std::vector<std::shared_ptr<Entity>> physEntities;
 	std::vector<std::unique_ptr<PhysicsComponent>> physMan;
 };
