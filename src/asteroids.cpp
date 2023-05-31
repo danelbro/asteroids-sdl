@@ -110,6 +110,10 @@ void asteroids()
             }
             if (!areAsteroidsRemaining) {
                 numAsteroids++;
+                for (auto& ent : physicsManager.physEntities) {
+                    if (ent->type == BULLET)
+                        ent->kill_it();
+                }
                 physicsManager.make_asteroids(&gameWorld, numAsteroids, 3.0, 'n', rng);
             }
 
@@ -121,7 +125,7 @@ void asteroids()
     }
 }
 
-int main()
+int WinMain()
 try
 {
     constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
