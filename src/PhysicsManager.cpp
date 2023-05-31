@@ -80,7 +80,7 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale, Vec2d
 }
 
 void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
-	double scale, char flag, std::mt19937& rng, Vec2d pos)
+	double scale, char flag, std::mt19937& rng, Player* player, Vec2d pos)
 {
 	std::uniform_real_distribution<double> xDist(0, new_GameWorld->screen.w);
 	std::uniform_real_distribution<double> yDist(0, new_GameWorld->screen.h);
@@ -89,8 +89,15 @@ void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 	for (int i{ num }; i > 0; i--)
 	{
 		if (flag == 'n') {
-			new_pos.x = xDist(rng);
-			new_pos.y = yDist(rng);
+			bool isTooClose{ true };
+			while (isTooClose) {
+				new_pos.x = xDist(rng);
+				new_pos.y = yDist(rng);
+
+				Vec2d distanceToPlayer{ new_pos - player->pos() };
+				if (distanceToPlayer.magnitude() > 30.0 * scale) 
+					isTooClose = false;
+			}
 
 			make_asteroid(new_GameWorld, scale, new_pos, rng);
 		}
@@ -135,7 +142,7 @@ void PhysicsManager::clean_up(GameWorld* gw, std::mt19937& rng)
 		if (phys->toBeKilled())
 		{
 			if (phys->type == ASTEROID && phys->scale() > 1.0) {
-				make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, phys->pos());
+				make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 			}
 
 			physMan.erase(physMan.begin() + i);
