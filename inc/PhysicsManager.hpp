@@ -37,7 +37,7 @@ public:
 
 	Player* make_player(GameWorld* new_GameWorld);
 
-	void clean_up(GameWorld* gw, std::mt19937 rng);
+	void clean_up(GameWorld* gw, std::mt19937& rng);
 
 	bool check_player_hit();
 	void check_asteroids_hit();
