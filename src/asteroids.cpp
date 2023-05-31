@@ -69,7 +69,9 @@ void asteroids()
     // Make Player
     Player* player{physicsManager.make_player(&gameWorld)};
 
-    physicsManager.make_asteroids(&gameWorld, 3, 3.0, 'n', rng);
+    bool areAsteroidsRemaining{ false };
+    int numAsteroids{ 3 };
+    physicsManager.make_asteroids(&gameWorld, numAsteroids, 3.0, 'n', rng);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
@@ -100,6 +102,17 @@ void asteroids()
             if (!isRunning) break;
             isRunning = updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);
             if (!isRunning) break;
+
+            areAsteroidsRemaining = false;
+            for (auto& ent : physicsManager.physEntities) {
+                if (ent->type == ASTEROID)
+                    areAsteroidsRemaining = true;
+            }
+            if (!areAsteroidsRemaining) {
+                numAsteroids++;
+                physicsManager.make_asteroids(&gameWorld, numAsteroids, 3.0, 'n', rng);
+            }
+
             accumulator -= dt;
             t += dt;
         }
