@@ -22,6 +22,8 @@ Bullet::Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
 
 void Bullet::update(double t, double dt)
 {
+	update_shapes();
+
 	m_alive += dt;
 
 	if (m_alive >= m_lifespan)

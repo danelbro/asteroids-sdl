@@ -24,7 +24,7 @@ public:
            PhysicsComponent *new_physicsComponent,
            double warpTimer, int new_lives);
 
-    void update(double t, double dt) override { return; }
+    void update(double t, double dt) override { update_shapes(); }
 
     Hyperdrive hyperdrive;
 

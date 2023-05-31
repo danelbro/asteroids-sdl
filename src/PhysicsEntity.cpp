@@ -18,6 +18,20 @@ PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld* new_gameWorld,
 	physicsComponent{ new_physicsComponent }
 {}
 
+void PhysicsEntity::update_shapes()
+{
+    m_transShape.clear();
+
+    for (auto p : m_shape)
+        m_transShape.push_back(p.rotate_deg(physicsComponent->angle()) * m_scale);
+
+    m_fillShape = m_transShape;
+    for (auto& p : m_fillShape) {
+        p.x += m_pos.x;
+        p.y += m_pos.y;
+    }
+}
+
 void PhysicsEntity::render(SDL_Renderer* renderer)
 {
     SdlColor oldColor{ };
@@ -25,33 +39,24 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
         &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
     SDL_SetRenderDrawColor(renderer,
         m_color.r, m_color.g, m_color.b, m_color.a);
-
-    std::vector<Vec2d> transShape{ };
-    for (auto p : m_shape)
-        transShape.push_back(p.rotate_deg(physicsComponent->angle()) * m_scale);
-
-    for (size_t i{ 0 }; i < transShape.size(); ++i) {
-        if (i == transShape.size() - 1) {
+    
+    for (size_t i{ 0 }; i < m_fillShape.size(); ++i) {
+        if (i == m_fillShape.size() - 1) {
             DrawWrapLine(renderer,
                 gameWorld->screen,
-                m_pos.x + transShape[i].x, m_pos.y + transShape[i].y,
-                m_pos.x + transShape[0].x, m_pos.y + transShape[0].y);
+                m_fillShape[i].x, m_fillShape[i].y,
+                m_fillShape[0].x, m_fillShape[0].y);
         }
         else {
             DrawWrapLine(renderer,
                 gameWorld->screen,
-                m_pos.x + transShape[i].x, m_pos.y + transShape[i].y,
-                m_pos.x + transShape[i + 1].x, m_pos.y + transShape[i + 1].y);
+                m_fillShape[i].x, m_fillShape[i].y,
+                m_fillShape[i + 1].x, m_fillShape[i + 1].y);
         }
     }
-
-    std::vector<Vec2d> fillShape = transShape;
-    for (auto& p : fillShape) {
-        p.x += m_pos.x;
-        p.y += m_pos.y;
-    }
+  
     if (fill)
-        ScanFill(gameWorld, fillShape, m_color, renderer);
+        ScanFill(gameWorld, m_fillShape, m_color, renderer);
 
     SDL_SetRenderDrawColor(renderer,
         oldColor.r, oldColor.g, oldColor.b, oldColor.a);

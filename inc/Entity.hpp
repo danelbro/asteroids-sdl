@@ -26,7 +26,8 @@ public:
     Entity & operator=(const Entity&) = delete;
 
     Vec2d & pos() { return m_pos; }
-    bool kill_it() const { return kill_me; }
+    bool toBeKilled() const { return kill_me; }
+    void kill_it() { kill_me = true; }
     double scale() const { return m_scale; }
 
     GameWorld const *gameWorld;

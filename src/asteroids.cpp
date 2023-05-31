@@ -69,7 +69,7 @@ void asteroids()
     // Make Player
     Player* player{physicsManager.make_player(&gameWorld)};
 
-    physicsManager.make_asteroids(&gameWorld, 3, 3.0, rng);
+    physicsManager.make_asteroids(&gameWorld, 3, 3.0, 'n', rng);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html

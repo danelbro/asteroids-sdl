@@ -71,11 +71,24 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
 
 bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
 {
-    return false;
+    // adatpted from https://alienryderflex.com/polygon/
+    size_t i, j{ polygon.size() - 1 };
+    bool oddNodes{ false };
+
+    for (i = 0; i < polygon.size(); i++) {
+        if (polygon[i].y < point.y && polygon[j].y >= point.y 
+            || polygon[j].y < point.y && polygon[i].y >= point.y)
+                if (polygon[i].x + (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x)
+                    oddNodes = !oddNodes;
+        j = i;
+    }
+
+    return oddNodes;
 }
 
 void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Renderer* renderer)
 {
+    // adapted form https://alienryderflex.com/polygon_fill/
     SdlColor old{};
     SDL_GetRenderDrawColor(renderer, &old.r, &old.g, &old.b, &old.a);
     SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);

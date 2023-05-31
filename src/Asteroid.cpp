@@ -19,7 +19,7 @@ Asteroid::Asteroid(GameWorld *new_gameWorld, Vec2d pos, std::vector<Vec2d> shape
     radius{ new_radius }
 {
     physicsComponent->setOwner(this);
-    physicsComponent->setFrameImpulse(impulse);
+    physicsComponent->setFrameImpulse(impulse / scale);
     physicsComponent->setAngle(angle);
     // fill = true;
 }

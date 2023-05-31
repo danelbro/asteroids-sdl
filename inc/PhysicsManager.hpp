@@ -27,10 +27,11 @@ public:
 		double power, double angle, Ship* new_owner);
 
 	void make_asteroid(GameWorld* new_GameWorld, double scale,
-		std::mt19937& rng);
+		Vec2d pos, std::mt19937& rng);
 
 	void make_asteroids(GameWorld* new_GameWorld, int num,
-		double scale, std::mt19937& rng);
+		double scale, char flag, std::mt19937& rng, 
+		Vec2d pos={ 0.0, 0.0 });
 
 	void make_enemy();
 
@@ -38,8 +39,8 @@ public:
 
 	void clean_up(GameWorld* gw, std::mt19937 rng);
 
-	void check_player_hit() { return; }
-	void check_asteroids_hit() { return; }
+	void check_player_hit();
+	void check_asteroids_hit();
 
 	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;
 	std::vector<std::unique_ptr<PhysicsComponent>> physMan;

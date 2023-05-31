@@ -21,4 +21,14 @@ public:
 	void render(SDL_Renderer* renderer) override;
 
 	PhysicsComponent* physicsComponent;
+
+	std::vector<Vec2d> shape() const { return m_shape; }
+	std::vector<Vec2d> transShape() const { return m_transShape; }
+	std::vector<Vec2d> fillShape() const { return m_fillShape; }
+
+protected:
+	std::vector<Vec2d> m_transShape;
+	std::vector<Vec2d> m_fillShape;
+
+	void update_shapes();
 };
