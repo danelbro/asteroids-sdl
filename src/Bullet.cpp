@@ -17,6 +17,7 @@ Bullet::Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
 	owner{ new_owner }, m_lifespan{ lifespan }
 {
     physicsComponent->setOwner(this);
+	fill = true;
 }
 
 void Bullet::update(double t, double dt)

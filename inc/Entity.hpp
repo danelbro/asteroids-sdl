@@ -44,4 +44,5 @@ protected:
     SdlColor m_color;
     double m_scale;
     bool kill_me{ false };
+    bool fill{ false };
 };

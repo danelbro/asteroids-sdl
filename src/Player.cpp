@@ -23,4 +23,5 @@ Player::Player(GameWorld *new_gameWorld, Vec2d pos,
       isControllable{ true }, lives{ new_lives }
 {
     physicsComponent->setOwner(this);
+    // fill = true;
 }
