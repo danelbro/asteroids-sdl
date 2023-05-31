@@ -59,11 +59,21 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale,
 
 	std::vector<Vec2d> shape{ };
 	int vertexes{ 13 };
-	std::uniform_real_distribution<double> cragDist(-5.0, 5.0);
+	std::normal_distribution<double> cragDistLow(-5.0, 0.5);
+	std::normal_distribution<double> cragDistHigh(5.0, 0.5);
+	std::uniform_int_distribution<> coinFlip(1, 2);
 	double sliceAngle{ (2 * M_PI / vertexes) };
 	for (int i{ 0 }; i < vertexes; ++i)
-		shape.push_back(Vec2d{ std::sin(sliceAngle * i) * (radius + cragDist(rng)),
-			-std::cos(sliceAngle * i) * (radius + cragDist(rng)) });
+	{
+		double cragDepth{ };
+		int coin{ coinFlip(rng) };
+		if (coin == 2)
+			cragDepth = cragDistHigh(rng);
+		else
+			cragDepth = cragDistLow(rng);
+		shape.push_back(Vec2d{ std::sin(sliceAngle * i) * (radius + cragDepth),
+			-std::cos(sliceAngle * i) * (radius + cragDepth) });
+	}
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
