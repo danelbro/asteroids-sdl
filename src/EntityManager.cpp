@@ -17,34 +17,6 @@ EntityManager::EntityManager(std::vector<std::unique_ptr<PhysicsComponent>> &phy
 	:m_physMan{ physMan }
 {}
 
-void EntityManager::make_entity(char typeFlag,
-	GameWorld* new_GameWorld, Vec2d pos, std::vector<Vec2d> shape,
-	SdlColor color, double scale, double mass, std::mt19937& rng,
-	// Bullet-specific
-
-	// Asteroid-specific
-	double impulseMin, double impulseMax, double radius
-	// Enemy-specific
-
-	)
-{
-	switch (typeFlag)
-	{
-	case 'B':
-		make_bullet();
-		break;
-	case 'A':
-		make_asteroid(new_GameWorld, pos, shape, color, scale, mass, impulseMin,
-			impulseMax, radius, rng);
-		break;
-	case 'E':
-		make_enemy();
-		break;
-	default:
-		break;
-	}
-}
-
 void EntityManager::make_bullet()
 {
 	return;
