@@ -1,5 +1,6 @@
 #include "../inc/Vec2d.hpp"
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 double Vec2d::magnitude() const
