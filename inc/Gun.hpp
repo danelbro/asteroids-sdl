@@ -1,7 +1,6 @@
 #pragma once
 
-#include "EntityManager.hpp"
-
+class EntityManager;
 class Ship;
 
 class Gun {
