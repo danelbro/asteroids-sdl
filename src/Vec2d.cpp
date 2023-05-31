@@ -13,6 +13,18 @@ double Vec2d::magnitude_squared() const
     return x * x + y * y;
 }
 
+double Vec2d::angle() const
+{
+    Vec2d oldVec{x, y};
+    Vec2d normVec = oldVec.normalize();
+    return M_PI - atan2(normVec.x, normVec.y);
+}
+
+double Vec2d::angleDeg() const
+{
+    return angle() * 180 / M_PI;
+}
+
 Vec2d Vec2d::normalizeInPlace()
 {
     auto mag = magnitude();

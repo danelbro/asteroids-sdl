@@ -6,12 +6,17 @@
 
 #include <SDL.h>
 
-#include "../inc/KeyFlag.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/Entity.hpp"
+#include "../inc/EntityManager.hpp"
+#include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
+#include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
 
-bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state)
+bool processInput(GameWorld* gameworld, Player* player, double dt,
+    std::array<bool, K_TOTAL>& key_state,
+    EntityManager* entMan, PhysicsManager* physMan)
 {
     bool isRunning = handleInput(key_state);
 
@@ -26,7 +31,10 @@ bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_stat
         player->engine.turnRight(dt);
 
     if (key_state[K_SPACE])
-        player->gun.fire();
+        if (!player->gun.fired)
+            player->gun.fire(gameworld, physMan, player);
+    if (!key_state[K_SPACE])
+        player->gun.fired = false;
 
     if (key_state[K_LSHIFT])
         player->hyperdrive.warp();
@@ -99,28 +107,33 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
     return isRunning;
 }
 
-// TODO: remove. Just for suppressing warnings
-double animate(double t)
+bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt, std::mt19937& rng)
 {
-    return t+1;
-}
+    for (auto &ent : entMan->entities)
+        ent->update(t, dt);
+    for (auto& physEnt : physMan->physEntities)
+        physEnt->update(t, dt);
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
-               double t, double dt)
-{
-    // TODO: remove. Just for suppressing warnings
-    for (int i = 0; i <= 0; ++i)
-        animate(t);
+    bool playerIsAlive{ physMan->check_player_hit() };
+    physMan->check_asteroids_hit();
 
-    for (auto &physComp : physicsManager)
+    entMan->clean_up();
+    physMan->clean_up(gw, rng);
+
+    for (auto &physComp : physMan->physMan)
         physComp->update(dt);
+
+    return playerIsAlive;
 }
 
-void render(std::vector<std::shared_ptr<Entity>> &entities,
-            SDL_Renderer *renderer)
+void render(EntityManager* entMan, PhysicsManager* physMan,
+    SDL_Renderer* renderer)
 {
     SDL_RenderClear(renderer);
-    for (auto &entity : entities)
+    for (auto &entity : entMan->entities)
         entity->render(renderer);
+    for (auto& physEntity : physMan->physEntities)
+        physEntity->render(renderer);
     SDL_RenderPresent(renderer);
 }

@@ -12,7 +12,6 @@
 #include "Ship.hpp"
 #include "Vec2d.hpp"
 
-class Engine;
 struct GameWorld;
 class PhysicsComponent;
 
@@ -25,11 +24,12 @@ public:
            PhysicsComponent *new_physicsComponent,
            double warpTimer, int new_lives);
 
+    void update(double t, double dt) override { update_shapes(); }
+
     Hyperdrive hyperdrive;
 
     void respawn(Vec2d new_pos, bool reset=true);
 
-    void render(SDL_Renderer *renderer) override;
 private:
     bool isVisible;
     bool isControllable;

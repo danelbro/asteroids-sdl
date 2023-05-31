@@ -19,6 +19,7 @@ public:
     void turn(double turnSpeed, double dt);
 
     double angle() const { return m_angle; }
+    Vec2d facing() const { return m_dir_vector; }
     Vec2d velocity() const { return m_velocity; }
 
     void setAngle(double angle);
@@ -33,6 +34,7 @@ private:
     Vec2d m_velocity;
 
     double m_angle; // between 0 and 360
+    Vec2d m_dir_vector; // vector representation of m_angle
 
     Entity *owner;
 };

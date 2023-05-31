@@ -5,25 +5,22 @@
 #include <random>
 
 #include "Colors.hpp"
-#include "Entity.hpp"
-#include "PhysicsComponent.hpp"
+#include "PhysicsEntity.hpp"
 #include "Vec2d.hpp"
 
 struct GameWorld;
+class PhysicsComponent;
 
-class Asteroid : public Entity {
+class Asteroid : public PhysicsEntity {
 public:
-    Asteroid(GameWorld *new_gameWorld, Vec2d pos,
-             std::vector<Vec2d> shape, SdlColor color,
-             double scale, PhysicsComponent *new_physicsComponent,
-             double impulseMin, double impulseMax,
-             double new_radius, std::mt19937 &rng);
+    Asteroid(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape, 
+        SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
+        double impulse, double angle, double new_radius);
 
     Asteroid(const Asteroid&) = delete;
     Asteroid & operator=(const Asteroid&) = delete;
 
-    void render(SDL_Renderer *renderer) override;
+    void update(double t, double dt) override { update_shapes(); }
 
-    PhysicsComponent *physicsComponent;
     double radius;
 };

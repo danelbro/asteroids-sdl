@@ -1,5 +1,7 @@
 #pragma once
 
+class PhysicsManager;
+class GameWorld;
 class Ship;
 
 class Gun {
@@ -8,7 +10,8 @@ public:
         : owner{ new_owner }, m_shotPower{ shotPower }
         {}
 
-    void fire();
+    void fire(GameWorld* new_GameWorld, PhysicsManager* physMan, Ship* firingShip);
+    bool fired{ false };
 
 private:
     Ship *owner;

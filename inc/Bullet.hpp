@@ -1,20 +1,26 @@
 #pragma once
 
+#include <vector>
+
 #include <SDL.h>
 
-#include "Entity.hpp"
-#include "PhysicsComponent.hpp"
-#include "Player.hpp"
+#include "PhysicsEntity.hpp"
 
-class Bullet : public Entity {
+class Gameworld;
+class Ship;
+class PhysicsComponent;
+class Vec2d;
+
+class Bullet : public PhysicsEntity {
 public:
-    Bullet();
-
-    PhysicsComponent *physicsComponent;
-
-    void render(SDL_Renderer *renderer) override;
+    Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
+        SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
+        Ship* new_owner, double lifespan);
+    
+    void update(double t, double dt) override;
 
 private:
-    Player &owner;
-
+    Ship *owner;
+    double m_lifespan;
+    double m_alive{ 0.0 };
 };

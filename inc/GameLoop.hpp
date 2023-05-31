@@ -6,18 +6,24 @@
 
 #include <SDL.h>
 
-#include "KeyFlag.hpp"
+#include "EntityManager.hpp"
+#include "GameWorld.hpp"
+#include "FlagEnums.hpp"
+#include "PhysicsManager.hpp"
 
+struct GameWorld;
 class Entity;
 class PhysicsComponent;
 class Player;
 
-bool processInput(Player *player, double dt, std::array<bool, K_TOTAL> &key_state);
+bool processInput(GameWorld* GameWorld, Player* player, double dt,
+    std::array<bool, K_TOTAL>& key_state, 
+    EntityManager* entMan, PhysicsManager* physMan);
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 
-void updateAll(std::vector<std::unique_ptr<PhysicsComponent>> &physicsManager,
-               double t, double dt);
+bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt, std::mt19937& rng);
 
-void render(std::vector<std::shared_ptr<Entity>> &entities,
+void render(EntityManager* entMan, PhysicsManager* physMan,
             SDL_Renderer *renderer);
