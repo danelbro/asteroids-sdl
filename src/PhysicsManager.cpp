@@ -7,6 +7,7 @@
 #include "../inc/Asteroid.hpp"
 #include "../inc/Bullet.hpp"
 #include "../inc/Enemy.hpp"
+#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
@@ -118,12 +119,18 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 	return plPtr;
 }
 
-void PhysicsManager::clean_up()
+void PhysicsManager::clean_up(GameWorld* gw, std::mt19937 rng)
 {
-	for (size_t i{ 0 }; i < physEntities.size(); i++)
-		if (physEntities[i]->kill_it())
+	for (size_t i{ 0 }; i < physEntities.size(); i++) {
+		PhysicsEntity* phys = physEntities[i].get();
+		if (phys->kill_it())
 		{
+			if (phys->type == ASTEROID && phys->scale() > 1.0) {
+				make_asteroids(gw, 2, phys->scale() - 1.0, rng);
+			}
+
 			physMan.erase(physMan.begin() + i);
 			physEntities.erase(physEntities.begin() + i);
 		}
+	}
 }

@@ -11,6 +11,7 @@
 #include "FlagEnums.hpp"
 #include "PhysicsManager.hpp"
 
+struct GameWorld;
 class Entity;
 class PhysicsComponent;
 class Player;
@@ -21,8 +22,8 @@ bool processInput(GameWorld* GameWorld, Player* player, double dt,
 
 bool handleInput(std::array<bool, K_TOTAL> &key_state);
 
-void updateAll(EntityManager* entMan, PhysicsManager* physMan,
-    double t, double dt);
+void updateAll(GameWorld *gw, EntityManager* entMan, PhysicsManager* physMan,
+    double t, double dt, std::mt19937 rng);
 
 void render(EntityManager* entMan, PhysicsManager* physMan,
             SDL_Renderer *renderer);

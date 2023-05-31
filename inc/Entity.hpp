@@ -27,6 +27,7 @@ public:
 
     Vec2d & pos() { return m_pos; }
     bool kill_it() const { return kill_me; }
+    double scale() const { return m_scale; }
 
     GameWorld const *gameWorld;
 

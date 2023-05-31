@@ -98,7 +98,7 @@ void asteroids()
             isRunning = processInput(&gameWorld, player, dt, 
                 keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
-            updateAll(&entityManager, &physicsManager, t, dt);
+            updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);
             accumulator -= dt;
             t += dt;
         }
