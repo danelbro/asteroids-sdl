@@ -8,7 +8,7 @@
 #include "FlagEnums.hpp"
 #include "Vec2d.hpp"
 
-class GameWorld;
+struct GameWorld;
 class PhysicsComponent;
 
 class PhysicsEntity : public Entity

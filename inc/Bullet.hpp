@@ -6,10 +6,10 @@
 
 #include "PhysicsEntity.hpp"
 
-class Gameworld;
+struct Gameworld;
 class Ship;
 class PhysicsComponent;
-class Vec2d;
+struct Vec2d;
 
 class Bullet : public PhysicsEntity {
 public:

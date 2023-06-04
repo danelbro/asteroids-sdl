@@ -7,7 +7,7 @@
 #include "Colors.hpp"
 #include "Vec2d.hpp"
 
-class Box;
+struct Box;
 struct GameWorld;
 
 void DrawWrapLine(SDL_Renderer *rend, Box screen,

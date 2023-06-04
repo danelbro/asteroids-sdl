@@ -1,7 +1,7 @@
 #pragma once
 
 class PhysicsManager;
-class GameWorld;
+struct GameWorld;
 class Ship;
 
 class Gun {
