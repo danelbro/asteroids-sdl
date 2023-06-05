@@ -15,11 +15,11 @@ class Entity;
 class PhysicsComponent;
 class Player;
 
-bool processInput(GameWorld* GameWorld, Player* player, double dt,
+bool processInput(GameWorld* GameWorld, Uint32 windowID, Player* player, double dt,
     std::array<bool, K_TOTAL>& key_state, 
     EntityManager* entMan, PhysicsManager* physMan);
 
-bool handleInput(std::array<bool, K_TOTAL> &key_state);
+bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL> &key_state);
 
 bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     double t, double dt, std::mt19937& rng);

@@ -42,10 +42,11 @@ void asteroids()
     std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
     char title[] = "Asteroids";
     const Box screen{ 960, 720 };
-    constexpr unsigned windowFlags = 0;
+    constexpr unsigned windowFlags = SDL_WINDOW_RESIZABLE;
     window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
         createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                      screen.w, screen.h, windowFlags) };
+    Uint32 windowID = SDL_GetWindowID(window.get());
 
     // Renderer intialisation
     std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer> renderer{ nullptr };
@@ -111,7 +112,7 @@ void asteroids()
                 physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng, player);
             }
 
-            isRunning = processInput(&gameWorld, player, dt,
+            isRunning = processInput(&gameWorld, windowID, player, dt,
                 keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
             isRunning = updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);

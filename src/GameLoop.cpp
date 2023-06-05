@@ -14,11 +14,11 @@
 #include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
 
-bool processInput(GameWorld* gameworld, Player* player, double dt,
+bool processInput(GameWorld* gameworld, Uint32 windowID, Player* player, double dt,
     std::array<bool, K_TOTAL>& key_state,
     EntityManager* entMan, PhysicsManager* physMan)
 {
-    bool isRunning = handleInput(key_state);
+    bool isRunning = handleInput(gameworld, windowID, key_state);
 
     if (key_state[K_UP])
         player->engine.on();
@@ -42,7 +42,7 @@ bool processInput(GameWorld* gameworld, Player* player, double dt,
     return isRunning;
 }
 
-bool handleInput(std::array<bool, K_TOTAL> &key_state)
+bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL>& key_state)
 {
     SDL_Event ev;
     bool isRunning{ true };
@@ -51,6 +51,16 @@ bool handleInput(std::array<bool, K_TOTAL> &key_state)
         if (ev.type == SDL_QUIT) {
             isRunning = false;
         }
+
+        else if (ev.type == SDL_WINDOWEVENT) {
+            if (ev.window.windowID == windowID)
+                if (ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+                    gw->screen.w = ev.window.data1;
+                    gw->screen.h = ev.window.data2;
+                }
+
+        }
+
         else if (ev.type == SDL_KEYDOWN) {
             switch (ev.key.keysym.sym) {
             case SDLK_ESCAPE:
