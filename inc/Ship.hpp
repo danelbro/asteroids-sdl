@@ -11,6 +11,7 @@
 #include "Vec2d.hpp"
 
 struct GameWorld;
+
 class PhysicsComponent;
 
 class Ship : public PhysicsEntity {
@@ -21,7 +22,7 @@ public:
     Ship(const Ship&) = delete;
     Ship & operator=(const Ship&) = delete;
 
-    Vec2d nose() const;
+    Vec2d nose() const { return m_fillShape.at(0); }
 
 protected:
     Ship(EntityFlag new_type, GameWorld *new_gameWorld, Vec2d pos,

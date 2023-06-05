@@ -16,11 +16,3 @@ Ship::Ship(EntityFlag new_type, GameWorld *new_gameWorld, Vec2d pos,
       engine(this, power, turnSpeed),
       gun(this, shotPower)
 {}
-
-Vec2d Ship::nose() const
-{
-    Vec2d p = m_shape.at(0);
-    Vec2d transP = p.rotate_deg(physicsComponent->angle()) * m_scale;
-
-    return { {m_pos.x + transP.x}, {m_pos.y + transP.y} };
-}
