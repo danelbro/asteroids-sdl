@@ -40,7 +40,7 @@ public:
 	void clean_up(GameWorld* gw, std::mt19937& rng);
 
 	bool check_player_hit();
-	void check_asteroids_hit();
+	bool check_asteroids_hit();
 
 	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;
 	std::vector<std::unique_ptr<PhysicsComponent>> physMan;

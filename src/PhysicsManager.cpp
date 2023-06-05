@@ -170,19 +170,23 @@ bool PhysicsManager::check_player_hit()
 	return true;
 }
 
-void PhysicsManager::check_asteroids_hit()
+bool PhysicsManager::check_asteroids_hit()
 {
+	bool hits{ false };
 	for (auto& bul : physEntities) {
 		if (bul->type == BULLET) {
 			for (auto& ast : physEntities) {
 				if (ast->type == ASTEROID) {
-					bool hit{ PointInPolygon(bul->pos(), ast->fillShape()) };
-					if (hit) {
+					if (PointInPolygon(bul->pos(), ast->fillShape())) {
 						ast->kill_it();
 						bul->kill_it();
+						hits = true;
+						break;
 					}
 				}
 			}
 		}
 	}
+	
+	return hits;
 }

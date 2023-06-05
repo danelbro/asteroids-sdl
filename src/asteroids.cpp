@@ -69,9 +69,9 @@ void asteroids()
     // Make Player
     Player* player{physicsManager.make_player(&gameWorld)};
 
-    bool areAsteroidsRemaining{ false };
-    int numAsteroids{ 3 };
-    physicsManager.make_asteroids(&gameWorld, numAsteroids, 3.0, 'n', rng, player);
+    bool asteroidsRemain{ false };
+    int numOfAsteroids{ 3 };
+    physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng, player);
 
     // Set up for main loop
     // Structure from http://gameprogrammingpatterns.com/game-loop.html
@@ -97,18 +97,18 @@ void asteroids()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
-            areAsteroidsRemaining = false;
+            asteroidsRemain = false;
             for (auto& ent : physicsManager.physEntities) {
                 if (ent->type == ASTEROID)
-                    areAsteroidsRemaining = true;
+                    asteroidsRemain = true;
             }
-            if (!areAsteroidsRemaining) {
-                numAsteroids++;
+            if (!asteroidsRemain) {
+                numOfAsteroids++;
                 for (auto& ent : physicsManager.physEntities) {
                     if (ent->type == BULLET)
                         ent->kill_it();
                 }
-                physicsManager.make_asteroids(&gameWorld, numAsteroids, 3.0, 'n', rng, player);
+                physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng, player);
             }
 
             isRunning = processInput(&gameWorld, player, dt,

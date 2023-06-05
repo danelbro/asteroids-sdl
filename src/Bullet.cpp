@@ -29,7 +29,9 @@ void Bullet::update(double t, double dt)
 	if (m_alive >= m_lifespan)
 	{
 		kill_me = true;
-		physicsComponent->setOwner(nullptr);
-		physicsComponent = nullptr;
+		if (physicsComponent) {
+			physicsComponent->setOwner(nullptr);
+			physicsComponent = nullptr;
+		}
 	}
 }
