@@ -7,7 +7,6 @@
 
 #include "Entity.hpp"
 
-
 class EntityManager {
 public:
 	EntityManager();

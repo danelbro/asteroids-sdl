@@ -7,9 +7,10 @@
 #include "PhysicsEntity.hpp"
 
 struct Gameworld;
+struct Vec2d;
+
 class Ship;
 class PhysicsComponent;
-struct Vec2d;
 
 class Bullet : public PhysicsEntity {
 public:

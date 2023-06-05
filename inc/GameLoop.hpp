@@ -11,7 +11,6 @@
 #include "FlagEnums.hpp"
 #include "PhysicsManager.hpp"
 
-struct GameWorld;
 class Entity;
 class PhysicsComponent;
 class Player;

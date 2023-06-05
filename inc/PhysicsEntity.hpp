@@ -9,6 +9,7 @@
 #include "Vec2d.hpp"
 
 struct GameWorld;
+
 class PhysicsComponent;
 
 class PhysicsEntity : public Entity
