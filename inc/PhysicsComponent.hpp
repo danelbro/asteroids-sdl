@@ -23,7 +23,7 @@ public:
     Vec2d velocity() const { return m_velocity; }
 
     void setAngle(double angle);
-    void setOwner(Entity *new_owner) { owner = new_owner; }
+    void setOwner(Entity *new_owner) { if (new_owner) owner = new_owner; }
 
     void update(double dt);
 
