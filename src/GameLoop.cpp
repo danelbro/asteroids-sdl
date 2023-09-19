@@ -13,6 +13,7 @@
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
+#include "../inc/ScoreManager.hpp"
 
 bool processInput(GameWorld* gameworld, Uint32 windowID, Player* player, double dt,
     std::array<bool, K_TOTAL>& key_state,
@@ -118,7 +119,7 @@ bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL>& key_
 }
 
 bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
-    double t, double dt, std::mt19937& rng)
+    ScoreManager* scoreMan, double t, double dt, std::mt19937& rng)
 {
     for (auto &ent : entMan->entities)
         ent->update(t, dt);
@@ -128,8 +129,9 @@ bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     bool playerIsAlive{ physMan->check_player_hit() };
     physMan->check_asteroids_hit();
 
+
     entMan->clean_up();
-    physMan->clean_up(gw, rng);
+    physMan->clean_up(gw, scoreMan, rng);
 
     for (auto &physComp : physMan->physMan)
         physComp->update(dt);

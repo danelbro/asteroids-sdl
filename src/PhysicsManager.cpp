@@ -11,6 +11,7 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
+#include "../inc/ScoreManager.hpp"
 #include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
@@ -135,14 +136,19 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 	return plPtr;
 }
 
-void PhysicsManager::clean_up(GameWorld* gw, std::mt19937& rng)
+void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt19937& rng)
 {
+	constexpr int BASE_AST_SCORE = 300;
+
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity* phys = physEntities[i].get();
 		if (phys->toBeKilled())
 		{
-			if (phys->type == ASTEROID && phys->scale() > 1.0) {
-				make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
+			if (phys->type == ASTEROID) {
+				scoreMan->score += BASE_AST_SCORE / phys->scale();
+				if (phys->scale() > 1.0) {
+					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
+				}
 			}
 
 			physMan.erase(physMan.begin() + i);

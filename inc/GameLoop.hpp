@@ -10,6 +10,7 @@
 #include "GameWorld.hpp"
 #include "FlagEnums.hpp"
 #include "PhysicsManager.hpp"
+#include "ScoreManager.hpp"
 
 class Entity;
 class PhysicsComponent;
@@ -21,8 +22,8 @@ bool processInput(GameWorld* GameWorld, Uint32 windowID, Player* player, double 
 
 bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL> &key_state);
 
-bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
-    double t, double dt, std::mt19937& rng);
+bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan, 
+    ScoreManager* scoreMan, double t, double dt, std::mt19937& rng);
 
 void render(EntityManager* entMan, PhysicsManager* physMan,
             SDL_Renderer *renderer);

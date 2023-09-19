@@ -17,6 +17,7 @@
 #include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
 #include "Player.hpp"
+#include "ScoreManager.hpp"
 #include "Vec2d.hpp"
 
 class PhysicsManager {
@@ -37,7 +38,7 @@ public:
 
 	Player* make_player(GameWorld* new_GameWorld);
 
-	void clean_up(GameWorld* gw, std::mt19937& rng);
+	void clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt19937& rng);
 
 	bool check_player_hit();
 	bool check_asteroids_hit();

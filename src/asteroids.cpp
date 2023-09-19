@@ -12,6 +12,7 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "../inc/Asteroid.hpp"
 #include "../inc/Colors.hpp"
@@ -23,6 +24,7 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
+#include "../inc/ScoreManager.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
@@ -66,6 +68,9 @@ void asteroids()
 
     // Make PhysicsManager
     PhysicsManager physicsManager{};
+
+    // Make ScoreManager
+    ScoreManager scoreManager{};
 
     // Make Player
     Player* player{physicsManager.make_player(&gameWorld)};
@@ -115,7 +120,7 @@ void asteroids()
             isRunning = processInput(&gameWorld, windowID, player, dt,
                 keyState, &entityManager, &physicsManager);
             if (!isRunning) break;
-            isRunning = updateAll(&gameWorld, &entityManager, &physicsManager, t, dt, rng);
+            isRunning = updateAll(&gameWorld, &entityManager, &physicsManager, &scoreManager, t, dt, rng);
             if (!isRunning) break;
             accumulator -= dt;
             t += dt;

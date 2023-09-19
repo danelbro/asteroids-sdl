@@ -1,6 +1,7 @@
 #include "../inc/utility.hpp"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 const char* SdlException::what() const throw() {
     return SDL_GetError();
@@ -9,6 +10,9 @@ const char* SdlException::what() const throw() {
 void init(Uint32 sdlFlags)
 {
     if (SDL_Init(sdlFlags) != 0)
+        throw SdlException();
+
+    if (TTF_Init() == -1)
         throw SdlException();
 }
 
