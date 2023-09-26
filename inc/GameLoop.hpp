@@ -25,5 +25,5 @@ bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL> &key_
 bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan, 
     ScoreManager* scoreMan, double t, double dt, std::mt19937& rng);
 
-void render(EntityManager* entMan, PhysicsManager* physMan,
+void render(EntityManager* entMan, PhysicsManager* physMan, ScoreManager* scoreMan,
             SDL_Renderer *renderer);

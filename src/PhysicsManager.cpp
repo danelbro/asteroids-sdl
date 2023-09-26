@@ -145,11 +145,13 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 		if (phys->toBeKilled())
 		{
 			if (phys->type == ASTEROID) {
-				scoreMan->score += BASE_AST_SCORE / phys->scale();
+				scoreMan->score += static_cast<int>( BASE_AST_SCORE / phys->scale());
 				if (phys->scale() > 1.0) {
 					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 				}
 			}
+
+			scoreMan->refresh();
 
 			physMan.erase(physMan.begin() + i);
 			physEntities.erase(physEntities.begin() + i);

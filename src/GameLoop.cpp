@@ -129,7 +129,6 @@ bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     bool playerIsAlive{ physMan->check_player_hit() };
     physMan->check_asteroids_hit();
 
-
     entMan->clean_up();
     physMan->clean_up(gw, scoreMan, rng);
 
@@ -139,13 +138,15 @@ bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     return playerIsAlive;
 }
 
-void render(EntityManager* entMan, PhysicsManager* physMan,
-    SDL_Renderer* renderer)
+void render(EntityManager* entMan, PhysicsManager* physMan, 
+    ScoreManager* scoreMan, SDL_Renderer* renderer)
 {
     SDL_RenderClear(renderer);
-    for (auto &entity : entMan->entities)
+    for (auto& entity : entMan->entities)
         entity->render(renderer);
     for (auto& physEntity : physMan->physEntities)
         physEntity->render(renderer);
+    for (auto& textObject : scoreMan->textObjects)
+        textObject->render(renderer);
     SDL_RenderPresent(renderer);
 }

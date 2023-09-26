@@ -1,0 +1,27 @@
+#include "../inc/ScoreManager.hpp"
+
+#include <string>
+
+#include <SDL.h>
+
+#include "../inc/Colors.hpp"
+#include "../inc/GameWorld.hpp"
+#include "../inc/TextObject.hpp"
+
+ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Renderer* renderer)
+    : textObjects{}, score{ 0 }, m_renderer{ renderer },
+    scoreboard{ gw, pos, font, customCols::text_col },
+    scoreText{ gw, pos, font, customCols::text_col }
+{
+    scoreboard.updateText("Score: ", m_renderer);
+    textObjects.push_back(&scoreboard);
+
+    scoreText.pos() = {pos.x + scoreboard.size().x, pos.y};
+    scoreText.updateText(std::to_string(score), m_renderer);
+    textObjects.push_back(&scoreText);
+}
+
+void ScoreManager::refresh()
+{
+    scoreText.updateText(std::to_string(score), m_renderer);
+}

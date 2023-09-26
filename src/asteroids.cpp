@@ -70,7 +70,16 @@ void asteroids()
     PhysicsManager physicsManager{};
 
     // Make ScoreManager
-    ScoreManager scoreManager{};
+    TTF_Font* font{ nullptr };
+
+    constexpr int SCOREBOARD_XPOS{ 17 };
+    constexpr int SCOREBOARD_YPOS{ 10 };
+
+    font = TTF_OpenFont("data/Play-Regular.ttf", 28);
+    if (!font) {
+        throw SdlException();
+    }
+    ScoreManager scoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS}, font, renderer.get() };
 
     // Make Player
     Player* player{physicsManager.make_player(&gameWorld)};
@@ -126,8 +135,14 @@ void asteroids()
             t += dt;
         }
 
-        render(&entityManager, &physicsManager, renderer.get());
+        render(&entityManager, &physicsManager, &scoreManager, renderer.get());
     }
+
+    for (auto& textObject : scoreManager.textObjects)
+        textObject->free();
+
+    SDL_DestroyRenderer(renderer.get());
+    SDL_DestroyWindow(window.get());
 }
 
 int WinMain()
@@ -138,6 +153,7 @@ try
 
     asteroids();
 
+    TTF_Quit();
     SDL_Quit();
     return 0;
 }
