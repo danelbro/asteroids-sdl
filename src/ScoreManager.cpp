@@ -21,6 +21,13 @@ ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Rendere
     textObjects.push_back(&scoreText);
 }
 
+void ScoreManager::update_score(int add_this)
+{
+    score += add_this;
+    if (score < 0) score = 0;
+    changed = true;
+}
+
 void ScoreManager::refresh()
 {
     if (changed) {

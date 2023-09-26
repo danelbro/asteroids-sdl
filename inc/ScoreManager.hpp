@@ -22,6 +22,7 @@ public:
 
     bool changed{ false };
 
+    void update_score(int add_this);
     void refresh();
 };
 

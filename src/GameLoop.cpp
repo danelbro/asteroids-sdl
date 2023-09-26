@@ -59,7 +59,6 @@ bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL>& key_
                     gw->screen.w = ev.window.data1;
                     gw->screen.h = ev.window.data2;
                 }
-
         }
 
         else if (ev.type == SDL_KEYDOWN) {
@@ -131,6 +130,8 @@ bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
 
     entMan->clean_up();
     physMan->clean_up(gw, scoreMan, rng);
+
+    scoreMan->refresh();
 
     for (auto &physComp : physMan->physMan)
         physComp->update(dt);

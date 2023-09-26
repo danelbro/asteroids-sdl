@@ -152,8 +152,6 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 				}
 			}
 
-			scoreMan->refresh();
-
 			physMan.erase(physMan.begin() + i);
 			physEntities.erase(physEntities.begin() + i);
 		}
