@@ -23,5 +23,8 @@ ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Rendere
 
 void ScoreManager::refresh()
 {
-    scoreText.updateText(std::to_string(score), m_renderer);
+    if (changed) {
+        scoreText.updateText(std::to_string(score), m_renderer);
+        changed = false;
+    }
 }

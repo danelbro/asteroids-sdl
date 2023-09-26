@@ -146,6 +146,7 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 		{
 			if (phys->type == ASTEROID) {
 				scoreMan->score += static_cast<int>( BASE_AST_SCORE / phys->scale());
+				scoreMan->changed = true;
 				if (phys->scale() > 1.0) {
 					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 				}

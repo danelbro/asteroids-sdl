@@ -20,6 +20,8 @@ public:
 
     SDL_Renderer* m_renderer;
 
+    bool changed{ false };
+
     void refresh();
 };
 
