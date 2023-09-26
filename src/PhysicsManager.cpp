@@ -139,17 +139,26 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt19937& rng)
 {
 	constexpr int BASE_AST_SCORE = 300;
+	constexpr int PENALTY = -5;
 
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity* phys = physEntities[i].get();
 		if (phys->toBeKilled())
 		{
-			if (phys->type == ASTEROID) {
-				scoreMan->score += static_cast<int>( BASE_AST_SCORE / phys->scale());
-				scoreMan->changed = true;
+			switch (phys->type)
+			{
+			case ASTEROID:
+				scoreMan->update_score(static_cast<int>(BASE_AST_SCORE / phys->scale()));
 				if (phys->scale() > 1.0) {
 					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 				}
+				break;
+			case BULLET:
+				if (phys->wayward)
+					scoreMan->update_score(PENALTY);
+				break;
+			default:
+				break;
 			}
 
 			physMan.erase(physMan.begin() + i);
@@ -187,6 +196,7 @@ bool PhysicsManager::check_asteroids_hit()
 					if (PointInPolygon(bul->pos(), ast->fillShape())) {
 						ast->kill_it();
 						bul->kill_it();
+						bul->wayward = false;
 						hits = true;
 						break;
 					}

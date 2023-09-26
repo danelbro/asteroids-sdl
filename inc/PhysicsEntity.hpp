@@ -27,6 +27,8 @@ public:
 	std::vector<Vec2d> transShape() const { return m_transShape; }
 	std::vector<Vec2d> fillShape() const { return m_fillShape; }
 
+	bool wayward = true; // for dealing with wayward bullets - find a better way to do this?
+
 protected:
 	std::vector<Vec2d> m_transShape;
 	std::vector<Vec2d> m_fillShape;
