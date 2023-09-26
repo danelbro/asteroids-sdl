@@ -14,3 +14,7 @@
 !*.png
 !*.sh
 !*.md
+
+#Unignore text and fonts
+!*.ttf
+!*.txt
