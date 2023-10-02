@@ -38,12 +38,12 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
 
     SDL_Surface* textSurface = TTF_RenderUTF8_Blended(m_font, textureText.c_str(), text_colour);
     if (!textSurface)
-        throw SdlException();
+        throw SdlException(std::string{"Could not create textSurface! SDL_Error: ", SDL_GetError()});
     else
     {
         m_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
         if (!m_texture)
-            throw SdlException();
+            throw SdlException(std::string{"Could not create texture from textSurface! SDL_Error: ", SDL_GetError()});
         else
         {
             m_size.x = textSurface->w;
@@ -59,7 +59,7 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
     if (!loadFromRenderedText(new_text, { m_color.r, m_color.g, m_color.b, m_color.a}, renderer))
-        throw SdlException();
+        throw SdlException(std::string{"Could not update text! SDL_Error: ", SDL_GetError()});
 }
 
 void TextObject::render(SDL_Renderer* renderer)

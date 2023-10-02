@@ -58,7 +58,7 @@ void asteroids(Box screen, unsigned windowID, SDL_Renderer* renderer)
 
     font = TTF_OpenFont("data/Play-Regular.ttf", 28);
     if (!font) {
-        throw SdlException();
+        throw SdlException(std::string{"Couldn't load font! TTF_Error:", TTF_GetError()});
     }
     ScoreManager scoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS}, font, renderer };
 

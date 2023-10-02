@@ -1,6 +1,7 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
+#include <string>
 
 #include <SDL.h>
 
@@ -20,10 +21,11 @@ struct SDL_RendererDestroyer
     }
 };
 
-// wrapper around std::exception to make SDL exception handling smoother
-class SdlException : public std::exception
+// wrapper around std::runtime_error to make SDL exception handling smoother
+class SdlException : public std::runtime_error
 {
-    const char* what() const throw();
+public:
+    SdlException(std::string e);
 };
 
 // Initialise SDL with sdlFlags.
