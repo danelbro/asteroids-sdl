@@ -58,7 +58,6 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
 
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
-    bool success = true;
     if (!loadFromRenderedText(new_text, { m_color.r, m_color.g, m_color.b, m_color.a}, renderer))
         throw SdlException();
 }

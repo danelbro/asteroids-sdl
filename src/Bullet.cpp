@@ -20,7 +20,7 @@ Bullet::Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
 	fill = true;
 }
 
-void Bullet::update(double t, double dt)
+void Bullet::update(double, double dt)
 {
 	update_shapes();
 

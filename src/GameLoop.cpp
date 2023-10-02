@@ -16,8 +16,7 @@
 #include "../inc/ScoreManager.hpp"
 
 bool processInput(GameWorld* gameworld, Uint32 windowID, Player* player, double dt,
-    std::array<bool, K_TOTAL>& key_state,
-    EntityManager* entMan, PhysicsManager* physMan)
+    std::array<bool, K_TOTAL>& key_state, PhysicsManager* physMan)
 {
     bool isRunning = handleInput(gameworld, windowID, key_state);
 

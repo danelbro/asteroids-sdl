@@ -23,7 +23,7 @@ public:
     void render(SDL_Renderer* renderer);
 
     void updateText(std::string new_text, SDL_Renderer* renderer);
-    void update(double t, double dt) {}
+    void update(double, double) {}
 
     const Vec2d size() { return m_size; }
 private:

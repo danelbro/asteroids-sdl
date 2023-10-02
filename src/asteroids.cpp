@@ -127,7 +127,7 @@ void asteroids()
             }
 
             isRunning = processInput(&gameWorld, windowID, player, dt,
-                keyState, &entityManager, &physicsManager);
+                keyState, &physicsManager);
             if (!isRunning) break;
             isRunning = updateAll(&gameWorld, &entityManager, &physicsManager, &scoreManager, t, dt, rng);
             if (!isRunning) break;
