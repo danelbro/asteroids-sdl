@@ -76,8 +76,8 @@ bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
     bool oddNodes{ false };
 
     for (i = 0; i < polygon.size(); i++) {
-        if (polygon[i].y < point.y && polygon[j].y >= point.y 
-            || polygon[j].y < point.y && polygon[i].y >= point.y)
+        if ((polygon[i].y < point.y && polygon[j].y >= point.y)
+            || (polygon[j].y < point.y && polygon[i].y >= point.y))
                 if (polygon[i].x + (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x)
                     oddNodes = !oddNodes;
         j = i;
@@ -105,11 +105,11 @@ void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Re
     for (pixel.y = y_min; pixel.y < y_max; pixel.y++) {
         size_t i{}, j{};
         std::vector<double> nodesX;
-        
+
         j = poly.size() - 1;
         for (i = 0; i < poly.size(); i++) {
-            if (poly.at(i).y < pixel.y && poly.at(j).y >= pixel.y
-                || poly.at(j).y < pixel.y && poly.at(i).y >= pixel.y)
+            if ((poly.at(i).y < pixel.y && poly.at(j).y >= pixel.y)
+                || (poly.at(j).y < pixel.y && poly.at(i).y >= pixel.y))
                 nodesX.push_back(
                     poly.at(i).x
                     + (pixel.y - poly.at(i).y)
