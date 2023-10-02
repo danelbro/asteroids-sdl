@@ -11,7 +11,7 @@ class PhysicsComponent {
 public:
     PhysicsComponent(double mass, Entity *new_owner)
         : m_mass { mass }, m_impulse{ 0.0 }, m_acceleration{ 0.0, 0.0 },
-          m_velocity{ 0, 0 }, m_angle{ 0.0 },
+          m_velocity{ 0, 0 }, m_angle{ 0.0 }, m_dir_vector{0, 0},
           owner { new_owner }
         {}
 

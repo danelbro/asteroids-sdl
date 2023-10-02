@@ -9,9 +9,10 @@
 #include "../inc/TextObject.hpp"
 
 ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Renderer* renderer)
-    : textObjects{}, score{ 0 }, m_renderer{ renderer },
-    scoreboard{ gw, pos, font, customCols::text_col },
-    scoreText{ gw, pos, font, customCols::text_col }
+    : score{ 0 },
+      scoreboard{ gw, pos, font, customCols::text_col },
+      scoreText{ gw, pos, font, customCols::text_col },
+      textObjects{}, m_renderer{ renderer }
 {
     scoreboard.updateText("Score: ", m_renderer);
     textObjects.push_back(&scoreboard);

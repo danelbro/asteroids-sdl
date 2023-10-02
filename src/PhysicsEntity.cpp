@@ -15,7 +15,7 @@ PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld* new_gameWorld,
     Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
 	PhysicsComponent* new_physicsComponent)
 	: Entity{ new_type, new_gameWorld, pos, shape, color, scale },
-	physicsComponent{ new_physicsComponent }
+      physicsComponent{ new_physicsComponent }, m_transShape{}, m_fillShape{}
 {}
 
 void PhysicsEntity::update_shapes()
