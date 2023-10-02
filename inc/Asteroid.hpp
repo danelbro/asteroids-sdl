@@ -18,6 +18,7 @@ public:
         SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
         double impulse, double angle, double new_radius);
 
+    ~Asteroid() = default;
     Asteroid(const Asteroid&) = delete;
     Asteroid & operator=(const Asteroid&) = delete;
 

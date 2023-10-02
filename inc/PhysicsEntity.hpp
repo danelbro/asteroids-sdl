@@ -19,6 +19,10 @@ public:
 		std::vector<Vec2d> shape, SdlColor color, double scale,
 		PhysicsComponent* new_physicsComponent);
 
+    ~PhysicsEntity() = default;
+    PhysicsEntity(const PhysicsEntity&) = delete;
+    PhysicsEntity& operator=(const PhysicsEntity&) = delete;
+
 	void render(SDL_Renderer* renderer) override;
 
 	PhysicsComponent* physicsComponent;

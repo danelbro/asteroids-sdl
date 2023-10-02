@@ -20,8 +20,8 @@ class Entity {
 public:
     virtual void render(SDL_Renderer* renderer) = 0;
     virtual void update(double t, double dt) = 0;
-    virtual ~Entity() = default;
 
+    virtual ~Entity() = default;
     Entity(const Entity&) = delete;
     Entity & operator=(const Entity&) = delete;
 
@@ -30,9 +30,8 @@ public:
     void kill_it() { kill_me = true; }
     double scale() const { return m_scale; }
 
-    GameWorld const *gameWorld;
-
     EntityFlag type;
+    GameWorld const *gameWorld;
 
 protected:
     Entity(EntityFlag new_type, GameWorld* new_gameWorld, Vec2d pos,

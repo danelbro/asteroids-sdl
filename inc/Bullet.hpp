@@ -17,7 +17,11 @@ public:
     Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
         SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
         Ship* new_owner, double lifespan);
-    
+
+    ~Bullet() = default;
+    Bullet(const Bullet&) = delete;
+    Bullet& operator=(const Bullet&) = delete;
+
     void update(double t, double dt) override;
 
 private:
