@@ -145,7 +145,11 @@ void asteroids()
     SDL_DestroyWindow(window.get());
 }
 
+#ifdef _WIN32
 int WinMain()
+#elif __linux__
+int main()
+#endif
 try
 {
     constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
