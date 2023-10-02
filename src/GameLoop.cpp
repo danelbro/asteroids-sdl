@@ -139,7 +139,7 @@ bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
     return playerIsAlive;
 }
 
-void render(EntityManager* entMan, PhysicsManager* physMan, 
+void render(EntityManager* entMan, PhysicsManager* physMan,
     ScoreManager* scoreMan, SDL_Renderer* renderer)
 {
     SDL_RenderClear(renderer);

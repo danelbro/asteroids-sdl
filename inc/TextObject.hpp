@@ -17,7 +17,7 @@ public:
 
     bool loadFromRenderedText(std::string textureText, SDL_Color text_colour,
         SDL_Renderer* renderer);
-    
+
     void free();
 
     void render(SDL_Renderer* renderer);

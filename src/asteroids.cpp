@@ -56,7 +56,7 @@ void asteroids()
     renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
         createRenderer(window.get(), -1, rendererFlags) };
 
-    SDL_SetRenderDrawColor(renderer.get(), customCols::bg.r, customCols::bg.g, 
+    SDL_SetRenderDrawColor(renderer.get(), customCols::bg.r, customCols::bg.g,
         customCols::bg.b, customCols::bg.a);
 
     // Gameworld initialisation

@@ -96,7 +96,7 @@ void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 				new_pos.y = yDist(rng);
 
 				Vec2d distanceToPlayer{ new_pos - player->pos() };
-				if (distanceToPlayer.magnitude() > 30.0 * scale) 
+				if (distanceToPlayer.magnitude() > 30.0 * scale)
 					isTooClose = false;
 			}
 
@@ -161,8 +161,8 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 				break;
 			}
 
-			physMan.erase(physMan.begin() + i);
-			physEntities.erase(physEntities.begin() + i);
+			physMan.erase(physMan.begin() + static_cast<long>(i));
+			physEntities.erase(physEntities.begin() + static_cast<long>(i));
 		}
 	}
 }
@@ -204,6 +204,6 @@ bool PhysicsManager::check_asteroids_hit()
 			}
 		}
 	}
-	
+
 	return hits;
 }

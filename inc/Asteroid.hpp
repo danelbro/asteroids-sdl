@@ -14,7 +14,7 @@ class PhysicsComponent;
 
 class Asteroid : public PhysicsEntity {
 public:
-    Asteroid(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape, 
+    Asteroid(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
         SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
         double impulse, double angle, double new_radius);
 

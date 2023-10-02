@@ -12,7 +12,7 @@
 #include "../inc/Vec2d.hpp"
 
 TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color)
-    : Entity{ EntityFlag::TEXT, gw, pos, std::vector<Vec2d>{}, color, 1.0 }, 
+    : Entity{ EntityFlag::TEXT, gw, pos, std::vector<Vec2d>{}, color, 1.0 },
     m_texture{ nullptr }, m_font{ font }, m_size{ 0, 0 }
 {}
 
@@ -65,7 +65,7 @@ void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 
 void TextObject::render(SDL_Renderer* renderer)
 {
-    SDL_Rect renderQuad = { static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 
+    SDL_Rect renderQuad = { static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
         static_cast<int>(m_size.x), static_cast<int>(m_size.y) };
     SDL_RenderCopy(renderer, m_texture, nullptr, &renderQuad);
 }

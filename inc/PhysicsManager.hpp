@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 // PhysicsManager class to create, store and destroy instances of PhysicsEntity
 
 #include <memory>
