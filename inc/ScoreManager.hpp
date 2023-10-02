@@ -13,7 +13,7 @@ class ScoreManager
 public:
     ScoreManager(GameWorld* gw, Vec2d scoreboard_pos, TTF_Font* font, SDL_Renderer* renderer); // scoreboard_pos = top left
 
-    ~ScoreManager() = default;
+    ~ScoreManager();
     ScoreManager(const ScoreManager&) = delete;
     ScoreManager& operator=(const ScoreManager&) = delete;
 

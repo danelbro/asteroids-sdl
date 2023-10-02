@@ -8,6 +8,12 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/TextObject.hpp"
 
+ScoreManager::~ScoreManager()
+{
+    for (auto& t_o : textObjects)
+        t_o->free();
+}
+
 ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Renderer* renderer)
     : score{ 0 },
       scoreboard{ gw, pos, font, customCols::text_col },

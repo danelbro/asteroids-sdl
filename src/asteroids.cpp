@@ -118,9 +118,6 @@ void asteroids(Box screen, unsigned windowID, SDL_Renderer* renderer)
 
         render(&entityManager, &physicsManager, &scoreManager, renderer);
     }
-
-    for (auto& textObject : scoreManager.textObjects)
-        textObject->free();
 }
 
 #ifdef _WIN32
