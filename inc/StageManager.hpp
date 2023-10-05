@@ -4,7 +4,7 @@
 
 #include "Box.hpp"
 
-enum class StageEnum {
+enum class StageID {
     TITLE_SCREEN,
     PLAYING,
     HIGH_SCORES,
@@ -18,8 +18,8 @@ public:
     Stage& operator=(const Stage&) = delete;
 
     virtual void init();
-    virtual int handle_input();
-    virtual int update();
+    virtual StageID handle_input();
+    virtual StageID update();
     virtual void render();
 protected:
     Stage(Box screen, unsigned windowID, SDL_Renderer* renderer)
@@ -37,9 +37,9 @@ class StageManager {
 public:
     StageManager();
 
-    void add_stage(Stage new_stage);
+    void add_stage(StageID key, Stage& new_stage);
     void run();
 private:
-    std::map<int, Stage> stages;
-    StageEnum current_stage{StageEnum::TITLE_SCREEN};
+    std::map<StageID, Stage> stages;
+    StageID current{StageID::TITLE_SCREEN};
 };
