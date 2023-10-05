@@ -12,7 +12,7 @@ OBJ = obj/asteroids.o obj/AIComponent.o obj/Asteroid.o obj/Bullet.o obj/Engine.o
 all: asteroids
 asteroids: $(OBJ)
 	$(CC) $(LDFLAGS) -o asteroids $(OBJ) $(SDL_LDFLAGS) $(LDLIBS)
-obj/asteroids.o: src/asteroids.cpp inc/Asteroid.hpp inc/Colors.hpp inc/Entity.hpp inc/EntityManager.hpp inc/PhysicsManager.hpp inc/FlagEnums.hpp inc/GameLoop.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/ScoreManager.hpp inc/utility.hpp inc/Vec2d.hpp
+obj/asteroids.o: src/asteroids.cpp inc/Asteroid.hpp inc/Box.hpp inc/Colors.hpp inc/Entity.hpp inc/EntityManager.hpp inc/PhysicsManager.hpp inc/FlagEnums.hpp inc/GameLoop.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/Player.hpp inc/ScoreManager.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/asteroids.o -c src/asteroids.cpp
 obj/AIComponent.o: inc/AIComponent.hpp src/AIComponent.cpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/AIComponent.o -c src/AIComponent.cpp

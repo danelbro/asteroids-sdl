@@ -15,6 +15,7 @@
 #include <SDL_ttf.h>
 
 #include "../inc/Asteroid.hpp"
+#include "../inc/Box.hpp"
 #include "../inc/Colors.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/EntityManager.hpp"
