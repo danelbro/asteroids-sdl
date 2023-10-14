@@ -6,7 +6,7 @@
 
 #include "PhysicsEntity.hpp"
 
-struct Gameworld;
+struct GameWorld;
 struct Vec2d;
 
 class Ship;

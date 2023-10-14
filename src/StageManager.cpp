@@ -1,27 +1,29 @@
+#include "../inc/Stage.hpp"
 #include "../inc/StageManager.hpp"
 
-void StageManager::add_stage(StageID key, Stage& new_stage)
+void StageManager::add_stage(StageID key, Stage* new_stage)
 {
+    stages.at(key) = new_stage;
 }
 
 void StageManager::run()
 {
-    Stage& current_stage = stages[current];
+    Stage* current_stage = stages[current];
     StageID next = current;
 
-    next = current_stage.handle_input();
+    next = current_stage->handle_input();
     if (next != current) {
         current = next;
-        stages[current].init();
+        stages[current]->init();
         return;
     }
 
-    next = current_stage.update();
+    next = current_stage->update();
     if (next != current) {
         current = next;
-        stages[current].init();
+        stages[current]->init();
         return;
     }
 
-    current_stage.render();
+    current_stage->render();
 }

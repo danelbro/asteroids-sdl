@@ -1,6 +1,6 @@
 #pragma once
 
-enum KeyFlag {
+enum class KeyFlag {
     K_LEFT,
     K_RIGHT,
     K_UP,
@@ -10,11 +10,18 @@ enum KeyFlag {
     K_TOTAL
 };
 
-enum EntityFlag {
+enum class EntityFlag {
     PLAYER,
     ASTEROID,
     ENEMY,
     BULLET,
     TEXT,
     E_TYPE_TOTAL
+};
+
+enum class StageID {
+    TITLE_SCREEN,
+    PLAYING,
+    HIGH_SCORES,
+    STAGES_TOTAL
 };

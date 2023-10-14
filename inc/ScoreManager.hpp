@@ -11,6 +11,7 @@
 class ScoreManager
 {
 public:
+    ScoreManager() {}
     ScoreManager(GameWorld* gw, Vec2d scoreboard_pos, TTF_Font* font, SDL_Renderer* renderer); // scoreboard_pos = top left
 
     ~ScoreManager();

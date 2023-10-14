@@ -12,6 +12,7 @@
 class TextObject : public Entity
 {
 public:
+    TextObject();
     TextObject(GameWorld* gw, Vec2d pos, TTF_Font* font, SdlColor color);
 
     ~TextObject();
