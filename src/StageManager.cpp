@@ -47,6 +47,8 @@ void StageManager::run()
 
         while (accumulator >= dt) {
             next = current_stage->handle_input(t, dt, keyState);
+            if (next == StageID::QUIT)
+                break;
 
             if (next != current) {
                 handle_stage_transition();
@@ -62,6 +64,9 @@ void StageManager::run()
             accumulator -= dt;
             t += dt;
         }
+
+        if (next == StageID::QUIT)
+            break;
 
         if(handle_stage_transition())
             current_stage->render(t, dt);
@@ -85,6 +90,9 @@ bool StageManager::handle_stage_transition()
         case StageID::HIGH_SCORES:
             // remove later
             next = StageID::PLAYING;
+            break;
+        case StageID::QUIT:
+            next = StageID::QUIT;
             break;
         default:
             throw SdlException("bad stage");
