@@ -1,6 +1,8 @@
 #include "../inc/GameLoop.hpp"
 
+#include <algorithm>
 #include <array>
+#include <cstddef>
 #include <memory>
 #include <vector>
 
@@ -15,138 +17,55 @@
 #include "../inc/Player.hpp"
 #include "../inc/ScoreManager.hpp"
 
-bool processInput(GameWorld* gameworld, Uint32 windowID, Player* player, double dt,
-    std::array<bool, K_TOTAL>& key_state, PhysicsManager* physMan)
-{
-    bool isRunning = handleInput(gameworld, windowID, key_state);
+namespace GameLoop {
+    void process_input(GameWorld* gw, Uint32 windowID, std::array<bool,
+                     static_cast<size_t>(KeyFlag::K_TOTAL)>& key_state)
+    {
+        SDL_Event ev{ };
 
-    if (key_state[K_UP])
-        player->engine.on();
-    else if (!key_state[K_UP])
-        player->engine.off();
+        while (SDL_PollEvent(&ev)) {
+            if (ev.type == SDL_QUIT)
+                key_state[static_cast<size_t>(KeyFlag::QUIT)] = true;
 
-    if (key_state[K_LEFT])
-        player->engine.turnLeft(dt);
-    if (key_state[K_RIGHT])
-        player->engine.turnRight(dt);
+            else if (ev.type == SDL_WINDOWEVENT) {
+                if (ev.window.windowID == windowID)
+                    if (ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+                        gw->screen.w = ev.window.data1;
+                        gw->screen.h = ev.window.data2;
+                    }
+            }
 
-    if (key_state[K_SPACE])
-        if (!player->gun.fired)
-            player->gun.fire(gameworld, physMan, player);
-    if (!key_state[K_SPACE])
-        player->gun.fired = false;
-
-    if (key_state[K_LSHIFT])
-        player->hyperdrive.warp();
-
-    return isRunning;
-}
-
-bool handleInput(GameWorld* gw, Uint32 windowID, std::array<bool, K_TOTAL>& key_state)
-{
-    SDL_Event ev;
-    bool isRunning{ true };
-
-    while (SDL_PollEvent(&ev)) {
-        if (ev.type == SDL_QUIT) {
-            isRunning = false;
-        }
-
-        else if (ev.type == SDL_WINDOWEVENT) {
-            if (ev.window.windowID == windowID)
-                if (ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-                    gw->screen.w = ev.window.data1;
-                    gw->screen.h = ev.window.data2;
+            else if (ev.type == SDL_KEYDOWN) {
+                switch (ev.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)] = true;
+                    break;
+                case SDLK_LEFT:
+                    key_state[static_cast<size_t>(KeyFlag::K_LEFT)] = true;
+                    break;
+                case SDLK_RIGHT:
+                    key_state[static_cast<size_t>(KeyFlag::K_RIGHT)] = true;
+                    break;
+                case SDLK_UP:
+                    key_state[static_cast<size_t>(KeyFlag::K_UP)] = true;
+                    break;
+                case SDLK_DOWN:
+                    key_state[static_cast<size_t>(KeyFlag::K_DOWN)] = true;
+                    break;
+                case SDLK_SPACE:
+                    key_state[static_cast<size_t>(KeyFlag::K_SPACE)] = true;
+                    break;
+                case SDLK_LSHIFT:
+                    key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)] = true;
+                    break;
+                default:
+                    break;
                 }
+            }
+            else if (ev.type == SDL_KEYUP)
+                std::fill(key_state.begin(), key_state.end(), false);
         }
 
-        else if (ev.type == SDL_KEYDOWN) {
-            switch (ev.key.keysym.sym) {
-            case SDLK_ESCAPE:
-                isRunning = false;
-                break;
-            case SDLK_LEFT:
-                key_state[K_LEFT] = true;
-                break;
-            case SDLK_RIGHT:
-                key_state[K_RIGHT] = true;
-                break;
-            case SDLK_UP:
-                key_state[K_UP] = true;
-                break;
-            case SDLK_DOWN:
-                key_state[K_DOWN] = true;
-                break;
-            case SDLK_SPACE:
-                key_state[K_SPACE] = true;
-                break;
-            case SDLK_LSHIFT:
-                key_state[K_LSHIFT] = true;
-                break;
-            default:
-                break;
-            }
-        }
-        else if (ev.type == SDL_KEYUP) {
-            switch (ev.key.keysym.sym) {
-            case SDLK_LEFT:
-                key_state[K_LEFT] = false;
-                break;
-            case SDLK_RIGHT:
-                key_state[K_RIGHT] = false;
-                break;
-            case SDLK_UP:
-                key_state[K_UP] = false;
-                break;
-            case SDLK_DOWN:
-                key_state[K_DOWN] = false;
-                break;
-            case SDLK_SPACE:
-                key_state[K_SPACE] = false;
-                break;
-            case SDLK_LSHIFT:
-                key_state[K_LSHIFT] = false;
-                break;
-            default:
-                break;
-            }
-        }
     }
 
-    return isRunning;
-}
-
-bool updateAll(GameWorld* gw, EntityManager* entMan, PhysicsManager* physMan,
-    ScoreManager* scoreMan, double t, double dt, std::mt19937& rng)
-{
-    for (auto &ent : entMan->entities)
-        ent->update(t, dt);
-    for (auto& physEnt : physMan->physEntities)
-        physEnt->update(t, dt);
-
-    bool playerIsAlive{ physMan->check_player_hit() };
-    physMan->check_asteroids_hit();
-
-    entMan->clean_up();
-    physMan->clean_up(gw, scoreMan, rng);
-
-    scoreMan->refresh();
-
-    for (auto &physComp : physMan->physMan)
-        physComp->update(dt);
-
-    return playerIsAlive;
-}
-
-void render(EntityManager* entMan, PhysicsManager* physMan,
-    ScoreManager* scoreMan, SDL_Renderer* renderer)
-{
-    SDL_RenderClear(renderer);
-    for (auto& entity : entMan->entities)
-        entity->render(renderer);
-    for (auto& physEntity : physMan->physEntities)
-        physEntity->render(renderer);
-    for (auto& textObject : scoreMan->textObjects)
-        textObject->render(renderer);
-    SDL_RenderPresent(renderer);
 }

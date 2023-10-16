@@ -11,10 +11,20 @@
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
-TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color)
+TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color,
+                       SDL_Renderer* rend)
     : Entity{ EntityFlag::TEXT, gw, pos, std::vector<Vec2d>{}, color, 1.0 },
-    m_texture{ nullptr }, m_font{ font }, m_size{ 0, 0 }
+      text{ }, m_texture{ nullptr }, m_font{ font }, m_size{ 0, 0 },
+      m_rend{ rend }
 {}
+
+TextObject::TextObject(const TextObject& to)
+    : Entity{ EntityFlag::TEXT, to.gameWorld, to.m_pos, to.m_shape,
+              to.m_color, to.m_scale }, text{ to.text }, m_texture{ nullptr },
+      m_font{ to.m_font }, m_size{ to.m_size }, m_rend{ to.m_rend }
+{
+    updateText(text, m_rend);
+}
 
 TextObject::~TextObject()
 {
@@ -58,7 +68,8 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
 
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
-    if (!loadFromRenderedText(new_text, { m_color.r, m_color.g, m_color.b, m_color.a}, renderer))
+    text = new_text;
+    if (!loadFromRenderedText(text, { m_color.r, m_color.g, m_color.b, m_color.a}, renderer))
         throw SdlException(std::string{"Could not update text! SDL_Error: ", SDL_GetError()});
 }
 

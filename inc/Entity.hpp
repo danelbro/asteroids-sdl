@@ -31,7 +31,7 @@ public:
     double scale() const { return m_scale; }
 
     EntityFlag type;
-    GameWorld const *gameWorld;
+    GameWorld *gameWorld;
 
 protected:
     Entity(EntityFlag new_type, GameWorld* new_gameWorld, Vec2d pos,

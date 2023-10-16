@@ -7,6 +7,8 @@ enum class KeyFlag {
     K_DOWN,
     K_SPACE,
     K_LSHIFT,
+    K_ESCAPE,
+    QUIT,
     K_TOTAL
 };
 
@@ -23,5 +25,6 @@ enum class StageID {
     TITLE_SCREEN,
     PLAYING,
     HIGH_SCORES,
-    STAGES_TOTAL
+    STAGES_TOTAL,
+    QUIT
 };

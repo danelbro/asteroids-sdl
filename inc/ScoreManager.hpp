@@ -11,17 +11,22 @@
 class ScoreManager
 {
 public:
-    ScoreManager() {}
-    ScoreManager(GameWorld* gw, Vec2d scoreboard_pos, TTF_Font* font, SDL_Renderer* renderer); // scoreboard_pos = top left
+    ScoreManager()
+        : score{ 0 }, scoreboard{ }, scoreText{ },
+          textObjects{ }, m_renderer{ nullptr }
+        {}
+
+    ScoreManager(GameWorld* gw, Vec2d scoreboard_pos, TTF_Font* font,
+                 SDL_Renderer* renderer); // scoreboard_pos = top left
 
     ~ScoreManager();
-    ScoreManager(const ScoreManager&) = delete;
-    ScoreManager& operator=(const ScoreManager&) = delete;
+    ScoreManager(const ScoreManager&) = default;
+    ScoreManager& operator=(const ScoreManager&) = default;
 
     int score;
     TextObject scoreboard;
     TextObject scoreText;
-    std::vector<TextObject*> textObjects;
+    std::vector<TextObject> textObjects;
 
     SDL_Renderer* m_renderer;
 

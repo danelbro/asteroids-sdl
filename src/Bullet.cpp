@@ -13,7 +13,8 @@
 Bullet::Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
 	SdlColor color, double scale,
 	PhysicsComponent* new_physicsComponent, Ship* new_owner, double lifespan)
-	: PhysicsEntity{ BULLET, new_gameWorld, pos, shape, color, scale, new_physicsComponent },
+	: PhysicsEntity{ EntityFlag::BULLET, new_gameWorld, pos, shape, color,
+                     scale, new_physicsComponent },
 	owner{ new_owner }, m_lifespan{ lifespan }
 {
     physicsComponent->setOwner(this);

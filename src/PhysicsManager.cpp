@@ -147,13 +147,13 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 		{
 			switch (phys->type)
 			{
-			case ASTEROID:
+			case EntityFlag::ASTEROID:
 				scoreMan->update_score(static_cast<int>(BASE_AST_SCORE / phys->scale()));
 				if (phys->scale() > 1.0) {
 					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 				}
 				break;
-			case BULLET:
+			case EntityFlag::BULLET:
 				if (phys->wayward)
 					scoreMan->update_score(PENALTY);
 				break;
@@ -170,9 +170,9 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 bool PhysicsManager::check_player_hit()
 {
 	for (auto& plr : physEntities) {
-		if (plr->type == PLAYER) {
+		if (plr->type == EntityFlag::PLAYER) {
 			for (auto& ast : physEntities) {
-				if (ast->type == ASTEROID) {
+				if (ast->type == EntityFlag::ASTEROID) {
 					bool hit{ PointInPolygon(plr->pos(), ast->fillShape()) };
 					if (hit) {
 						plr->kill_it();
@@ -190,9 +190,9 @@ bool PhysicsManager::check_asteroids_hit()
 {
 	bool hits{ false };
 	for (auto& bul : physEntities) {
-		if (bul->type == BULLET) {
+		if (bul->type == EntityFlag::BULLET) {
 			for (auto& ast : physEntities) {
-				if (ast->type == ASTEROID) {
+				if (ast->type == EntityFlag::ASTEROID) {
 					if (PointInPolygon(bul->pos(), ast->fillShape())) {
 						ast->kill_it();
 						bul->kill_it();

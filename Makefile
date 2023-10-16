@@ -7,7 +7,7 @@ SDL_CFLAGS = $(shell sdl2-config --cflags)
 CFLAGS = $(OPT) -Wall -Wextra -Weffc++ -Wsign-conversion -pedantic -std=c++17
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = -lSDL2_ttf
-OBJ = obj/asteroids.o obj/AIComponent.o obj/Asteroid.o obj/Bullet.o obj/Engine.o obj/Entity.o obj/EntityManager.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/utility.o obj/Vec2d.o obj/VectorDraw.o
+OBJ = obj/asteroids.o obj/AIComponent.o obj/Asteroid.o obj/Bullet.o obj/Engine.o obj/Entity.o obj/EntityManager.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/Stage.o obj/StageManager.o obj/TextObject.o obj/utility.o obj/Vec2d.o obj/VectorDraw.o
 
 all: asteroids
 asteroids: $(OBJ)
@@ -32,6 +32,8 @@ obj/Gun.o: src/Gun.cpp inc/Gun.hpp inc/EntityManager.hpp inc/GameWorld.hpp inc/P
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Gun.o -c src/Gun.cpp
 obj/Hyperdrive.o: src/Hyperdrive.cpp inc/Hyperdrive.hpp inc/Player.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Hyperdrive.o -c src/Hyperdrive.cpp
+obj/MainLevel.o: src/MainLevel.cpp inc/MainLevel.hpp inc/Box.hpp inc/Entity.hpp inc/EntityManager.hpp inc/FlagEnums.hpp inc/GameLoop.hpp inc/GameWorld.hpp inc/ScoreManager.hpp inc/Stage.hpp inc/StageManager.hpp inc/PhysicsManager.hpp inc/Player.hpp inc/utility.hpp
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/MainLevel.o -c src/MainLevel.cpp
 obj/PhysicsComponent.o: src/PhysicsComponent.cpp inc/PhysicsComponent.hpp inc/Box.hpp inc/GameWorld.hpp inc/Entity.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/PhysicsComponent.o -c src/PhysicsComponent.cpp
 obj/PhysicsEntity.o: src/PhysicsEntity.cpp inc/PhysicsEntity.hpp inc/Entity.hpp inc/FlagEnums.hpp inc/GameWorld.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/Vec2d.hpp inc/VectorDraw.hpp
@@ -44,7 +46,9 @@ obj/ScoreManager.o: src/ScoreManager.cpp inc/ScoreManager.hpp inc/Colors.hpp inc
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/ScoreManager.o -c src/ScoreManager.cpp
 obj/Ship.o: src/Ship.cpp inc/Ship.hpp inc/Colors.hpp inc/Engine.hpp inc/FlagEnums.hpp inc/GameWorld.hpp inc/Gun.hpp inc/PhysicsComponent.hpp inc/PhysicsEntity.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Ship.o -c src/Ship.cpp
-obj/StageManager.o: src/StageManager.cpp inc/StageManager.hpp inc/Box.hpp
+obj/Stage.o: src/Stage.cpp inc/Stage.hpp inc/Box.hpp inc/FlagEnums.hpp
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Stage.o -c src/Stage.cpp
+obj/StageManager.o: src/StageManager.cpp inc/StageManager.hpp inc/FlagEnums.hpp inc/Stage.hpp inc/MainLevel.hpp inc/utility.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/StageManager.o -c src/StageManager.cpp
 obj/TextObject.o: src/TextObject.cpp inc/TextObject.hpp inc/Entity.hpp inc/FlagEnums.hpp inc/GameWorld.hpp inc/utility.hpp inc/Vec2d.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/TextObject.o -c src/TextObject.cpp
