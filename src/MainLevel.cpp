@@ -151,8 +151,14 @@ void MainLevel::render(double, double)
         if (physEntity)
             physEntity->render(renderer());
     }
-    for (auto& textObject : scoreManager.textObjects) {
-        textObject.render(renderer());
-    }
+    // for (auto& textObject : scoreManager.textObjects) {
+    //     if (textObject)
+    //         textObject->render(renderer());
+    // }
+
+    // temporary solution
+    scoreManager.scoreboard.render(renderer());
+    scoreManager.scoreText.render(renderer());
+
     SDL_RenderPresent(renderer());
 }
