@@ -45,3 +45,5 @@ struct tex_pointer_and_sizes
 // Throw an SdlException if creation fails
 tex_pointer_and_sizes createTextTexture(TTF_Font* font, std::string text,
     SDL_Color text_colour, SDL_Renderer* rend);
+
+TTF_Font* createFont(std::string path, int font_size);

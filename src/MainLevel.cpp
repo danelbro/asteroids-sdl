@@ -42,13 +42,11 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     // Make ScoreManager
     constexpr int SCOREBOARD_XPOS{ 17 };
     constexpr int SCOREBOARD_YPOS{ 10 };
+    constexpr int FONT_SIZE{ 28 };
+    const std::string FONT_PATH{ "data/Play-Regular.ttf" };
 
-    font = std::unique_ptr<TTF_Font, sdl_deleter>(
-        TTF_OpenFont("data/Play-Regular.ttf", 28));
-    if (!font) {
-        throw SdlException(std::string{"Couldn't load font! TTF_Error:",
-                                       TTF_GetError()});
-    }
+    font = std::unique_ptr<TTF_Font, sdl_deleter>(createFont(FONT_PATH, FONT_SIZE));
+
     scoreManager = ScoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS},
                                  font.get(), renderer()};
 

@@ -78,3 +78,15 @@ tex_pointer_and_sizes createTextTexture(TTF_Font* font, std::string text,
 
     return return_package;
 }
+
+TTF_Font* createFont(std::string path, int font_size)
+{
+    auto font = TTF_OpenFont(path.c_str(), font_size);
+
+    if (!font) {
+        throw SdlException(std::string{ "Couldn't load font! TTF_Error:",
+                                       TTF_GetError() });
+    }
+
+    return font;
+}
