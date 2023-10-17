@@ -3,12 +3,13 @@
 #include <memory>
 #include <vector>
 
-#include "AIComponent.hpp"
 #include "Colors.hpp"
 #include "GameWorld.hpp"
 #include "Ship.hpp"
 #include "PhysicsComponent.hpp"
 #include "Vec2d.hpp"
+
+class AIComponent;
 
 class Enemy : public Ship {
 public:

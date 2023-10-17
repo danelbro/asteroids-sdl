@@ -6,6 +6,7 @@
 
 #include <SDL.h>
 
+#include "../inc/AIComponent.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/Ship.hpp"
@@ -22,12 +23,11 @@ Enemy::Enemy(GameWorld* new_gameworld, Vec2d pos, std::vector<Vec2d> shape,
     if (!aiComponent)
         throw std::runtime_error("failed to create AIComponent");
 
+    aiComponent->setOwner(this);
     physicsComponent->setOwner(this);
 }
 
 void Enemy::update(double, double)
 {
     update_shapes();
-    if (physicsComponent->velocity().magnitude() < 300.0)
-        engine.on();
 }

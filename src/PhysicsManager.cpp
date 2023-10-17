@@ -4,6 +4,7 @@
 #include <random>
 #include <vector>
 
+#include "../inc/AIComponent.hpp"
 #include "../inc/Asteroid.hpp"
 #include "../inc/Bullet.hpp"
 #include "../inc/Enemy.hpp"
