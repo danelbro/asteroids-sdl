@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -32,3 +33,15 @@ SDL_Window* createWindow(const char *title, int x, int y,
 
 // Create an SDL_Renderer*. Throw an SdlException if creation fails
 SDL_Renderer* createRenderer(SDL_Window *window, int index, Uint32 flags);
+
+struct tex_pointer_and_sizes
+{
+    std::unique_ptr<SDL_Texture, sdl_deleter> texP{ nullptr };
+    int w{ 0 };
+    int h{ 0 };
+};
+
+// Create an SDL_Texture* rendered from text. 
+// Throw an SdlException if creation fails
+tex_pointer_and_sizes createTextTexture(TTF_Font* font, std::string text,
+    SDL_Color text_colour, SDL_Renderer* rend);

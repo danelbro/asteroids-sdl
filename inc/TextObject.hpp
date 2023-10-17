@@ -23,7 +23,7 @@ public:
     TextObject(GameWorld* gw, Vec2d pos, TTF_Font* font, SdlColor color,
                SDL_Renderer* rend);
 
-    bool loadFromRenderedText(std::string textureText, SDL_Color text_colour,
+    void loadFromRenderedText(std::string textureText, SDL_Color text_colour,
         SDL_Renderer* renderer);
 
     void free();

@@ -29,47 +29,27 @@ void TextObject::free()
     }
 }
 
-bool TextObject::loadFromRenderedText(std::string textureText,
+void TextObject::loadFromRenderedText(std::string textureText,
                                       SDL_Color text_colour,
                                       SDL_Renderer* renderer)
 {
     free();
 
-    SDL_Surface* textSurface = TTF_RenderUTF8_Blended(m_font,
-                                                      textureText.c_str(),
-                                                      text_colour);
-    if (!textSurface)
-        throw SdlException(std::string{
-                "Could not create textSurface! SDL_Error: ",
-                SDL_GetError()});
-    else
-    {
-        m_texture = std::unique_ptr<SDL_Texture, sdl_deleter>(
-            SDL_CreateTextureFromSurface(renderer, textSurface));
-        if (!m_texture)
-            throw SdlException(std::string{
-                    "Could not create texture from textSurface! SDL_Error: ",
-                    SDL_GetError()});
-        else
-        {
-            m_size.x = textSurface->w;
-            m_size.y = textSurface->h;
-        }
+    auto texPstruct{ createTextTexture(m_font, textureText, text_colour, renderer) };
 
-        SDL_FreeSurface(textSurface);
-        textSurface = nullptr;
-    }
-
-    return m_texture != nullptr;
+    m_texture = std::move(texPstruct.texP);
+    m_size.x = texPstruct.w;
+    m_size.y = texPstruct.h;
 }
 
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
     text = new_text;
-    if (!loadFromRenderedText(text, { m_color.r, m_color.g,
-                                      m_color.b, m_color.a}, renderer))
-        throw SdlException(
-            std::string{"Could not update text! SDL_Error: ", SDL_GetError()});
+    loadFromRenderedText(
+        text, 
+        { m_color.r, m_color.g, m_color.b, m_color.a }, 
+        renderer
+    );
 }
 
 void TextObject::render(SDL_Renderer* renderer)

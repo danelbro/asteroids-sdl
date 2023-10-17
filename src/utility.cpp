@@ -46,3 +46,35 @@ SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags)
 
     return rend;
 }
+
+tex_pointer_and_sizes createTextTexture(TTF_Font* font, std::string text, 
+    SDL_Color text_colour, SDL_Renderer* rend)
+{
+    tex_pointer_and_sizes return_package{};
+
+    SDL_Surface* textSurface = TTF_RenderUTF8_Blended(font, text.c_str(),
+        text_colour);
+
+    if (!textSurface)
+        throw SdlException(std::string{
+        "Could not create textSurface! SDL_Error: ", SDL_GetError() });
+    else
+    {
+        auto texP = SDL_CreateTextureFromSurface(rend, textSurface);
+        if (!texP)
+            throw SdlException(std::string{
+            "Could not create texture from textSurface! SDL_Error: ",
+            SDL_GetError() });
+        else
+        {
+            return_package.texP = std::unique_ptr<SDL_Texture, sdl_deleter>(texP);
+            return_package.w = textSurface->w;
+            return_package.h = textSurface->h;
+        }
+    }
+
+    SDL_FreeSurface(textSurface);
+    textSurface = nullptr;
+
+    return return_package;
+}
