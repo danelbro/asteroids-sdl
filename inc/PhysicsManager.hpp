@@ -32,7 +32,7 @@ public:
 		int num, double scale, char flag, std::mt19937& rng,
 		Player* player = nullptr, Vec2d pos = { 0.0, 0.0 });
 
-	void make_enemy();
+	void make_enemy(GameWorld* new_GameWorld);
 
 	Player* make_player(GameWorld* new_GameWorld);
 

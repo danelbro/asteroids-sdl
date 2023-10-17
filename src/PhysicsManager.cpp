@@ -108,9 +108,21 @@ void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 	}
 }
 
-void PhysicsManager::make_enemy()
+void PhysicsManager::make_enemy(GameWorld* gameWorld)
 {
-	return;
+	const Vec2d new_pos{ }; // needs not to be placed near the player
+	const std::vector<Vec2d> shape{ }; // think of a shape
+	constexpr double scale{ 1.0 };
+	constexpr double power{ 5000.0 };
+	constexpr double turnSpeed{ 300.0 };
+	constexpr double shotPower{ 20000.0 };
+	constexpr double mass{ 0.1 };
+
+	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
+
+	physEntities.push_back(std::make_unique<Enemy>(gameWorld, new_pos, shape,
+		customCols::enemy_col, scale, power, turnSpeed, shotPower,
+		physMan.back().get()));
 }
 
 Player* PhysicsManager::make_player(GameWorld* gameWorld)
