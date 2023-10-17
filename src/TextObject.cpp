@@ -78,5 +78,5 @@ void TextObject::render(SDL_Renderer* renderer)
                             static_cast<int>(m_pos.y),
                             static_cast<int>(m_size.x),
                             static_cast<int>(m_size.y) };
-    SDL_RenderCopy(renderer, m_texture, nullptr, &renderQuad);
+    SDL_RenderCopy(renderer, m_texture.get(), nullptr, &renderQuad);
 }
