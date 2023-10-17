@@ -61,8 +61,33 @@ namespace GameLoop {
                     break;
                 }
             }
-            else if (ev.type == SDL_KEYUP)
-                std::fill(key_state.begin(), key_state.end(), false);
+            else if (ev.type == SDL_KEYUP) {
+                switch (ev.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)] = false;
+                    break;
+                case SDLK_LEFT:
+                    key_state[static_cast<size_t>(KeyFlag::K_LEFT)] = false;
+                    break;
+                case SDLK_RIGHT:
+                    key_state[static_cast<size_t>(KeyFlag::K_RIGHT)] = false;
+                    break;
+                case SDLK_UP:
+                    key_state[static_cast<size_t>(KeyFlag::K_UP)] = false;
+                    break;
+                case SDLK_DOWN:
+                    key_state[static_cast<size_t>(KeyFlag::K_DOWN)] = false;
+                    break;
+                case SDLK_SPACE:
+                    key_state[static_cast<size_t>(KeyFlag::K_SPACE)] = false;
+                    break;
+                case SDLK_LSHIFT:
+                    key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)] = false;
+                    break;
+                default:
+                    break;
+                }
+            }      
         }
 
     }
