@@ -35,7 +35,7 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     std::random_device randDev;
     rng = std::mt19937{randDev()};
     std::mt19937::result_type seed_val{
-        static_cast<unsigned long>(std::time(NULL))
+        static_cast<unsigned long>(std::time(nullptr))
     };
     rng.seed(seed_val);
 

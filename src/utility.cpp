@@ -47,10 +47,10 @@ SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags)
     return rend;
 }
 
-tex_pointer_and_sizes createTextTexture(TTF_Font* font, std::string text, 
+textStruct createTextTexture(TTF_Font* font, std::string text, 
     SDL_Color text_colour, SDL_Renderer* rend)
 {
-    tex_pointer_and_sizes return_package{};
+    textStruct return_package{};
 
     SDL_Surface* textSurface = TTF_RenderUTF8_Blended(font, text.c_str(),
         text_colour);
