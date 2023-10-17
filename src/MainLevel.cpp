@@ -14,7 +14,6 @@
 
 #include "../inc/Box.hpp"
 #include "../inc/Entity.hpp"
-#include "../inc/EntityManager.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
@@ -25,9 +24,9 @@
 #include "../inc/utility.hpp"
 
 MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer)
-    : Stage{new_screen, windowID, new_renderer}, gameWorld{}, entityManager{},
-      physicsManager{}, scoreManager{}, rng{}, font{ nullptr },
-      player{ nullptr }, asteroidsRemain{ false }, numOfAsteroids{ 3 }
+    : Stage{new_screen, windowID, new_renderer}, gameWorld{}, physicsManager{}, 
+    scoreManager{}, rng{}, font{ nullptr }, player{ nullptr }, 
+    asteroidsRemain{ false }, numOfAsteroids{ 3 }
 {
     constexpr double fluidDensity{ 0.1 };
     gameWorld.screen = screen();
@@ -44,13 +43,14 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     constexpr int SCOREBOARD_XPOS{ 17 };
     constexpr int SCOREBOARD_YPOS{ 10 };
 
-    font = TTF_OpenFont("data/Play-Regular.ttf", 28);
+    font = std::unique_ptr<TTF_Font, sdl_deleter>(
+        TTF_OpenFont("data/Play-Regular.ttf", 28));
     if (!font) {
         throw SdlException(std::string{"Couldn't load font! TTF_Error:",
                                        TTF_GetError()});
     }
     scoreManager = ScoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS},
-                                 font, renderer() };
+                                 font.get(), renderer()};
 
     // Make Player
     player = physicsManager.make_player(&gameWorld);
@@ -60,12 +60,6 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     // Add some Asteroids
     physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng,
                                   player);
-}
-
-MainLevel::~MainLevel()
-{
-    TTF_CloseFont(font);
-    font = nullptr;
 }
 
 StageID MainLevel::handle_input(double, double dt,
@@ -79,24 +73,34 @@ StageID MainLevel::handle_input(double, double dt,
     if (key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)])
         return StageID::TITLE_SCREEN;
 
-    if (key_state[static_cast<size_t>(KeyFlag::K_UP)])
-        player->engine.on();
-    else if (!key_state[static_cast<size_t>(KeyFlag::K_UP)])
-        player->engine.off();
-
-    if (key_state[static_cast<size_t>(KeyFlag::K_LEFT)])
-        player->engine.turnLeft(dt);
-    if (key_state[static_cast<size_t>(KeyFlag::K_RIGHT)])
-        player->engine.turnRight(dt);
-
-    if (key_state[static_cast<size_t>(KeyFlag::K_SPACE)])
-        if (!player->gun.fired)
-            player->gun.fire(&gameWorld, &physicsManager, player);
+    if (key_state[static_cast<size_t>(KeyFlag::K_UP)]) {
+        if (player)
+            player->engine.on();
+    }
+    else if (!key_state[static_cast<size_t>(KeyFlag::K_UP)]) {
+        if (player)
+            player->engine.off();
+    }
+    if (key_state[static_cast<size_t>(KeyFlag::K_LEFT)]) {
+        if (player)
+            player->engine.turnLeft(dt);
+    }
+    if (key_state[static_cast<size_t>(KeyFlag::K_RIGHT)]) {
+        if (player)
+            player->engine.turnRight(dt);
+    }
+    if (key_state[static_cast<size_t>(KeyFlag::K_SPACE)]) {
+        if (player)
+            if (!player->gun.fired)
+                player->gun.fire(&gameWorld, &physicsManager, player);
+    }
     if (!key_state[static_cast<size_t>(KeyFlag::K_SPACE)])
-        player->gun.fired = false;
+        if (player)
+            player->gun.fired = false;
 
     if (key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)])
-        player->hyperdrive.warp();
+        if (player)
+            player->hyperdrive.warp();
 
     return StageID::PLAYING;
 }
@@ -118,15 +122,12 @@ StageID MainLevel::update(double t, double dt)
                                       'n', rng, player);
     }
 
-    for (auto &ent : entityManager.entities)
-        ent->update(t, dt);
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
 
     bool playerIsAlive{ physicsManager.check_player_hit() };
     physicsManager.check_asteroids_hit();
 
-    entityManager.clean_up();
     physicsManager.clean_up(&gameWorld, &scoreManager, rng);
 
     scoreManager.refresh();
@@ -134,8 +135,10 @@ StageID MainLevel::update(double t, double dt)
     for (auto &physComp : physicsManager.physMan)
         physComp->update(dt);
 
-    if (!playerIsAlive)
+    if (!playerIsAlive) {
+        player = nullptr;
         return StageID::HIGH_SCORES;
+    }
 
     return StageID::PLAYING;
 }
@@ -143,22 +146,14 @@ StageID MainLevel::update(double t, double dt)
 void MainLevel::render(double, double)
 {
     SDL_RenderClear(renderer());
-    for (auto& entity : entityManager.entities) {
-        if (entity)
-            entity->render(renderer());
-    }
     for (auto& physEntity : physicsManager.physEntities){
         if (physEntity)
             physEntity->render(renderer());
     }
-    // for (auto& textObject : scoreManager.textObjects) {
-    //     if (textObject)
-    //         textObject->render(renderer());
-    // }
-
-    // temporary solution
-    scoreManager.scoreboard.render(renderer());
-    scoreManager.scoreText.render(renderer());
+    for (auto& textObject : scoreManager.textObjects) {
+        if (textObject)
+            textObject->render(renderer());
+    }
 
     SDL_RenderPresent(renderer());
 }

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "../inc/EntityManager.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/PhysicsManager.hpp"

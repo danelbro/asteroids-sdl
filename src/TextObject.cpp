@@ -10,6 +10,7 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
+#include "../inc/utility.hpp"
 
 TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color,
                        SDL_Renderer* rend)
@@ -18,24 +19,11 @@ TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color,
       m_rend{ rend }
 {}
 
-TextObject::TextObject(const TextObject& to)
-    : Entity{ EntityFlag::TEXT, to.gameWorld, to.m_pos, to.m_shape,
-              to.m_color, to.m_scale }, text{ to.text }, m_texture{ nullptr },
-      m_font{ to.m_font }, m_size{ to.m_size }, m_rend{ to.m_rend }
-{
-    updateText(text, m_rend);
-}
-
-TextObject::~TextObject()
-{
-    free();
-}
-
 void TextObject::free()
 {
     if (m_texture)
     {
-        SDL_DestroyTexture(m_texture);
+        SDL_DestroyTexture(m_texture.get());
         m_texture = nullptr;
         m_size = { 0, 0 };
     }
@@ -51,7 +39,8 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
         throw SdlException(std::string{"Could not create textSurface! SDL_Error: ", SDL_GetError()});
     else
     {
-        m_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        m_texture = std::unique_ptr<SDL_Texture, sdl_deleter>(
+            SDL_CreateTextureFromSurface(renderer, textSurface));
         if (!m_texture)
             throw SdlException(std::string{"Could not create texture from textSurface! SDL_Error: ", SDL_GetError()});
         else
@@ -61,6 +50,7 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
         }
 
         SDL_FreeSurface(textSurface);
+        textSurface = nullptr;
     }
 
     return m_texture != nullptr;
@@ -77,5 +67,5 @@ void TextObject::render(SDL_Renderer* renderer)
 {
     SDL_Rect renderQuad = { static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
         static_cast<int>(m_size.x), static_cast<int>(m_size.y) };
-    SDL_RenderCopy(renderer, m_texture, nullptr, &renderQuad);
+    SDL_RenderCopy(renderer, m_texture.get(), nullptr, &renderQuad);
 }

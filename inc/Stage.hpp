@@ -9,15 +9,12 @@
 
 class Stage {
 public:
-    virtual ~Stage();
-    Stage(const Stage&) = delete;
-    Stage& operator=(const Stage&) = delete;
-
     virtual StageID handle_input(double t, double dt,
                                  std::array<bool,
-                                 static_cast<size_t>(KeyFlag::K_TOTAL)>& key_state);
-    virtual StageID update(double t, double dt);
-    virtual void render(double t, double dt);
+                                 static_cast<size_t>(
+                                     KeyFlag::K_TOTAL)>& key_state) = 0;
+    virtual StageID update(double t, double dt) = 0;
+    virtual void render(double t, double dt) = 0;
 
     Box screen() const { return m_screen; }
     unsigned windowID() const { return m_windowID; }

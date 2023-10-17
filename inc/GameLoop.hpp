@@ -4,7 +4,6 @@
 
 #include <SDL.h>
 
-#include "EntityManager.hpp"
 #include "GameWorld.hpp"
 #include "FlagEnums.hpp"
 #include "PhysicsManager.hpp"

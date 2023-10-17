@@ -29,29 +29,30 @@ try
     init(sdlFlags);
 
     // Window initialisation
-    std::unique_ptr<SDL_Window, SDL_WindowDestroyer> window{ nullptr };
+    std::unique_ptr<SDL_Window, sdl_deleter> window{ nullptr };
     char title[] = "Asteroids";
     const Box screen{ 960, 720 };
     constexpr unsigned windowFlags = SDL_WINDOW_RESIZABLE;
-    window = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>{
+    window = std::unique_ptr<SDL_Window, sdl_deleter>{
         createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                      screen.w, screen.h, windowFlags) };
     auto windowID = SDL_GetWindowID(window.get());
 
     // Renderer intialisation
-    std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer> renderer{ nullptr };
+    std::unique_ptr<SDL_Renderer, sdl_deleter> renderer{ nullptr };
     constexpr int rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
-    renderer = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>{
+    renderer = std::unique_ptr<SDL_Renderer, sdl_deleter>{
         createRenderer(window.get(), -1, rendererFlags) };
 
     SDL_SetRenderDrawColor(renderer.get(), customCols::bg.r, customCols::bg.g,
         customCols::bg.b, customCols::bg.a);
+    {
+        StageManager stageMan{};
+        stageMan.add_stage(StageID::PLAYING,
+            new MainLevel{ screen, windowID, renderer.get() });
 
-    StageManager stageMan{};
-    stageMan.add_stage(StageID::PLAYING,
-                       new MainLevel{screen, windowID, renderer.get()});
-
-    stageMan.run();
+        stageMan.run();
+    }
 
     SDL_DestroyRenderer(renderer.get());
     SDL_DestroyWindow(window.get());

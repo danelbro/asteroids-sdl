@@ -21,29 +21,26 @@ public:
     virtual void render(SDL_Renderer* renderer) = 0;
     virtual void update(double t, double dt) = 0;
 
-    virtual ~Entity() = default;
-    Entity(const Entity&) = delete;
-    Entity & operator=(const Entity&) = delete;
-
-    Vec2d & pos() { return m_pos; }
+    Vec2d& pos() { return m_pos; }
     bool toBeKilled() const { return kill_me; }
     void kill_it() { kill_me = true; }
     double scale() const { return m_scale; }
 
     EntityFlag type;
-    GameWorld *gameWorld;
+    GameWorld* gameWorld;
 
 protected:
     Entity(EntityFlag new_type, GameWorld* new_gameWorld, Vec2d pos,
         std::vector<Vec2d> shape, SdlColor color, double scale)
         : type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
-        m_shape{ shape }, m_color{ color }, m_scale{ scale }
+        m_shape{ shape }, m_color{ color }, m_scale{ scale }, 
+        kill_me{ false }, fill{ false }
     {}
 
     Vec2d m_pos;
     std::vector<Vec2d> m_shape;
     SdlColor m_color;
     double m_scale;
-    bool kill_me{ false };
-    bool fill{ false };
+    bool kill_me;
+    bool fill;
 };

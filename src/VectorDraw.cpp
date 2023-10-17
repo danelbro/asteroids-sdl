@@ -78,7 +78,11 @@ bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
     for (i = 0; i < polygon.size(); i++) {
         if ((polygon[i].y < point.y && polygon[j].y >= point.y)
             || (polygon[j].y < point.y && polygon[i].y >= point.y))
-                if (polygon[i].x + (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x)
+                if (polygon[i].x 
+                    + (point.y - polygon[i].y) 
+                    / (polygon[j].y - polygon[i].y) 
+                    * (polygon[j].x - polygon[i].x) 
+                    < point.x)
                     oddNodes = !oddNodes;
         j = i;
     }
@@ -86,9 +90,10 @@ bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
     return oddNodes;
 }
 
-void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Renderer* renderer)
+void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, 
+    SDL_Renderer* renderer)
 {
-    // adapted form https://alienryderflex.com/polygon_fill/
+    // adapted frpm https://alienryderflex.com/polygon_fill/
     SdlColor old{};
     SDL_GetRenderDrawColor(renderer, &old.r, &old.g, &old.b, &old.a);
     SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
@@ -123,7 +128,8 @@ void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, SDL_Re
 
         for (i = 0; i < nodesX.size(); i += 2) {
             for (pixel.x = nodesX.at(i); pixel.x < nodesX.at(i + 1); pixel.x += 1)
-                DrawWrapLine(renderer, gw->screen, pixel.x, pixel.y, nodesX.at(i + 1), pixel.y);
+                DrawWrapLine(renderer, gw->screen, pixel.x, pixel.y, 
+                    nodesX.at(i + 1), pixel.y);
         }
     }
 

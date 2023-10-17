@@ -10,7 +10,6 @@
 
 #include "../inc/FlagEnums.hpp"
 #include "../inc/Entity.hpp"
-#include "../inc/EntityManager.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/PhysicsManager.hpp"
