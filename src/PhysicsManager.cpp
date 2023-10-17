@@ -139,8 +139,9 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	std::unique_ptr<Player> player(new Player{ gameWorld, pos, shape, customCols::player_col, scale,
-		power, turnSpeed, shotPower, physMan.back().get(), warpTimer, lives });
+	auto player(std::make_unique<Player>( gameWorld, pos, shape, 
+		customCols::player_col, scale, power, turnSpeed, shotPower, 
+		physMan.back().get(), warpTimer, lives ));
 
 	Player* plPtr = player.get();
 	physEntities.push_back(std::move(player));
