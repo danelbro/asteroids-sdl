@@ -37,7 +37,7 @@ public:
 
 private:
     std::string text;
-    std::unique_ptr<SDL_Texture, sdl_deleter> m_texture;
+    std::unique_ptr<SDL_Texture, utl::sdl_deleter> m_texture;
     TTF_Font* m_font;
     Vec2d m_size;
     SDL_Renderer* m_rend;

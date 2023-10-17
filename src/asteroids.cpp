@@ -26,22 +26,22 @@ int main()
 try
 {
     constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
-    init(sdlFlags);
+    utl::init(sdlFlags);
 
     // Window initialisation
     char title[] = "Asteroids";
     const Box screen{ 960, 720 };
 
     constexpr unsigned windowFlags = SDL_WINDOW_RESIZABLE;
-    auto window = std::unique_ptr<SDL_Window, sdl_deleter>{
-        createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                     screen.w, screen.h, windowFlags) };
+    auto window = std::unique_ptr<SDL_Window, utl::sdl_deleter>{
+        utl::createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        screen.w, screen.h, windowFlags) };
     auto windowID = SDL_GetWindowID(window.get());
 
     // Renderer intialisation
     constexpr int rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
-    auto renderer = std::unique_ptr<SDL_Renderer, sdl_deleter>{
-        createRenderer(window.get(), -1, rendererFlags) };
+    auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{
+        utl::createRenderer(window.get(), -1, rendererFlags) };
 
     {
         StageManager stageMan{};

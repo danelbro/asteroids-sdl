@@ -35,7 +35,8 @@ void TextObject::loadFromRenderedText(std::string textureText,
 {
     free();
 
-    auto texPstruct{ createTextTexture(m_font, textureText, text_colour, renderer) };
+    auto texPstruct{ utl::createTextTexture(m_font, textureText, 
+        text_colour, renderer) };
 
     m_texture = std::move(texPstruct.texP);
     m_size.x = texPstruct.w;

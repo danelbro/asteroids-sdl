@@ -45,7 +45,8 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     constexpr int FONT_SIZE{ 28 };
     const std::string FONT_PATH{ "data/Play-Regular.ttf" };
 
-    font = std::unique_ptr<TTF_Font, sdl_deleter>(createFont(FONT_PATH, FONT_SIZE));
+    font = std::unique_ptr<TTF_Font, utl::sdl_deleter>(
+        utl::createFont(FONT_PATH, FONT_SIZE));
 
     scoreManager = ScoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS},
                                  font.get(), renderer()};
@@ -53,7 +54,7 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     // Make Player
     player = physicsManager.make_player(&gameWorld);
     if(!player)
-        throw SdlException("failed to make player");
+        throw std::runtime_error("failed to make player");
 
     // Add some Asteroids
     physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng,

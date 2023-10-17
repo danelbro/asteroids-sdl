@@ -29,7 +29,7 @@ private:
     PhysicsManager physicsManager;
     ScoreManager scoreManager;
     std::mt19937 rng;
-    std::unique_ptr<TTF_Font, sdl_deleter> font;
+    std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
     Player* player;
     bool asteroidsRemain;
     int numOfAsteroids;

@@ -98,7 +98,7 @@ bool StageManager::handle_stage_transition()
             next = StageID::QUIT;
             break;
         default:
-            throw SdlException("bad stage");
+            throw std::runtime_error("bad stage");
         }
         current = next;
         return false;
