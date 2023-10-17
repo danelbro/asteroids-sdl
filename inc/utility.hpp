@@ -12,6 +12,7 @@ struct sdl_deleter
 {
     void operator()(SDL_Window* w) const { SDL_DestroyWindow(w); }
     void operator()(SDL_Renderer* r) const { SDL_DestroyRenderer(r); }
+    void operator()(SDL_Surface* s) const { SDL_FreeSurface(s); }
     void operator()(SDL_Texture* t) const { SDL_DestroyTexture(t); }
     void operator()(TTF_Font* f) const { TTF_CloseFont(f); }
 };
