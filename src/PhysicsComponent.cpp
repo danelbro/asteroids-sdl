@@ -36,7 +36,7 @@ void wrap(Vec2d &pos, Box screen)
 void PhysicsComponent::update(double dt)
 {
     m_dir_vector = { std::sin((m_angle * M_PI) / 180),
-                   -std::cos((m_angle * M_PI) / 180) };
+                     -std::cos((m_angle * M_PI) / 180) };
     auto totalForces{ m_dir_vector * m_impulse };
     m_acceleration = (totalForces / m_mass) * dt;
     m_velocity += m_acceleration * dt;
