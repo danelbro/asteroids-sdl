@@ -15,7 +15,8 @@ ScoreManager::~ScoreManager()
     textObjects.clear();
 }
 
-ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, SDL_Renderer* renderer)
+ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font,
+                           SDL_Renderer* renderer)
     : score{ 0 },
       scoreboard{ gw, pos, font, customCols::text_col, renderer },
       scoreText{ gw, pos, font, customCols::text_col, renderer },

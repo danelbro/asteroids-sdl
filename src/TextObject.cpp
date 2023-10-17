@@ -41,19 +41,26 @@ void TextObject::free()
     }
 }
 
-bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_colour,
-    SDL_Renderer* renderer)
+bool TextObject::loadFromRenderedText(std::string textureText,
+                                      SDL_Color text_colour,
+                                      SDL_Renderer* renderer)
 {
     free();
 
-    SDL_Surface* textSurface = TTF_RenderUTF8_Blended(m_font, textureText.c_str(), text_colour);
+    SDL_Surface* textSurface = TTF_RenderUTF8_Blended(m_font,
+                                                      textureText.c_str(),
+                                                      text_colour);
     if (!textSurface)
-        throw SdlException(std::string{"Could not create textSurface! SDL_Error: ", SDL_GetError()});
+        throw SdlException(std::string{
+                "Could not create textSurface! SDL_Error: ",
+                SDL_GetError()});
     else
     {
         m_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
         if (!m_texture)
-            throw SdlException(std::string{"Could not create texture from textSurface! SDL_Error: ", SDL_GetError()});
+            throw SdlException(std::string{
+                    "Could not create texture from textSurface! SDL_Error: ",
+                    SDL_GetError()});
         else
         {
             m_size.x = textSurface->w;
@@ -69,13 +76,17 @@ bool TextObject::loadFromRenderedText(std::string textureText, SDL_Color text_co
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
     text = new_text;
-    if (!loadFromRenderedText(text, { m_color.r, m_color.g, m_color.b, m_color.a}, renderer))
-        throw SdlException(std::string{"Could not update text! SDL_Error: ", SDL_GetError()});
+    if (!loadFromRenderedText(text, { m_color.r, m_color.g,
+                                      m_color.b, m_color.a}, renderer))
+        throw SdlException(
+            std::string{"Could not update text! SDL_Error: ", SDL_GetError()});
 }
 
 void TextObject::render(SDL_Renderer* renderer)
 {
-    SDL_Rect renderQuad = { static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
-        static_cast<int>(m_size.x), static_cast<int>(m_size.y) };
+    SDL_Rect renderQuad = { static_cast<int>(m_pos.x),
+                            static_cast<int>(m_pos.y),
+                            static_cast<int>(m_size.x),
+                            static_cast<int>(m_size.y) };
     SDL_RenderCopy(renderer, m_texture, nullptr, &renderQuad);
 }
