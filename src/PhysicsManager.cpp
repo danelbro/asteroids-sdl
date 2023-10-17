@@ -110,8 +110,15 @@ void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 
 void PhysicsManager::make_enemy(GameWorld* gameWorld)
 {
-	const Vec2d new_pos{ }; // needs not to be placed near the player
-	const std::vector<Vec2d> shape{ }; // think of a shape
+	const Vec2d new_pos{ 100, 200 }; // needs not to be placed near the player
+	const std::vector<Vec2d> shape{ {0, -30},  // top
+									{15, -10}, // top right
+									{-15, -10}, {15, -10}, // cross bar
+									{20, 30},  // bottom right
+									{0, 15},   // bottom
+									{0, -30}, {0, 15}, // dorsal line
+									{-20, 30}, // bottom right 
+									{-15, -10} }; // top left
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
 	constexpr double turnSpeed{ 300.0 };

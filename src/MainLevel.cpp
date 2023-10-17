@@ -60,6 +60,9 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng,
                                   player);
 
+    // Add an enemy
+    physicsManager.make_enemy(&gameWorld);
+
     SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
            customCols::bg.b, customCols::bg.a);
 }
@@ -123,6 +126,9 @@ StageID MainLevel::update(double t, double dt)
         physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0,
                                       'n', rng, player);
     }
+    
+    for (auto& physComp : physicsManager.physMan)
+        physComp->update(dt);
 
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
@@ -133,9 +139,6 @@ StageID MainLevel::update(double t, double dt)
     physicsManager.clean_up(&gameWorld, &scoreManager, rng);
 
     scoreManager.refresh();
-
-    for (auto &physComp : physicsManager.physMan)
-        physComp->update(dt);
 
     if (!playerIsAlive) {
         player = nullptr;
