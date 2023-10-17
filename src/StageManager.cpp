@@ -1,6 +1,7 @@
 #include "../inc/StageManager.hpp"
 
 #include <chrono>
+#include <memory>
 
 #include "../inc/FlagEnums.hpp"
 #include "../inc/MainLevel.hpp"
@@ -16,9 +17,9 @@ StageManager::StageManager()
     stages[StageID::HIGH_SCORES] = nullptr;
 }
 
-void StageManager::add_stage(StageID key, Stage* new_stage)
+void StageManager::add_stage(StageID key, std::unique_ptr<Stage> new_stage)
 {
-    stages[key] = new_stage;
+    stages[key] = std::move(new_stage);
 }
 
 void StageManager::run()
@@ -37,7 +38,7 @@ void StageManager::run()
     auto currentTime{ high_resolution_clock::now() };
     double accumulator{ 0.0 };
     while (isRunning) {
-        Stage* current_stage = stages[current];
+        Stage* current_stage = stages[current].get();
 
         auto newTime{ high_resolution_clock::now() };
         auto frameTime{ duration<double>(newTime - currentTime) };
@@ -83,10 +84,11 @@ bool StageManager::handle_stage_transition()
             next = StageID::PLAYING;
             break;
         case StageID::PLAYING:
-            delete stages[next];
-            add_stage(next, new MainLevel{stages[current]->screen(),
-                                          stages[current]->windowID(),
-                                          stages[current]->renderer()});
+            stages.erase(next);
+            add_stage(next, std::make_unique<MainLevel>(
+                stages[current]->screen(),
+                stages[current]->windowID(),
+                stages[current]->renderer()));
             break;
         case StageID::HIGH_SCORES:
             // remove later

@@ -60,6 +60,9 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
     // Add some Asteroids
     physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng,
                                   player);
+
+    SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
+           customCols::bg.b, customCols::bg.a);
 }
 
 StageID MainLevel::handle_input(double, double dt,
