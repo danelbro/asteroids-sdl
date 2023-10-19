@@ -76,7 +76,7 @@ void MainLevel::init()
     physicsManager.make_enemy(gameWorld, rng, player);
 
     SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
-           customCols::bg.b, customCols::bg.a);
+        customCols::bg.b, customCols::bg.a);
 }
 
 StageID MainLevel::handle_input(double, double dt,

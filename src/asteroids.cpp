@@ -25,21 +25,30 @@ int main()
 #endif
 try
 {
-    constexpr unsigned sdlFlags = SDL_INIT_VIDEO;
+    constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
     utl::init(sdlFlags);
 
     // Window initialisation
-    char title[] = "Asteroids";
-    const Box screen{ 960, 720 };
+    std::string title = "Asteroids";
 
-    constexpr unsigned windowFlags = SDL_WINDOW_RESIZABLE;
+    constexpr int screenWidth{ 960 };
+    constexpr int screenHeight{ 720 };
+
+    constexpr Box screen{ screenWidth, screenHeight };
+
+    constexpr auto windowFlags = SDL_WindowFlags::SDL_WINDOW_RESIZABLE;
+
     auto window = std::unique_ptr<SDL_Window, utl::sdl_deleter>{
-        utl::createWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        utl::createWindow(title.c_str(), 
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         screen.w, screen.h, windowFlags) };
+
     auto windowID = SDL_GetWindowID(window.get());
 
     // Renderer intialisation
-    constexpr int rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
+    constexpr auto rendererFlags = 
+        SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
+
     auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{
         utl::createRenderer(window.get(), -1, rendererFlags) };
 
@@ -47,7 +56,8 @@ try
         StageManager stageMan{};
 
         // stageMan.add_stage(StageID::TITLE_SCREEN,
-        //     std::make_unique<TitleScreen>(screen, windowID, renderer.get()));
+        //     std::make_unique<TitleScreen>(
+        // screen, windowID, renderer.get()));
 
         stageMan.add_stage(StageID::PLAYING,
             std::make_unique<MainLevel>(screen, windowID, renderer.get()));
@@ -62,13 +72,18 @@ try
     SDL_Quit();
     return 0;
 }
-catch (std::exception &e)
+catch (utl::SdlException& se)
+{
+    errorLogger << "SDL exception: " << se.what() << '\n';
+    return 1;
+}
+catch (std::runtime_error &e)
 {
     errorLogger << "exception: " << e.what() << '\n';
-    return 1;
+    return 2;
 }
 catch (...)
 {
     errorLogger << "unknown exception\n";
-    return 2;
+    return -1;
 }
