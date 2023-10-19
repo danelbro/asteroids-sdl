@@ -32,7 +32,8 @@ public:
 		int num, double scale, bool isNew, std::mt19937& rng,
 		Player* player = nullptr, Vec2d pos = { 0.0, 0.0 });
 
-	void make_enemy(GameWorld* new_GameWorld);
+	void make_enemy(GameWorld& new_GameWorld, std::mt19937& rng,
+		Player* player);
 
 	Player* make_player(GameWorld& new_GameWorld);
 

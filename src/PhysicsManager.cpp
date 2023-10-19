@@ -120,7 +120,6 @@ void PhysicsManager::make_asteroids(GameWorld& new_GameWorld, int num,
 void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng, 
 	Player* player)
 {
-	const Vec2d new_pos{ 100, 200 }; // needs not to be placed near the player
 	const std::vector<Vec2d> shape{ {0, -30},  // top
 									{15, -10}, // top right
 									{-15, -10}, {15, -10}, // cross bar
@@ -134,6 +133,9 @@ void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 	constexpr double turnSpeed{ 300.0 };
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
+
+	Vec2d new_pos{ findRandomDistantPos(rng, player, scale, 
+		gameWorld.screen.w, gameWorld.screen.h) };
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
