@@ -39,14 +39,14 @@ try
     constexpr auto windowFlags = SDL_WindowFlags::SDL_WINDOW_RESIZABLE;
 
     auto window = std::unique_ptr<SDL_Window, utl::sdl_deleter>{
-        utl::createWindow(title.c_str(), 
+        utl::createWindow(title.c_str(),
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         screen.w, screen.h, windowFlags) };
 
     auto windowID = SDL_GetWindowID(window.get());
 
     // Renderer intialisation
-    constexpr auto rendererFlags = 
+    constexpr auto rendererFlags =
         SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
 
     auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{

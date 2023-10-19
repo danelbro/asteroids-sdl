@@ -46,7 +46,7 @@ static std::mt19937 makeSeededRNG()
 MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
     : Stage{new_screen, windowID, new_renderer},
-    gameWorld{ new_screen, fluidDensity }, 
+    gameWorld{ new_screen, fluidDensity },
     font{ std::unique_ptr<TTF_Font, utl::sdl_deleter>(
         utl::createFont(font_path, font_size)) },
     physicsManager{},
@@ -69,7 +69,7 @@ void MainLevel::init()
         throw std::runtime_error("failed to make player");
 
     // Add some Asteroids
-    physicsManager.make_asteroids(gameWorld, numOfAsteroids, asteroidScale, 
+    physicsManager.make_asteroids(gameWorld, numOfAsteroids, asteroidScale,
         true, rng, player);
 
     // Add an enemy
@@ -136,11 +136,11 @@ StageID MainLevel::update(double t, double dt)
             if (ent->type == EntityFlag::BULLET)
                 ent->kill_it();
         }
-        physicsManager.make_asteroids(gameWorld, numOfAsteroids, 
+        physicsManager.make_asteroids(gameWorld, numOfAsteroids,
                                       asteroidScale,
                                       true, rng, player);
     }
-    
+
     for (auto& physComp : physicsManager.physMan)
         physComp->update(dt);
 

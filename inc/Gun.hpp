@@ -11,7 +11,7 @@ public:
         : owner{ new_owner }, m_shotPower{ shotPower }
         {}
 
-    void fire(GameWorld& new_GameWorld, 
+    void fire(GameWorld& new_GameWorld,
         PhysicsManager& physMan, Ship& firingShip);
     bool fired{ false };
 

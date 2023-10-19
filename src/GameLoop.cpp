@@ -87,9 +87,7 @@ namespace GameLoop {
                 default:
                     break;
                 }
-            }      
+            }
         }
-
     }
-
 }

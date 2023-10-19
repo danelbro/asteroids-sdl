@@ -33,7 +33,7 @@ protected:
     Entity(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
         std::vector<Vec2d> shape, SdlColor color, double scale)
         : type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
-        m_shape{ shape }, m_color{ color }, m_scale{ scale }, 
+        m_shape{ shape }, m_color{ color }, m_scale{ scale },
         kill_me{ false }, fill{ false }
     {}
 

@@ -12,7 +12,7 @@
 #include "../inc/Vec2d.hpp"
 #include "../inc/utility.hpp"
 
-TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font, 
+TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font,
     SdlColor color, SDL_Renderer* rend)
     : Entity{ EntityFlag::TEXT, gw, pos, std::vector<Vec2d>{}, color, 1.0 },
       text{ }, m_texture{ nullptr }, m_font{ font }, m_size{ 0, 0 },
@@ -35,7 +35,7 @@ void TextObject::loadFromRenderedText(std::string textureText,
 {
     free();
 
-    auto texPstruct{ utl::createTextTexture(m_font, textureText, 
+    auto texPstruct{ utl::createTextTexture(m_font, textureText,
         text_colour, renderer) };
 
     m_texture = std::move(texPstruct.texP);
@@ -47,8 +47,8 @@ void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
     text = new_text;
     loadFromRenderedText(
-        text, 
-        { m_color.r, m_color.g, m_color.b, m_color.a }, 
+        text,
+        { m_color.r, m_color.g, m_color.b, m_color.a },
         renderer
     );
 }

@@ -48,7 +48,7 @@ void StageManager::run()
 
         while (accumulator >= dt) {
             next = current_stage->handle_input(t, dt, keyState);
-            
+
             if (next == StageID::QUIT)
                 break;
             if (next != current) {
@@ -57,7 +57,7 @@ void StageManager::run()
             }
 
             next = current_stage->update(t, dt);
-            
+
             if (next != current) {
                 handle_stage_transition();
                 break;

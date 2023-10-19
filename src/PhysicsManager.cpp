@@ -34,13 +34,13 @@ void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
 	physMan.back()->setAngle(angle);
 	physMan.back()->setFrameImpulse(power);
 
-	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin, 
-		shape, customCols::bullet_col, scale, physMan.back().get(), 
+	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin,
+		shape, customCols::bullet_col, scale, physMan.back().get(),
 		new_owner, lifespan));
 }
 
 
-void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale, 
+void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 	Vec2d pos, std::mt19937& rng)
 {
 	const double mass{ 1.0 };
@@ -52,7 +52,9 @@ void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 
 	constexpr double impulseMin{ 750'000.0 };
 	constexpr double impulseMax{ 1'500'000.0 };
-	std::uniform_real_distribution<double> impulseDist(impulseMin, impulseMax);
+	std::uniform_real_distribution<double> impulseDist(
+		impulseMin, impulseMax
+	);
 	double impulse{ impulseDist(rng) };
 
 	std::uniform_real_distribution<double> angleDist(0.0, 360.0);
@@ -78,12 +80,12 @@ void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos, 
+	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos,
 		shape, customCols::asteroid_col, scale, physMan.back().get(), impulse,
 		angle, radius));
 }
 
-static Vec2d findRandomDistantPos(std::mt19937& rng, 
+static Vec2d findRandomDistantPos(std::mt19937& rng,
 	Entity* distant, double scale, int w, int h)
 {
 	std::uniform_real_distribution<double> xDist(0.0, static_cast<double>(w));
@@ -126,7 +128,7 @@ static const std::vector<Vec2d> enemyPointy
 	{20, 30},  // bottom right
 	{0, 15},   // bottom
 	// {0, -30}, {0, 15}, // dorsal line
-	{-20, 30}, // bottom right 
+	{-20, 30}, // bottom right
 	{-15, -10} // top left
 };
 
@@ -141,7 +143,7 @@ static const std::vector<Vec2d> enemyUFO
 	{ -20, -20 }
 };
 
-void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng, 
+void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 	Player* player)
 {
 	const std::vector<Vec2d> shape{ enemyPointy };
@@ -152,7 +154,7 @@ void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
 
-	Vec2d new_pos{ findRandomDistantPos(rng, player, scale, 
+	Vec2d new_pos{ findRandomDistantPos(rng, player, scale,
 		gameWorld.screen.w, gameWorld.screen.h) };
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
@@ -183,8 +185,8 @@ Player* PhysicsManager::make_player(GameWorld& gameWorld)
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	auto player(std::make_unique<Player>( gameWorld, pos, shape, 
-		customCols::player_col, scale, power, turnSpeed, shotPower, 
+	auto player(std::make_unique<Player>( gameWorld, pos, shape,
+		customCols::player_col, scale, power, turnSpeed, shotPower,
 		physMan.back().get(), warpTimer, lives ));
 
 	Player* plPtr = player.get();
@@ -193,7 +195,7 @@ Player* PhysicsManager::make_player(GameWorld& gameWorld)
 	return plPtr;
 }
 
-void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan, 
+void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 	std::mt19937& rng)
 {
 	constexpr int BASE_AST_SCORE = 300;
@@ -210,7 +212,7 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 				scoreMan.update_score(
 					static_cast<int>(BASE_AST_SCORE / phys->scale()));
 				if (phys->scale() > 1.0) {
-					make_asteroids(gw, 2, phys->scale() - 1.0, false, rng, 
+					make_asteroids(gw, 2, phys->scale() - 1.0, false, rng,
 						nullptr, phys->pos());
 				}
 				break;
@@ -256,7 +258,7 @@ bool PhysicsManager::check_shots_hit()
 	for (auto& bul : physEntities) {
 		if (bul->type == EntityFlag::BULLET && !bul->toBeKilled()) {
 			for (auto& target : physEntities) {
-				if (target->type == EntityFlag::ASTEROID 
+				if (target->type == EntityFlag::ASTEROID
 					|| target->type == EntityFlag::ENEMY) {
 					if (PointInPolygon(bul->pos(), target->fillShape())) {
 						target->kill_it();

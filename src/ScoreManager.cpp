@@ -8,7 +8,7 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/TextObject.hpp"
 
-ScoreManager::ScoreManager(GameWorld& gw, Vec2d pos, TTF_Font* font, 
+ScoreManager::ScoreManager(GameWorld& gw, Vec2d pos, TTF_Font* font,
     SDL_Renderer* renderer)
     : score{ 0 }, textObjects{}, m_renderer{ renderer }
 
@@ -16,7 +16,7 @@ ScoreManager::ScoreManager(GameWorld& gw, Vec2d pos, TTF_Font* font,
     textObjects.push_back(
         std::make_unique<TextObject>(gw, pos, font, customCols::text_col, renderer));
     textObjects[0]->updateText("Score: ", m_renderer);
-    
+
     textObjects.push_back(
         std::make_unique<TextObject>(gw, pos, font, customCols::text_col, renderer));
     textObjects[1]->pos() = { pos.x + textObjects[0]->size().x, pos.y};
