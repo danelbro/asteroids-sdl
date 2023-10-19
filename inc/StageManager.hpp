@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <array>
-#include <map>
+#include <unordered_map>
 #include <memory>
 
 #include <SDL.h>
@@ -20,7 +20,7 @@ public:
 private:
     bool handle_stage_transition();
 
-    std::map<StageID, std::unique_ptr<Stage>> stages{};
+    std::unordered_map<StageID, std::unique_ptr<Stage>> stages{ };
     StageID current{StageID::PLAYING};
     StageID next{StageID::PLAYING};
     std::array<bool, static_cast<size_t>(KeyFlag::K_TOTAL)> keyState{ };
