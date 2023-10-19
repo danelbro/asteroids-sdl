@@ -17,14 +17,14 @@
 #include "../inc/ScoreManager.hpp"
 
 namespace GameLoop {
-    void process_input(GameWorld* gw, Uint32 windowID, std::array<bool,
-                     static_cast<size_t>(KeyFlag::K_TOTAL)>& key_state)
+    void process_input(GameWorld* gw, Uint32 windowID,
+        std::array<bool, KeyFlag::K_TOTAL>& key_state)
     {
         SDL_Event ev{ };
 
         while (SDL_PollEvent(&ev)) {
             if (ev.type == SDL_QUIT)
-                key_state[static_cast<size_t>(KeyFlag::QUIT)] = true;
+                key_state[KeyFlag::QUIT] = true;
 
             else if (ev.type == SDL_WINDOWEVENT) {
                 if (ev.window.windowID == windowID)
@@ -37,25 +37,25 @@ namespace GameLoop {
             else if (ev.type == SDL_KEYDOWN) {
                 switch (ev.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)] = true;
+                    key_state[KeyFlag::K_ESCAPE] = true;
                     break;
                 case SDLK_LEFT:
-                    key_state[static_cast<size_t>(KeyFlag::K_LEFT)] = true;
+                    key_state[KeyFlag::K_LEFT] = true;
                     break;
                 case SDLK_RIGHT:
-                    key_state[static_cast<size_t>(KeyFlag::K_RIGHT)] = true;
+                    key_state[KeyFlag::K_RIGHT] = true;
                     break;
                 case SDLK_UP:
-                    key_state[static_cast<size_t>(KeyFlag::K_UP)] = true;
+                    key_state[KeyFlag::K_UP] = true;
                     break;
                 case SDLK_DOWN:
-                    key_state[static_cast<size_t>(KeyFlag::K_DOWN)] = true;
+                    key_state[KeyFlag::K_DOWN] = true;
                     break;
                 case SDLK_SPACE:
-                    key_state[static_cast<size_t>(KeyFlag::K_SPACE)] = true;
+                    key_state[KeyFlag::K_SPACE] = true;
                     break;
                 case SDLK_LSHIFT:
-                    key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)] = true;
+                    key_state[KeyFlag::K_LSHIFT] = true;
                     break;
                 default:
                     break;
@@ -64,25 +64,25 @@ namespace GameLoop {
             else if (ev.type == SDL_KEYUP) {
                 switch (ev.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)] = false;
+                    key_state[KeyFlag::K_ESCAPE] = false;
                     break;
                 case SDLK_LEFT:
-                    key_state[static_cast<size_t>(KeyFlag::K_LEFT)] = false;
+                    key_state[KeyFlag::K_LEFT] = false;
                     break;
                 case SDLK_RIGHT:
-                    key_state[static_cast<size_t>(KeyFlag::K_RIGHT)] = false;
+                    key_state[KeyFlag::K_RIGHT] = false;
                     break;
                 case SDLK_UP:
-                    key_state[static_cast<size_t>(KeyFlag::K_UP)] = false;
+                    key_state[KeyFlag::K_UP] = false;
                     break;
                 case SDLK_DOWN:
-                    key_state[static_cast<size_t>(KeyFlag::K_DOWN)] = false;
+                    key_state[KeyFlag::K_DOWN] = false;
                     break;
                 case SDLK_SPACE:
-                    key_state[static_cast<size_t>(KeyFlag::K_SPACE)] = false;
+                    key_state[KeyFlag::K_SPACE] = false;
                     break;
                 case SDLK_LSHIFT:
-                    key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)] = false;
+                    key_state[KeyFlag::K_LSHIFT] = false;
                     break;
                 default:
                     break;

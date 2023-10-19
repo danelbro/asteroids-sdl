@@ -12,5 +12,5 @@
 namespace GameLoop {
     void process_input(GameWorld* gw, Uint32 windowID,
                      std::array<bool,
-                     static_cast<size_t>(KeyFlag::K_TOTAL)> &key_state);
+                     KeyFlag::K_TOTAL> &key_state);
 }
