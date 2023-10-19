@@ -172,6 +172,7 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 	std::mt19937& rng)
 {
 	constexpr int BASE_AST_SCORE = 300;
+	constexpr int BASE_ENEMY_SCORE = 500;
 	constexpr int PENALTY = -5;
 
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
@@ -184,8 +185,12 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 				scoreMan.update_score(
 					static_cast<int>(BASE_AST_SCORE / phys->scale()));
 				if (phys->scale() > 1.0) {
-					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
+					make_asteroids(gw, 2, phys->scale() - 1.0, false, rng, 
+						nullptr, phys->pos());
 				}
+				break;
+			case EntityFlag::ENEMY:
+				scoreMan.update_score(BASE_ENEMY_SCORE);
 				break;
 			case EntityFlag::BULLET:
 				if (phys->wayward)
@@ -220,15 +225,16 @@ bool PhysicsManager::check_player_hit()
 	return true;
 }
 
-bool PhysicsManager::check_asteroids_hit()
+bool PhysicsManager::check_shots_hit()
 {
 	bool hits{ false };
 	for (auto& bul : physEntities) {
-		if (bul->type == EntityFlag::BULLET) {
-			for (auto& ast : physEntities) {
-				if (ast->type == EntityFlag::ASTEROID) {
-					if (PointInPolygon(bul->pos(), ast->fillShape())) {
-						ast->kill_it();
+		if (bul->type == EntityFlag::BULLET && !bul->toBeKilled()) {
+			for (auto& target : physEntities) {
+				if (target->type == EntityFlag::ASTEROID 
+					|| target->type == EntityFlag::ENEMY) {
+					if (PointInPolygon(bul->pos(), target->fillShape())) {
+						target->kill_it();
 						bul->kill_it();
 						bul->wayward = false;
 						hits = true;
