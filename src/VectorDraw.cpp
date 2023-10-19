@@ -90,7 +90,7 @@ bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
     return oddNodes;
 }
 
-void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col, 
+void ScanFill(GameWorld& gw, std::vector<Vec2d> poly, SdlColor col, 
     SDL_Renderer* renderer)
 {
     // adapted frpm https://alienryderflex.com/polygon_fill/
@@ -128,7 +128,7 @@ void ScanFill(GameWorld const* gw, std::vector<Vec2d> poly, SdlColor col,
 
         for (i = 0; i < nodesX.size(); i += 2) {
             for (pixel.x = nodesX.at(i); pixel.x < nodesX.at(i + 1); pixel.x += 1)
-                DrawWrapLine(renderer, gw->screen, pixel.x, pixel.y, 
+                DrawWrapLine(renderer, gw.screen, pixel.x, pixel.y, 
                     nodesX.at(i + 1), pixel.y);
         }
     }

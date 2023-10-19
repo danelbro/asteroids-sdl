@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Enemy.hpp"
 #include "Player.hpp"
+
+class Enemy;
 
 class AIComponent {
 public:
-    AIComponent();
+    AIComponent(Enemy& new_owner);
 
     void update(double t, double dt, Player* plr);
-    void setOwner(Enemy* new_owner);
-
 private:
-    Enemy* owner;
+    Enemy& owner;
 };

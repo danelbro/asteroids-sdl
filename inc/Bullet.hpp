@@ -14,14 +14,14 @@ class PhysicsComponent;
 
 class Bullet : public PhysicsEntity {
 public:
-    Bullet(GameWorld* new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
+    Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
         SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
-        Ship* new_owner, double lifespan);
+        Ship& new_owner, double lifespan);
 
     void update(double t, double dt) override;
 
 private:
-    Ship *owner;
+    Ship& owner;
     double m_lifespan;
     double m_alive{ 0.0 };
 };

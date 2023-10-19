@@ -12,8 +12,8 @@
 #include "../inc/Vec2d.hpp"
 #include "../inc/utility.hpp"
 
-TextObject::TextObject(GameWorld *gw, Vec2d pos, TTF_Font* font, SdlColor color,
-                       SDL_Renderer* rend)
+TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font, 
+    SdlColor color, SDL_Renderer* rend)
     : Entity{ EntityFlag::TEXT, gw, pos, std::vector<Vec2d>{}, color, 1.0 },
       text{ }, m_texture{ nullptr }, m_font{ font }, m_size{ 0, 0 },
       m_rend{ rend }

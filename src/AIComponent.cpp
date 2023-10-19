@@ -2,18 +2,11 @@
 
 #include "../inc/Enemy.hpp"
 
-AIComponent::AIComponent()
-    : owner{ nullptr }
+AIComponent::AIComponent(Enemy& new_owner)
+    : owner{ new_owner }
 {}
 
 void AIComponent::update(double t, double dt, Player* plr)
 {
 
-}
-
-
-void AIComponent::setOwner(Enemy* new_owner)
-{
-    if (new_owner)
-        owner = new_owner;
 }

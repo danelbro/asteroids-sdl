@@ -23,45 +23,57 @@
 #include "../inc/Player.hpp"
 #include "../inc/utility.hpp"
 
-MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer)
-    : Stage{new_screen, windowID, new_renderer}, gameWorld{}, physicsManager{}, 
-    scoreManager{}, rng{}, font{ nullptr }, player{ nullptr }, 
-    asteroidsRemain{ false }, numOfAsteroids{ 3 }
-{
-    constexpr double fluidDensity{ 0.1 };
-    gameWorld.screen = screen();
-    gameWorld.fluidDensity = fluidDensity;
+static constexpr int startingAsteroids{ 3 };
+static constexpr double asteroidScale{ 3.0 };
+static constexpr int scoreboard_xPos{ 17 };
+static constexpr int scoreboard_yPos{ 10 };
+static constexpr int font_size{ 28 };
+static const std::string font_path{ "data/Play-Regular.ttf" };
+static constexpr double fluidDensity{ 0.1 };
 
+static std::mt19937 makeSeededRNG()
+{
     std::random_device randDev;
-    rng = std::mt19937{randDev()};
+    auto rng = std::mt19937{ randDev() };
     std::mt19937::result_type seed_val{
         static_cast<unsigned long>(std::time(nullptr))
     };
     rng.seed(seed_val);
 
-    // Make ScoreManager
-    constexpr int SCOREBOARD_XPOS{ 17 };
-    constexpr int SCOREBOARD_YPOS{ 10 };
-    constexpr int FONT_SIZE{ 28 };
-    const std::string FONT_PATH{ "data/Play-Regular.ttf" };
+    return rng;
+}
 
-    font = std::unique_ptr<TTF_Font, utl::sdl_deleter>(
-        utl::createFont(FONT_PATH, FONT_SIZE));
+MainLevel::MainLevel(Box new_screen, Uint32 windowID,
+    SDL_Renderer* new_renderer)
+    : Stage{new_screen, windowID, new_renderer},
+    gameWorld{ new_screen, fluidDensity }, 
+    font{ std::unique_ptr<TTF_Font, utl::sdl_deleter>(
+        utl::createFont(font_path, font_size)) },
+    physicsManager{},
+    scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
+                  font.get(), new_renderer},
+    rng{ makeSeededRNG() },
+    player{ nullptr }, asteroidsRemain{ false },
+    numOfAsteroids{ startingAsteroids }
+{
+    init();
+}
 
-    scoreManager = ScoreManager{ &gameWorld, {SCOREBOARD_XPOS, SCOREBOARD_YPOS},
-                                 font.get(), renderer()};
+void MainLevel::init()
+{
+    if (!font) throw(utl::SdlException{ "Failed to make font! TTF_Error: " });
 
     // Make Player
-    player = physicsManager.make_player(&gameWorld);
-    if(!player)
+    player = physicsManager.make_player(gameWorld);
+    if (!player)
         throw std::runtime_error("failed to make player");
 
     // Add some Asteroids
-    physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0, 'n', rng,
-                                  player);
+    physicsManager.make_asteroids(gameWorld, numOfAsteroids, asteroidScale, 
+        true, rng, player);
 
     // Add an enemy
-    physicsManager.make_enemy(&gameWorld);
+    physicsManager.make_enemy(gameWorld, rng, player);
 
     SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
            customCols::bg.b, customCols::bg.a);
@@ -69,7 +81,8 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID, SDL_Renderer* new_renderer
 
 StageID MainLevel::handle_input(double, double dt,
                                 std::array<bool,
-                                static_cast<size_t>(KeyFlag::K_TOTAL)>& key_state)
+                                static_cast<size_t>(
+                                    KeyFlag::K_TOTAL)>& key_state)
 {
     GameLoop::process_input(&gameWorld, windowID(), key_state);
 
@@ -97,7 +110,7 @@ StageID MainLevel::handle_input(double, double dt,
     if (key_state[static_cast<size_t>(KeyFlag::K_SPACE)]) {
         if (player)
             if (!player->gun.fired)
-                player->gun.fire(&gameWorld, &physicsManager, player);
+                player->gun.fire(gameWorld, physicsManager, *player);
     }
     if (!key_state[static_cast<size_t>(KeyFlag::K_SPACE)])
         if (player)
@@ -123,8 +136,9 @@ StageID MainLevel::update(double t, double dt)
             if (ent->type == EntityFlag::BULLET)
                 ent->kill_it();
         }
-        physicsManager.make_asteroids(&gameWorld, numOfAsteroids, 3.0,
-                                      'n', rng, player);
+        physicsManager.make_asteroids(gameWorld, numOfAsteroids, 
+                                      asteroidScale,
+                                      true, rng, player);
     }
     
     for (auto& physComp : physicsManager.physMan)
@@ -136,7 +150,7 @@ StageID MainLevel::update(double t, double dt)
     bool playerIsAlive{ physicsManager.check_player_hit() };
     physicsManager.check_asteroids_hit();
 
-    physicsManager.clean_up(&gameWorld, &scoreManager, rng);
+    physicsManager.clean_up(gameWorld, scoreManager, rng);
 
     scoreManager.refresh();
 

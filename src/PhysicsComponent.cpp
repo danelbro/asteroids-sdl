@@ -42,7 +42,7 @@ void PhysicsComponent::update(double dt)
     m_velocity += m_acceleration * dt;
     if (owner) {
         owner->pos() += m_velocity * dt;
-        wrap(owner->pos(), owner->gameWorld->screen);
+        wrap(owner->pos(), owner->gameWorld.screen);
     }
     m_impulse = 0;
 }

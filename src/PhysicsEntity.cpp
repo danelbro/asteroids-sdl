@@ -11,7 +11,7 @@
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
 
-PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld* new_gameWorld,
+PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld,
     Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
     PhysicsComponent* new_physicsComponent)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },
@@ -45,13 +45,13 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
     for (size_t i{ 0 }; i < m_fillShape.size(); ++i) {
         if (i == m_fillShape.size() - 1) {
             DrawWrapLine(renderer,
-                gameWorld->screen,
+                gameWorld.screen,
                 m_fillShape[i].x, m_fillShape[i].y,
                 m_fillShape[0].x, m_fillShape[0].y);
         }
         else {
             DrawWrapLine(renderer,
-                gameWorld->screen,
+                gameWorld.screen,
                 m_fillShape[i].x, m_fillShape[i].y,
                 m_fillShape[i + 1].x, m_fillShape[i + 1].y);
         }

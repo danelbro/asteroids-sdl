@@ -15,7 +15,7 @@ class PhysicsComponent;
 class PhysicsEntity : public Entity
 {
 public:
-	PhysicsEntity(EntityFlag new_type, GameWorld* new_gameWorld, Vec2d pos,
+	PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
 		std::vector<Vec2d> shape, SdlColor color, double scale,
 		PhysicsComponent* new_physicsComponent);
 

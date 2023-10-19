@@ -4,7 +4,7 @@ class Ship;
 
 class Engine {
 public:
-    Engine(Ship *newOwner, double newPower, double newTurnSpeed);
+    Engine(Ship& newOwner, double newPower, double newTurnSpeed);
 
     void on();
     void off();
@@ -12,7 +12,7 @@ public:
     void turnRight(double dt);
 
 private:
-    Ship *owner;
+    Ship& owner;
     double power;
     double turnSpeed;
 };

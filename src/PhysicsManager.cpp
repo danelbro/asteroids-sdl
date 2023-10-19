@@ -21,8 +21,8 @@ PhysicsManager::PhysicsManager()
 	: physEntities{ }, physMan{ }
 {}
 
-void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
-	double power, double angle, Ship* new_owner)
+void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
+	double power, double angle, Ship& new_owner)
 {
 	constexpr double mass{ 0.003 };
 	constexpr double scale{ 1.0 };
@@ -34,13 +34,14 @@ void PhysicsManager::make_bullet(GameWorld* new_GameWorld, Vec2d origin,
 	physMan.back()->setAngle(angle);
 	physMan.back()->setFrameImpulse(power);
 
-	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin, shape,
-		customCols::bullet_col, scale, physMan.back().get(), new_owner, lifespan));
+	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin, 
+		shape, customCols::bullet_col, scale, physMan.back().get(), 
+		new_owner, lifespan));
 }
 
 
-void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale, Vec2d pos,
-	std::mt19937& rng)
+void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale, 
+	Vec2d pos, std::mt19937& rng)
 {
 	const double mass{ 1.0 };
 
@@ -71,14 +72,15 @@ void PhysicsManager::make_asteroid(GameWorld* new_GameWorld, double scale, Vec2d
 			cragDepth = cragDistHigh(rng);
 		else
 			cragDepth = cragDistLow(rng);
-		shape.push_back(Vec2d{ std::sin(sliceAngle * i) * (radius + cragDepth),
-			-std::cos(sliceAngle * i) * (radius + cragDepth) });
+		shape.push_back(Vec2d{std::sin(sliceAngle * i) * (radius + cragDepth),
+			-std::cos(sliceAngle * i) * (radius + cragDepth)});
 	}
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
-	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos, shape,
-		customCols::asteroid_col, scale, physMan.back().get(), impulse, angle, radius));
+	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos, 
+		shape, customCols::asteroid_col, scale, physMan.back().get(), impulse,
+		angle, radius));
 }
 
 void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
@@ -109,7 +111,8 @@ void PhysicsManager::make_asteroids(GameWorld* new_GameWorld, int num,
 	}
 }
 
-void PhysicsManager::make_enemy(GameWorld* gameWorld)
+void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng, 
+	Player* player)
 {
 	const Vec2d new_pos{ 100, 200 }; // needs not to be placed near the player
 	const std::vector<Vec2d> shape{ {0, -30},  // top
@@ -117,7 +120,7 @@ void PhysicsManager::make_enemy(GameWorld* gameWorld)
 									{-15, -10}, {15, -10}, // cross bar
 									{20, 30},  // bottom right
 									{0, 15},   // bottom
-									{0, -30}, {0, 15}, // dorsal line
+									// {0, -30}, {0, 15}, // dorsal line
 									{-20, 30}, // bottom right 
 									{-15, -10} }; // top left
 	constexpr double scale{ 1.0 };
@@ -133,9 +136,9 @@ void PhysicsManager::make_enemy(GameWorld* gameWorld)
 		physMan.back().get()));
 }
 
-Player* PhysicsManager::make_player(GameWorld* gameWorld)
+Player* PhysicsManager::make_player(GameWorld& gameWorld)
 {
-	const Vec2d pos{ gameWorld->screen.w / 2.0, gameWorld->screen.h / 2.0 };
+	const Vec2d pos{ gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
 	const std::vector<Vec2d> shape{ {0, -30}, {20, 30}, {-20, 30} };
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
@@ -157,7 +160,8 @@ Player* PhysicsManager::make_player(GameWorld* gameWorld)
 	return plPtr;
 }
 
-void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt19937& rng)
+void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan, 
+	std::mt19937& rng)
 {
 	constexpr int BASE_AST_SCORE = 300;
 	constexpr int PENALTY = -5;
@@ -169,7 +173,8 @@ void PhysicsManager::clean_up(GameWorld* gw, ScoreManager* scoreMan, std::mt1993
 			switch (phys->type)
 			{
 			case EntityFlag::ASTEROID:
-				scoreMan->update_score(static_cast<int>(BASE_AST_SCORE / phys->scale()));
+				scoreMan.update_score(
+					static_cast<int>(BASE_AST_SCORE / phys->scale()));
 				if (phys->scale() > 1.0) {
 					make_asteroids(gw, 2, phys->scale() - 1.0, '\0', rng, nullptr, phys->pos());
 				}

@@ -9,7 +9,7 @@ class Entity;
 
 class PhysicsComponent {
 public:
-    PhysicsComponent(double mass, Entity *new_owner)
+    PhysicsComponent(double mass, Entity* new_owner)
         : m_mass { mass }, m_impulse{ 0.0 }, m_acceleration{ 0.0, 0.0 },
           m_velocity{ 0, 0 }, m_angle{ 0.0 }, m_dir_vector{0, 0},
           owner { new_owner }
@@ -23,7 +23,7 @@ public:
     Vec2d velocity() const { return m_velocity; }
 
     void setAngle(double angle);
-    void setOwner(Entity *new_owner) { if (new_owner) owner = new_owner; }
+    void setOwner(Entity* new_owner) { if (new_owner) owner = new_owner; }
 
     void update(double dt);
 
@@ -36,5 +36,5 @@ private:
     double m_angle; // between 0 and 360
     Vec2d m_dir_vector; // vector representation of m_angle
 
-    Entity *owner;
+    Entity* owner;
 };

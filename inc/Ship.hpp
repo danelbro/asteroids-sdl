@@ -22,7 +22,7 @@ public:
     Vec2d nose() const { return m_fillShape.at(0); }
 
 protected:
-    Ship(EntityFlag new_type, GameWorld *new_gameWorld, Vec2d pos,
+    Ship(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
          std::vector<Vec2d> shape, SdlColor color, double scale,
          double power, double turnSpeed,
          double shotPower,

@@ -8,7 +8,7 @@
 #include "../inc/GameWorld.hpp"
 #include "../inc/TextObject.hpp"
 
-ScoreManager::ScoreManager(GameWorld* gw, Vec2d pos, TTF_Font* font, 
+ScoreManager::ScoreManager(GameWorld& gw, Vec2d pos, TTF_Font* font, 
     SDL_Renderer* renderer)
     : score{ 0 }, textObjects{}, m_renderer{ renderer }
 
