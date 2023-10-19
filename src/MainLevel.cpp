@@ -148,7 +148,7 @@ StageID MainLevel::update(double t, double dt)
         physEnt->update(t, dt);
 
     bool playerIsAlive{ physicsManager.check_player_hit() };
-    physicsManager.check_asteroids_hit();
+    physicsManager.check_shots_hit();
 
     physicsManager.clean_up(gameWorld, scoreManager, rng);
 
