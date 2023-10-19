@@ -25,11 +25,13 @@ public:
     StageID update(double t, double dt) override;
     void render(double t, double dt) override;
 private:
+    void init();
+
     GameWorld gameWorld;
+    std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
     PhysicsManager physicsManager;
     ScoreManager scoreManager;
     std::mt19937 rng;
-    std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
     Player* player;
     bool asteroidsRemain;
     int numOfAsteroids;
