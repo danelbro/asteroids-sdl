@@ -117,17 +117,35 @@ void PhysicsManager::make_asteroids(GameWorld& new_GameWorld, int num,
 	}
 }
 
+// shaped mostly like the player
+static const std::vector<Vec2d> enemyPointy
+{
+	{0, -30},  // top
+	{15, -10}, // top right
+	{-15, -10}, {15, -10}, // cross bar
+	{20, 30},  // bottom right
+	{0, 15},   // bottom
+	// {0, -30}, {0, 15}, // dorsal line
+	{-20, 30}, // bottom right 
+	{-15, -10} // top left
+};
+
+// more ufo shaped
+static const std::vector<Vec2d> enemyUFO
+{
+	{ 20, -20 },
+	{ 40, 0 }, { 45, 0 },
+	{ -45, 0 }, { 45, 0 },
+	{ 40, 20 }, { -40, 20 },
+	{ -45, 0 }, { -40, 0 },
+	{ -20, -20 }
+};
+
 void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng, 
 	Player* player)
 {
-	const std::vector<Vec2d> shape{ {0, -30},  // top
-									{15, -10}, // top right
-									{-15, -10}, {15, -10}, // cross bar
-									{20, 30},  // bottom right
-									{0, 15},   // bottom
-									// {0, -30}, {0, 15}, // dorsal line
-									{-20, 30}, // bottom right 
-									{-15, -10} }; // top left
+	const std::vector<Vec2d> shape{ enemyPointy };
+
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
 	constexpr double turnSpeed{ 300.0 };
@@ -144,10 +162,17 @@ void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 		physMan.back().get()));
 }
 
+static const std::vector<Vec2d> playerShape
+{
+	{0, -30},
+	{20, 30},
+	{-20, 30}
+};
+
 Player* PhysicsManager::make_player(GameWorld& gameWorld)
 {
 	const Vec2d pos{ gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
-	const std::vector<Vec2d> shape{ {0, -30}, {20, 30}, {-20, 30} };
+	const std::vector<Vec2d> shape{ playerShape };
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
 	constexpr double turnSpeed{ 300.0 };
