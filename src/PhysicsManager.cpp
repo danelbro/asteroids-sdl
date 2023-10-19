@@ -86,7 +86,7 @@ void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
-	Entity* distant, double scale, int w, int h)
+	Entity* distant, double distance, int w, int h)
 {
 	std::uniform_real_distribution<double> xDist(0.0, static_cast<double>(w));
 	std::uniform_real_distribution<double> yDist(0.0, static_cast<double>(h));
@@ -97,7 +97,7 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 		new_pos.y = yDist(rng);
 
 		Vec2d distanceToPlayer{ new_pos - distant->pos() };
-		if (distanceToPlayer.magnitude() > 30.0 * scale)
+		if (distanceToPlayer.magnitude() > distance)
 			isTooClose = false;
 	} while (isTooClose);
 	return new_pos;
@@ -106,11 +106,14 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 void PhysicsManager::make_asteroids(GameWorld& new_GameWorld, int num,
 	double scale, bool isNew, std::mt19937& rng, Player* player, Vec2d pos)
 {
+	constexpr double asteroidDistance{ 50.0 };
+
 	for (int i{ num }; i > 0; i--)
 	{
 		if (isNew) {
-			Vec2d new_pos{ findRandomDistantPos(rng, player, scale,
-				new_GameWorld.screen.w, new_GameWorld.screen.h) };
+			Vec2d new_pos{ findRandomDistantPos(rng, player,
+				asteroidDistance * scale, new_GameWorld.screen.w,
+				new_GameWorld.screen.h) };
 			make_asteroid(new_GameWorld, scale, new_pos, rng);
 		}
 		else {
@@ -154,7 +157,9 @@ void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
 
-	Vec2d new_pos{ findRandomDistantPos(rng, player, scale,
+	constexpr double enemyDistance{ 100.0 };
+
+	Vec2d new_pos{ findRandomDistantPos(rng, player, enemyDistance * scale,
 		gameWorld.screen.w, gameWorld.screen.h) };
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
