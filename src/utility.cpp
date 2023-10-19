@@ -55,8 +55,6 @@ namespace utl {
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend)
     {
-        textStruct return_package{};
-
         SDL_Surface* textSurface = TTF_RenderUTF8_Blended(font, text.c_str(),
             text_colour);
 
@@ -72,16 +70,15 @@ namespace utl {
                 SDL_GetError() });
             else
             {
-                return_package.texP = std::unique_ptr<SDL_Texture, sdl_deleter>(texP);
-                return_package.w = textSurface->w;
-                return_package.h = textSurface->h;
+                SDL_FreeSurface(textSurface);
+
+                return textStruct {
+                    std::unique_ptr<SDL_Texture, sdl_deleter>(texP),
+                    textSurface->w,
+                    textSurface->h
+                };
             }
         }
-
-        SDL_FreeSurface(textSurface);
-        textSurface = nullptr;
-
-        return return_package;
     }
 
     TTF_Font* createFont(std::string path, int font_size)

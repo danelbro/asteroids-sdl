@@ -39,12 +39,17 @@ namespace utl {
 
     struct textStruct
     {
-        std::unique_ptr<SDL_Texture, sdl_deleter> texP{ nullptr };
-        int w{ 0 };
-        int h{ 0 };
+        textStruct(std::unique_ptr<SDL_Texture, sdl_deleter> newTexP,
+            int newW, int newH)
+            : texP{std::move(newTexP)}, w{newW}, h{newH}
+        {}
+
+        std::unique_ptr<SDL_Texture, sdl_deleter> texP;
+        int w;
+        int h;
     };
 
-    // Create an SDL_Texture* rendered from text. 
+    // Create an SDL_Texture* rendered from text.
     // Throw an SdlException if creation fails
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend);
