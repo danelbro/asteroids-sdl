@@ -29,7 +29,7 @@ public:
 		Vec2d pos, std::mt19937& rng);
 
 	void make_asteroids(GameWorld& new_GameWorld,
-		int num, double scale, char flag, std::mt19937& rng,
+		int num, double scale, bool isNew, std::mt19937& rng,
 		Player* player = nullptr, Vec2d pos = { 0.0, 0.0 });
 
 	void make_enemy(GameWorld* new_GameWorld);
