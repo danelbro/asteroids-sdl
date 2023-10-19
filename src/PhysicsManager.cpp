@@ -89,17 +89,17 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 	std::uniform_real_distribution<double> xDist(0.0, static_cast<double>(w));
 	std::uniform_real_distribution<double> yDist(0.0, static_cast<double>(h));
 	Vec2d new_pos{ };
-			bool isTooClose{ true };
+	bool isTooClose{ true };
 	do {
-				new_pos.x = xDist(rng);
-				new_pos.y = yDist(rng);
+		new_pos.x = xDist(rng);
+		new_pos.y = yDist(rng);
 
 		Vec2d distanceToPlayer{ new_pos - distant->pos() };
-				if (distanceToPlayer.magnitude() > 30.0 * scale)
-					isTooClose = false;
+		if (distanceToPlayer.magnitude() > 30.0 * scale)
+			isTooClose = false;
 	} while (isTooClose);
 	return new_pos;
-			}
+}
 
 void PhysicsManager::make_asteroids(GameWorld& new_GameWorld, int num,
 	double scale, bool isNew, std::mt19937& rng, Player* player, Vec2d pos)
@@ -194,7 +194,7 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 				break;
 			case EntityFlag::BULLET:
 				if (phys->wayward)
-					scoreMan->update_score(PENALTY);
+					scoreMan.update_score(PENALTY);
 				break;
 			default:
 				break;
