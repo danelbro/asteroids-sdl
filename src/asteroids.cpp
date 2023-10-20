@@ -1,6 +1,5 @@
 // Plays an asteroids game
 #include <exception>
-#include <fstream>
 #include <memory>
 #include <stdexcept>
 #include <vector>
@@ -16,8 +15,6 @@
 #include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
-
-std::ofstream errorLogger("exception.log");
 
 #ifdef _WIN32
 int WinMain()
@@ -42,7 +39,8 @@ try
     auto window = std::unique_ptr<SDL_Window, utl::sdl_deleter>{
         utl::createWindow(title.c_str(),
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        screen.w, screen.h, windowFlags) };
+        screen.w, screen.h, windowFlags),
+        utl::sdl_deleter()};
 
     auto windowID = SDL_GetWindowID(window.get());
 
@@ -51,7 +49,8 @@ try
         SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
 
     auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{
-        utl::createRenderer(window.get(), -1, rendererFlags) };
+        utl::createRenderer(window.get(), -1, rendererFlags),
+        utl::sdl_deleter()};
 
     {
         StageManager stageMan{};

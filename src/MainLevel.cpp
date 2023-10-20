@@ -47,8 +47,7 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
     : Stage{new_screen, windowID, new_renderer},
     gameWorld{ new_screen, fluidDensity },
-    font{ std::unique_ptr<TTF_Font, utl::sdl_deleter>(
-        utl::createFont(font_path, font_size)) },
+    font{ utl::createFont(font_path, font_size) },
     physicsManager{},
     scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
                   font.get(), new_renderer},

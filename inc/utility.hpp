@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -14,11 +15,26 @@ namespace utl {
     // thanks to https://stackoverflow.com/a/24252225
     struct sdl_deleter
     {
-        void operator()(SDL_Window* w) const { SDL_DestroyWindow(w); }
-        void operator()(SDL_Renderer* r) const { SDL_DestroyRenderer(r); }
-        void operator()(SDL_Surface* s) const { SDL_FreeSurface(s); }
-        void operator()(SDL_Texture* t) const { SDL_DestroyTexture(t); }
-        void operator()(TTF_Font* f) const { TTF_CloseFont(f); }
+        void operator()(SDL_Window* w) const {
+            errorLogger << "destroying a window\n";
+            SDL_DestroyWindow(w);
+        }
+        void operator()(SDL_Renderer* r) const {
+            errorLogger << "destroying a renderer\n";
+            SDL_DestroyRenderer(r);
+        }
+        void operator()(SDL_Surface* s) const {
+            errorLogger << "freeing a surface\n";
+            SDL_FreeSurface(s);
+        }
+        void operator()(SDL_Texture* t) const {
+            errorLogger << "destroying a texture\n";
+            SDL_DestroyTexture(t);
+        }
+        void operator()(TTF_Font* f) {
+            errorLogger << "closing a font\n";
+            TTF_CloseFont(f);
+        }
     };
 
     // wrapper around std::runtime_error to make SDL exception handling smoother
@@ -56,5 +72,6 @@ namespace utl {
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend);
 
-    TTF_Font* createFont(std::string path, int font_size);
+   std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,
+       int font_size);
 }
