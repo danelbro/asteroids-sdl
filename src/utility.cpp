@@ -72,13 +72,12 @@ namespace utl {
                 SDL_GetError() });
             else
             {
+                auto w{textSurface->w};
+                auto h{textSurface->h};
                 SDL_FreeSurface(textSurface);
+                textSurface = nullptr;
 
-                return textStruct {
-                    std::unique_ptr<SDL_Texture, sdl_deleter>(texP),
-                    textSurface->w,
-                    textSurface->h
-                };
+                return textStruct{texP, w, h};
             }
         }
     }

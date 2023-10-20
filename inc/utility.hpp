@@ -57,9 +57,8 @@ namespace utl {
 
     struct textStruct
     {
-        textStruct(std::unique_ptr<SDL_Texture, sdl_deleter> newTexP,
-            int newW, int newH)
-            : texP{std::move(newTexP)}, w{newW}, h{newH}
+        textStruct(SDL_Texture* newTexP, int newW, int newH)
+        : texP{newTexP, sdl_deleter()}, w{newW}, h{newH}
         {}
 
         std::unique_ptr<SDL_Texture, sdl_deleter> texP;

@@ -1,5 +1,6 @@
 #include "../inc/TextObject.hpp"
 
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -21,12 +22,8 @@ TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font,
 
 void TextObject::free()
 {
-    if (m_texture)
-    {
-        SDL_DestroyTexture(m_texture.get());
-        m_texture = nullptr;
-        m_size = { 0, 0 };
-    }
+    m_texture.reset(nullptr);
+    m_size = { 0, 0 };
 }
 
 void TextObject::loadFromRenderedText(std::string textureText,
