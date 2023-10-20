@@ -16,5 +16,5 @@ void DrawWrapLine(SDL_Renderer *rend, Box screen,
 
 bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon);
 
-void ScanFill(GameWorld& gw, std::vector<Vec2d> poly, 
+void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly,
     SdlColor col, SDL_Renderer* renderer);

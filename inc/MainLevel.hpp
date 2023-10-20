@@ -19,6 +19,10 @@ class MainLevel : public Stage {
 public:
     MainLevel(Box screen, Uint32 windowID, SDL_Renderer* renderer);
 
+    MainLevel(const MainLevel&) = delete;
+    MainLevel& operator=(const MainLevel&) = delete;
+    ~MainLevel() = default;
+
     StageID handle_input(double t, double dt,
         std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
     StageID update(double t, double dt) override;

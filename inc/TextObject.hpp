@@ -16,12 +16,15 @@ class TextObject : public Entity
 public:
     TextObject()
         : Entity{ EntityFlag::E_TYPE_TOTAL, GameWorld{}, {}, {}, {}, 1.0 },
-        text{ }, m_texture{ nullptr }, m_font{ nullptr }, m_size{ }, 
+        text{ }, m_texture{ nullptr }, m_font{ nullptr }, m_size{ },
         m_rend{ nullptr }
         {}
 
     TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font, SdlColor color,
                SDL_Renderer* rend);
+    TextObject(const TextObject&) = delete;
+    TextObject& operator=(const TextObject&) = delete;
+    ~TextObject() = default;
 
     void loadFromRenderedText(std::string textureText, SDL_Color text_colour,
         SDL_Renderer* renderer);

@@ -18,6 +18,10 @@ public:
     ScoreManager(GameWorld& gw, Vec2d scoreboard_pos, TTF_Font* font,
                  SDL_Renderer* renderer); // scoreboard_pos = top left
 
+    ScoreManager(const ScoreManager&) = default;
+    ScoreManager& operator=(const ScoreManager&) = default;
+    ~ScoreManager() = default;
+
     void update_score(int add_this);
     void refresh();
 

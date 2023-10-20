@@ -90,7 +90,7 @@ bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon)
     return oddNodes;
 }
 
-void ScanFill(GameWorld& gw, std::vector<Vec2d> poly, SdlColor col,
+void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly, SdlColor col,
     SDL_Renderer* renderer)
 {
     // adapted frpm https://alienryderflex.com/polygon_fill/

@@ -9,6 +9,10 @@
 
 class Stage {
 public:
+    Stage(const Stage&) = default;
+    Stage& operator=(const Stage&) = default;
+    virtual ~Stage() = default;
+
     virtual StageID handle_input(double t, double dt,
                                  std::array<bool,
                                  static_cast<size_t>(
@@ -27,6 +31,4 @@ private:
     Box m_screen;
     unsigned m_windowID;
     SDL_Renderer* m_rend;
-
-    bool seen{ false };
 };

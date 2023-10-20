@@ -6,7 +6,7 @@ AIComponent::AIComponent(Enemy& new_owner)
     : owner{ new_owner }
 {}
 
-void AIComponent::update(double t, double dt, Player* plr)
+void AIComponent::update(double, double, Player*)
 {
 
 }
