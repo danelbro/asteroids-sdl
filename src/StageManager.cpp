@@ -55,7 +55,7 @@ void StageManager::run()
             next = current_stage->handle_input(t, dt, keyState);
 
             if (next != current) {
-                handle_stage_transition();
+                handle_stage_transition(current_stage);
                 current_stage = nullptr;
                 break;
             }
@@ -63,7 +63,7 @@ void StageManager::run()
             next = current_stage->update(t, dt);
 
             if (next != current) {
-                handle_stage_transition();
+                handle_stage_transition(current_stage);
                 current_stage = nullptr;
                 break;
             }
@@ -80,46 +80,34 @@ void StageManager::run()
     }
 }
 
-bool StageManager::handle_stage_transition()
+void StageManager::handle_stage_transition(Stage* current_stage)
 {
-    if (next != current) {
-        keyState.fill(false);
+    auto screen{ current_stage->screen() };
+    auto windowID{ current_stage->windowID() };
+    auto renderer{ current_stage->renderer() };
 
-        switch (next) {
-        case StageID::TITLE_SCREEN:
-            stages.erase(next);
-            add_stage(next, std::make_unique<TitleScreen>(
-                stages[current]->screen(),
-                stages[current]->windowID(),
-                stages[current]->renderer()));
-            stages.erase(current);
-            break;
-        case StageID::PLAYING:
-            stages.erase(next);
-            add_stage(next, std::make_unique<MainLevel>(
-                stages[current]->screen(),
-                stages[current]->windowID(),
-                stages[current]->renderer()));
-            stages.erase(current);
-            break;
-        case StageID::HIGH_SCORES:
-            // remove later
-            next = StageID::TITLE_SCREEN;
-            stages.erase(next);
-            add_stage(next, std::make_unique<TitleScreen>(
-                stages[current]->screen(),
-                stages[current]->windowID(),
-                stages[current]->renderer()));
-            stages.erase(current);
-            break;
-        case StageID::QUIT:
-            next = StageID::QUIT;
-            break;
-        default:
-            throw std::runtime_error("bad stage");
-        }
-        return false;
+    stages[current].reset(nullptr);
+    keyState.fill(false);
+
+    switch (next) {
+    case StageID::TITLE_SCREEN:
+        add_stage(next,
+            std::make_unique<TitleScreen>(screen, windowID, renderer));
+        return;
+    case StageID::PLAYING:
+        add_stage(next,
+            std::make_unique<MainLevel>(screen, windowID, renderer));
+        return;
+    case StageID::HIGH_SCORES:
+        // remove later
+        next = StageID::TITLE_SCREEN;
+        add_stage(next,
+            std::make_unique<TitleScreen>(screen, windowID, renderer));;
+        return;
+    case StageID::QUIT:
+        next = StageID::QUIT;
+        return;
+    default:
+        throw std::runtime_error("bad stage");
     }
-
-    return true;
 }

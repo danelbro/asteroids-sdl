@@ -18,7 +18,7 @@ public:
     void add_stage(StageID key, std::unique_ptr<Stage> new_stage);
     void run();
 private:
-    bool handle_stage_transition();
+    void handle_stage_transition(Stage* current_stage);
 
     std::unordered_map<StageID, std::unique_ptr<Stage>> stages{ };
     StageID current{StageID::TITLE_SCREEN};
