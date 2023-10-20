@@ -46,7 +46,7 @@ try
 
     // Renderer intialisation
     constexpr auto rendererFlags =
-        SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC;
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
     auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{
         utl::createRenderer(window.get(), -1, rendererFlags),
