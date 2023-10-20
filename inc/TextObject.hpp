@@ -33,6 +33,8 @@ public:
     void updateText(std::string new_text, SDL_Renderer* renderer);
     void update(double, double) {}
 
+    void setPos(Vec2d new_pos) { m_pos = new_pos; }
+
     const Vec2d size() { return m_size; }
 
 private:

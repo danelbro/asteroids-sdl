@@ -10,7 +10,7 @@
 #include "ScoreManager.hpp"
 
 namespace GameLoop {
-    void process_input(GameWorld* gw, Uint32 windowID,
+    void process_input(GameWorld& gw, Uint32 windowID,
                      std::array<bool,
                      KeyFlag::K_TOTAL> &key_state);
 }

@@ -68,55 +68,46 @@ void MainLevel::init()
     if (!player)
         throw std::runtime_error("failed to make player");
 
-    // Add some Asteroids
-    physicsManager.make_asteroids(gameWorld, numOfAsteroids, asteroidScale,
-        true, rng, player);
-
-    // Add an enemy
-    physicsManager.make_enemy(gameWorld, rng, player);
-
     SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
         customCols::bg.b, customCols::bg.a);
 }
 
 StageID MainLevel::handle_input(double, double dt,
-                                std::array<bool,
-                                static_cast<size_t>(
-                                    KeyFlag::K_TOTAL)>& key_state)
+    std::array<bool, KeyFlag::K_TOTAL>& key_state)
 {
-    GameLoop::process_input(&gameWorld, windowID(), key_state);
+    GameLoop::process_input(gameWorld, windowID(), key_state);
 
-    if(key_state[static_cast<size_t>(KeyFlag::QUIT)])
+    if(key_state[KeyFlag::QUIT])
         return StageID::QUIT;
-    if (key_state[static_cast<size_t>(KeyFlag::K_ESCAPE)])
+    if (key_state[KeyFlag::K_ESCAPE])
         return StageID::TITLE_SCREEN;
 
-    if (key_state[static_cast<size_t>(KeyFlag::K_UP)]) {
+    if (key_state[KeyFlag::K_UP]) {
         if (player)
             player->engine.on();
     }
-    else if (!key_state[static_cast<size_t>(KeyFlag::K_UP)]) {
+    else if (!key_state[KeyFlag::K_UP]) {
         if (player)
             player->engine.off();
     }
-    if (key_state[static_cast<size_t>(KeyFlag::K_LEFT)]) {
+    if (key_state[KeyFlag::K_LEFT]) {
         if (player)
             player->engine.turnLeft(dt);
     }
-    if (key_state[static_cast<size_t>(KeyFlag::K_RIGHT)]) {
+    if (key_state[KeyFlag::K_RIGHT]) {
         if (player)
             player->engine.turnRight(dt);
     }
-    if (key_state[static_cast<size_t>(KeyFlag::K_SPACE)]) {
+    if (key_state[KeyFlag::K_SPACE]) {
         if (player)
             if (!player->gun.fired)
                 player->gun.fire(gameWorld, physicsManager, *player);
     }
-    if (!key_state[static_cast<size_t>(KeyFlag::K_SPACE)])
+    if (!key_state[KeyFlag::K_SPACE])
         if (player)
             player->gun.fired = false;
 
-    if (key_state[static_cast<size_t>(KeyFlag::K_LSHIFT)])
+    if (key_state[KeyFlag::K_LSHIFT])
         if (player)
             player->hyperdrive.warp();
 
@@ -131,15 +122,17 @@ StageID MainLevel::update(double t, double dt)
             asteroidsRemain = true;
     }
     if (!asteroidsRemain) {
-        numOfAsteroids++;
         for (auto& ent : physicsManager.physEntities) {
             if (ent->type == EntityFlag::BULLET)
                 ent->kill_it();
         }
-        physicsManager.make_asteroids(gameWorld, numOfAsteroids,
+        physicsManager.make_asteroids(gameWorld, numOfAsteroids++,
                                       asteroidScale,
                                       true, rng, player);
     }
+
+    // Add an enemy
+    //physicsManager.make_enemy(gameWorld, rng, player);
 
     for (auto& physComp : physicsManager.physMan)
         physComp->update(dt);

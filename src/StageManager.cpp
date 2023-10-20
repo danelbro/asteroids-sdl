@@ -6,6 +6,7 @@
 #include "../inc/FlagEnums.hpp"
 #include "../inc/MainLevel.hpp"
 #include "../inc/Stage.hpp"
+#include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 
 StageManager::StageManager()
@@ -38,6 +39,7 @@ void StageManager::run()
     auto currentTime{ high_resolution_clock::now() };
     double accumulator{ 0.0 };
     while (isRunning) {
+        current = next;
         Stage* current_stage = stages[current].get();
 
         auto newTime{ high_resolution_clock::now() };
@@ -47,12 +49,14 @@ void StageManager::run()
         accumulator += frameTime.count();
 
         while (accumulator >= dt) {
+            if (!current_stage)
+                throw (std::runtime_error("no stage set!"));
+
             next = current_stage->handle_input(t, dt, keyState);
 
-            if (next == StageID::QUIT)
-                break;
             if (next != current) {
                 handle_stage_transition();
+                current_stage = nullptr;
                 break;
             }
 
@@ -60,6 +64,7 @@ void StageManager::run()
 
             if (next != current) {
                 handle_stage_transition();
+                current_stage = nullptr;
                 break;
             }
 
@@ -70,7 +75,7 @@ void StageManager::run()
         if (next == StageID::QUIT)
             break;
 
-        if(handle_stage_transition())
+        if (current_stage)
             current_stage->render(t, dt);
     }
 }
@@ -78,10 +83,16 @@ void StageManager::run()
 bool StageManager::handle_stage_transition()
 {
     if (next != current) {
+        keyState.fill(false);
+
         switch (next) {
         case StageID::TITLE_SCREEN:
-            // remove later
-            next = StageID::PLAYING;
+            stages.erase(next);
+            add_stage(next, std::make_unique<TitleScreen>(
+                stages[current]->screen(),
+                stages[current]->windowID(),
+                stages[current]->renderer()));
+            stages.erase(current);
             break;
         case StageID::PLAYING:
             stages.erase(next);
@@ -89,10 +100,17 @@ bool StageManager::handle_stage_transition()
                 stages[current]->screen(),
                 stages[current]->windowID(),
                 stages[current]->renderer()));
+            stages.erase(current);
             break;
         case StageID::HIGH_SCORES:
             // remove later
-            next = StageID::PLAYING;
+            next = StageID::TITLE_SCREEN;
+            stages.erase(next);
+            add_stage(next, std::make_unique<TitleScreen>(
+                stages[current]->screen(),
+                stages[current]->windowID(),
+                stages[current]->renderer()));
+            stages.erase(current);
             break;
         case StageID::QUIT:
             next = StageID::QUIT;
@@ -100,7 +118,6 @@ bool StageManager::handle_stage_transition()
         default:
             throw std::runtime_error("bad stage");
         }
-        current = next;
         return false;
     }
 

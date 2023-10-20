@@ -13,6 +13,7 @@
 #include "../inc/Colors.hpp"
 #include "../inc/MainLevel.hpp"
 #include "../inc/StageManager.hpp"
+#include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
@@ -55,12 +56,9 @@ try
     {
         StageManager stageMan{};
 
-        // stageMan.add_stage(StageID::TITLE_SCREEN,
-        //     std::make_unique<TitleScreen>(
-        // screen, windowID, renderer.get()));
-
-        stageMan.add_stage(StageID::PLAYING,
-            std::make_unique<MainLevel>(screen, windowID, renderer.get()));
+        stageMan.add_stage(StageID::TITLE_SCREEN,
+            std::make_unique<TitleScreen>(
+        screen, windowID, renderer.get()));
 
         stageMan.run();
     }
@@ -77,10 +75,20 @@ catch (utl::SdlException& se)
     errorLogger << "SDL exception: " << se.what() << '\n';
     return 1;
 }
-catch (std::runtime_error &e)
+catch (std::runtime_error &re)
 {
-    errorLogger << "exception: " << e.what() << '\n';
+    errorLogger << "exception: " << re.what() << '\n';
     return 2;
+}
+catch (std::out_of_range& oor)
+{
+    errorLogger << "out of range: " << oor.what() << '\n';
+    return 3;
+}
+catch (std::exception& e)
+{
+    errorLogger << "std::exception: " << e.what() << '\n';
+    return 4;
 }
 catch (...)
 {

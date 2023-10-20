@@ -21,7 +21,7 @@ private:
     bool handle_stage_transition();
 
     std::unordered_map<StageID, std::unique_ptr<Stage>> stages{ };
-    StageID current{StageID::PLAYING};
-    StageID next{StageID::PLAYING};
+    StageID current{StageID::TITLE_SCREEN};
+    StageID next{StageID::TITLE_SCREEN};
     std::array<bool, static_cast<size_t>(KeyFlag::K_TOTAL)> keyState{ };
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <memory>
 #include <random>
 
 #include <SDL.h>
@@ -19,9 +20,7 @@ public:
     MainLevel(Box screen, Uint32 windowID, SDL_Renderer* renderer);
 
     StageID handle_input(double t, double dt,
-                         std::array<bool,
-                         static_cast<size_t>(
-                             KeyFlag::K_TOTAL)>& key_state) override;
+        std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
     StageID update(double t, double dt) override;
     void render(double t, double dt) override;
 private:

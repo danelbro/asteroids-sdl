@@ -17,7 +17,7 @@
 #include "../inc/ScoreManager.hpp"
 
 namespace GameLoop {
-    void process_input(GameWorld* gw, Uint32 windowID,
+    void process_input(GameWorld& gw, Uint32 windowID,
         std::array<bool, KeyFlag::K_TOTAL>& key_state)
     {
         SDL_Event ev{ };
@@ -29,8 +29,8 @@ namespace GameLoop {
             else if (ev.type == SDL_WINDOWEVENT) {
                 if (ev.window.windowID == windowID)
                     if (ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-                        gw->screen.w = ev.window.data1;
-                        gw->screen.h = ev.window.data2;
+                        gw.screen.w = ev.window.data1;
+                        gw.screen.h = ev.window.data2;
                     }
             }
 

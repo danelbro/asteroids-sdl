@@ -7,6 +7,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+extern std::ofstream errorLogger;
+
 namespace utl {
 
     // thanks to https://stackoverflow.com/a/24252225

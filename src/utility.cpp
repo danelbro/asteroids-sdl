@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+std::ofstream errorLogger("exception.log");
+
 namespace utl {
     SdlException::SdlException(std::string message)
         : std::runtime_error{ message }
