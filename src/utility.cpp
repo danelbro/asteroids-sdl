@@ -29,6 +29,9 @@ namespace utl {
     SDL_Window* createWindow(const char* title, int x, int y,
         int w, int h, Uint32 flags)
     {
+#ifdef _DEBUG
+        errorLogger << "creating a window\n";
+#endif
         SDL_Window* window = nullptr;
 
         window = SDL_CreateWindow(title, x, y, w, h, flags);
@@ -43,6 +46,9 @@ namespace utl {
 
     SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags)
     {
+#ifdef _DEBUG
+        errorLogger << "creating a renderer\n";
+#endif
         SDL_Renderer* rend = nullptr;
         rend = SDL_CreateRenderer(window, index, flags);
 
@@ -57,6 +63,9 @@ namespace utl {
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend)
     {
+#ifdef _DEBUG
+        errorLogger << "creating a text texture\n";
+#endif
         SDL_Surface* textSurface = TTF_RenderUTF8_Blended(font, text.c_str(),
             text_colour);
 
@@ -85,6 +94,9 @@ namespace utl {
     std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,
         int font_size)
     {
+#ifdef _DEBUG
+        errorLogger << "creating a font\n";
+#endif
         return std::unique_ptr<TTF_Font, sdl_deleter>(
             TTF_OpenFont(path.c_str(), font_size),
             sdl_deleter());
