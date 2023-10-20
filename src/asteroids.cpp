@@ -53,11 +53,12 @@ try
         utl::sdl_deleter()};
 
     {
-        StageManager stageMan{};
+        auto first_stage{ StageID::TITLE_SCREEN };
 
-        stageMan.add_stage(StageID::TITLE_SCREEN,
-            std::make_unique<TitleScreen>(
-        screen, windowID, renderer.get()));
+        StageManager stageMan{first_stage};
+
+        stageMan.add_stage(first_stage,
+            std::make_unique<TitleScreen>(screen, windowID, renderer.get()));
 
         stageMan.run();
     }
@@ -67,6 +68,7 @@ try
 
     TTF_Quit();
     SDL_Quit();
+
     return 0;
 }
 catch (utl::SdlException& se)

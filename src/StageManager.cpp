@@ -9,7 +9,8 @@
 #include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 
-StageManager::StageManager()
+StageManager::StageManager(StageID first)
+    : current{ StageID::STAGES_TOTAL }, next{ first }
 {
     std::fill(keyState.begin(), keyState.end(), false);
 
