@@ -115,23 +115,40 @@ StageID MainLevel::handle_input(double, double dt,
 
 StageID MainLevel::update(double t, double dt)
 {
+    constexpr double enemyTime{ 5 }; // seconds
+
+    levelElapsedTime += dt;
+
     asteroidsRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type == EntityFlag::ASTEROID)
+        if (ent->type == EntityFlag::ASTEROID) {
             asteroidsRemain = true;
+            break;
+        }
     }
-    if (!asteroidsRemain) {
+
+    enemiesRemain = false;
+    for (auto& ent : physicsManager.physEntities) {
+        if (ent->type == EntityFlag::ENEMY) {
+            enemiesRemain = true;
+            break;
+        }
+    }
+
+    if (!asteroidsRemain && !enemiesRemain) {
         for (auto& ent : physicsManager.physEntities) {
             if (ent->type == EntityFlag::BULLET)
                 ent->kill_it();
         }
+        levelElapsedTime = 0.0;
         physicsManager.make_asteroids(gameWorld, numOfAsteroids++,
                                       asteroidScale,
                                       true, rng, player);
     }
 
-    // Add an enemy
-    //physicsManager.make_enemy(gameWorld, rng, player);
+    if (asteroidsRemain && !enemiesRemain && levelElapsedTime >= enemyTime) {
+        physicsManager.make_enemy(gameWorld, rng, player);
+    }
 
     for (auto& physComp : physicsManager.physMan)
         physComp->update(dt);
@@ -139,14 +156,10 @@ StageID MainLevel::update(double t, double dt)
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
 
-    bool playerIsAlive{ physicsManager.check_player_hit() };
-    physicsManager.check_shots_hit();
-
+    physicsManager.didBulletsHit();
     physicsManager.clean_up(gameWorld, scoreManager, rng);
-
     scoreManager.refresh();
-
-    if (!playerIsAlive) {
+    if (physicsManager.isPlayerHit()) {
         player = nullptr;
         return StageID::HIGH_SCORES;
     }

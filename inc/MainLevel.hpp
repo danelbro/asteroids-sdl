@@ -38,4 +38,6 @@ private:
     Player* player;
     bool asteroidsRemain;
     int numOfAsteroids;
+    bool enemiesRemain;
+    double levelElapsedTime;
 };
