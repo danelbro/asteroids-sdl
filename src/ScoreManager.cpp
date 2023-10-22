@@ -3,6 +3,7 @@
 #include <string>
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "../inc/Colors.hpp"
 #include "../inc/GameWorld.hpp"

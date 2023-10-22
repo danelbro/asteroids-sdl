@@ -6,8 +6,6 @@
 
 #include "GameWorld.hpp"
 #include "FlagEnums.hpp"
-#include "PhysicsManager.hpp"
-#include "ScoreManager.hpp"
 
 namespace GameLoop {
     void process_input(GameWorld& gw, Uint32 windowID,

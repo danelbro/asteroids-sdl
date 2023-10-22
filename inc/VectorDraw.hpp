@@ -10,11 +10,13 @@
 struct Box;
 struct GameWorld;
 
-void DrawWrapLine(SDL_Renderer *rend, Box screen,
+namespace utl {
+    void DrawWrapLine(SDL_Renderer *rend, Box screen,
                   double x1, double y1,
                   double x2, double y2);
 
-bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon);
+    bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon);
 
-void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly,
+    void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly,
     SdlColor col, SDL_Renderer* renderer);
+}

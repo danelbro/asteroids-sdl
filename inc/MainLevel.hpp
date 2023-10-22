@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 
 #include "Box.hpp"
+#include "FlagEnums.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
 #include "Player.hpp"

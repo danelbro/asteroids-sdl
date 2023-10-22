@@ -5,8 +5,9 @@
 #include <SDL.h>
 
 #include "../inc/Colors.hpp"
-#include "../inc/GameWorld.hpp"
 #include "../inc/FlagEnums.hpp"
+#include "../inc/GameWorld.hpp"
+#include "../inc/PhysicsEntity.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"
 

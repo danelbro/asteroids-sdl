@@ -7,9 +7,11 @@
 #include <SDL.h>
 
 #include "../inc/AIComponent.hpp"
+#include "../inc/Colors.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/Ship.hpp"
+#include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"
 
 Enemy::Enemy(GameWorld& new_gameworld, Vec2d pos, std::vector<Vec2d> shape,

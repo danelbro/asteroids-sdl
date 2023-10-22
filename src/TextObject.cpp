@@ -7,11 +7,11 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include "../inc/Entity.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
-#include "../inc/utility.hpp"
 
 TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font,
     SdlColor color, SDL_Renderer* rend)

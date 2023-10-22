@@ -1,10 +1,12 @@
 #include "../inc/Ship.hpp"
 
+#include "../inc/Colors.hpp"
 #include "../inc/Engine.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/Gun.hpp"
 #include "../inc/PhysicsComponent.hpp"
+#include "../inc/PhysicsEntity.hpp"
 #include "../inc/Vec2d.hpp"
 
 Ship::Ship(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,

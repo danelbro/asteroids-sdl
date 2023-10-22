@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 
+#include "../inc/Colors.hpp"
 #include "../inc/Entity.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
@@ -47,13 +48,13 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
 
     for (size_t i{ 0 }; i < m_fillShape.size(); ++i) {
         if (i == m_fillShape.size() - 1) {
-            DrawWrapLine(renderer,
+            utl::DrawWrapLine(renderer,
                 gameWorld.screen,
                 m_fillShape[i].x, m_fillShape[i].y,
                 m_fillShape[0].x, m_fillShape[0].y);
         }
         else {
-            DrawWrapLine(renderer,
+            utl::DrawWrapLine(renderer,
                 gameWorld.screen,
                 m_fillShape[i].x, m_fillShape[i].y,
                 m_fillShape[i + 1].x, m_fillShape[i + 1].y);
@@ -61,7 +62,7 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
     }
 
     if (fill)
-        ScanFill(gameWorld, m_fillShape, m_color, renderer);
+        utl::ScanFill(gameWorld, m_fillShape, m_color, renderer);
 
     SDL_SetRenderDrawColor(renderer,
         oldColor.r, oldColor.g, oldColor.b, oldColor.a);

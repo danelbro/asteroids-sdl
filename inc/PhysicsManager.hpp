@@ -16,7 +16,9 @@
 #include "PhysicsComponent.hpp"
 #include "Player.hpp"
 #include "ScoreManager.hpp"
+#include "Ship.hpp"
 #include "Vec2d.hpp"
+#include "VectorDraw.hpp"
 
 class PhysicsManager {
 public:
@@ -35,12 +37,13 @@ public:
 	void make_enemy(GameWorld& new_GameWorld, std::mt19937& rng,
 		Player* player);
 
-	Player* make_player(GameWorld& new_GameWorld);
+	Player* make_player(GameWorld& new_GameWorld, std::mt19937& rng);
 
 	void clean_up(GameWorld& gw, ScoreManager& scoreMan, std::mt19937& rng);
 
-	bool isPlayerHit(Player* player);
-	bool didBulletsHit();
+	bool wasPlayerKilled(Player* player);
+    void checkPlayerHit(Player* player);
+	void checkBulletsHit();
 
 	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;
 	std::vector<std::unique_ptr<PhysicsComponent>> physMan;

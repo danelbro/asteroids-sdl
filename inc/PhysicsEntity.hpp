@@ -26,10 +26,11 @@ public:
 	std::vector<Vec2d> fillShape() const { return m_fillShape; }
     bool isVisible() const { return m_isVisible; }
 
-    void setVisible(bool vis) { m_isVisible = vis }
+    void setVisible(bool vis) { m_isVisible = vis; }
 
 	PhysicsComponent* physicsComponent;
-	bool wayward; // for dealing with wayward bullets - find a better way to do this?
+	bool wayward; // for dealing with wayward bullets - find a better
+                  // way to do this?
 
 protected:
     PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,

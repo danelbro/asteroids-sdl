@@ -7,6 +7,7 @@
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
+#include "../inc/PhysicsEntity.hpp"
 #include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
 

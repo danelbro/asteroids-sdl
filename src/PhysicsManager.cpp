@@ -4,10 +4,10 @@
 #include <random>
 #include <vector>
 
-#include "../inc/AIComponent.hpp"
 #include "../inc/Asteroid.hpp"
 #include "../inc/Bullet.hpp"
 #include "../inc/Enemy.hpp"
+#include "../inc/Entity.hpp"
 #include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
@@ -238,39 +238,41 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 	}
 }
 
-bool PhysicsManager::isPlayerHit(Player* plr)
+// checks whether the player got hit and whether they're out of lives.
+// return true if out of lives
+void PhysicsManager::checkPlayerHit(Player* plr)
 {
     for (auto& ast : physEntities) {
         if (ast->type == EntityFlag::ASTEROID) {
-            if (PointInPolygon(plr->pos(), ast->fillShape())) {
+            if (utl::PointInPolygon(plr->pos(), ast->fillShape())) {
                 plr->kill_it();
-                return true;
             }
         }
     }
-
-	return false;
 }
 
-bool PhysicsManager::didBulletsHit()
+bool PhysicsManager::wasPlayerKilled(Player* plr)
 {
-	bool hits{ false };
+    if (plr->toBeKilled()) return true;
+
+    return false;
+}
+
+void PhysicsManager::checkBulletsHit()
+{
 	for (auto& bul : physEntities) {
 		if (bul->type == EntityFlag::BULLET && !bul->toBeKilled()) {
 			for (auto& target : physEntities) {
 				if (target->type == EntityFlag::ASTEROID
 					|| target->type == EntityFlag::ENEMY) {
-					if (PointInPolygon(bul->pos(), target->fillShape())) {
+					if (utl::PointInPolygon(bul->pos(), target->fillShape())) {
 						target->kill_it();
 						bul->kill_it();
 						bul->wayward = false;
-						hits = true;
 						break;
 					}
 				}
 			}
 		}
 	}
-
-	return hits;
 }

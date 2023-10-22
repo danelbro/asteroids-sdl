@@ -18,6 +18,7 @@
 #include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/ScoreManager.hpp"
+#include "../inc/Stage.hpp"
 #include "../inc/StageManager.hpp"
 #include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
@@ -46,14 +47,15 @@ static std::mt19937 makeSeededRNG()
 MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
     : Stage{new_screen, windowID, new_renderer},
-    gameWorld{ new_screen, fluidDensity },
-    font{ utl::createFont(font_path, font_size) },
-    physicsManager{},
-    scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
+      gameWorld{ new_screen, fluidDensity },
+      font{ utl::createFont(font_path, font_size) },
+      physicsManager{},
+      scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
                   font.get(), new_renderer},
-    rng{ makeSeededRNG() },
-    player{ nullptr }, asteroidsRemain{ false },
-    numOfAsteroids{ startingAsteroids }
+      rng{ makeSeededRNG() },
+      player{ nullptr }, asteroidsRemain{ false },
+      numOfAsteroids{ startingAsteroids }, enemiesRemain{ false },
+      levelElapsedTime{ 0.0 }
 {
     init();
 }
@@ -63,7 +65,7 @@ void MainLevel::init()
     if (!font) throw(utl::SdlException{ "Failed to make font! TTF_Error: " });
 
     // Make Player
-    player = physicsManager.make_player(gameWorld);
+    player = physicsManager.make_player(gameWorld, rng);
     if (!player)
         throw std::runtime_error("failed to make player");
 
@@ -81,7 +83,7 @@ StageID MainLevel::handle_input(double, double dt,
     if (key_state[KeyFlag::K_ESCAPE])
         return StageID::TITLE_SCREEN;
 
-    if (player && player.isControllable()) {
+    if (player && player->isControllable()) {
         if (key_state[KeyFlag::K_UP]) {
             player->engine.on();
         }
@@ -110,9 +112,9 @@ StageID MainLevel::handle_input(double, double dt,
 
 StageID MainLevel::update(double t, double dt)
 {
-    constexpr double enemyTime{ 5 }; // seconds
+    constexpr double enemyTime{ 5.0 }; // seconds
 
-    levelElapsedTime += dt;
+    if (!enemiesRemain) levelElapsedTime += dt;
 
     asteroidsRemain = false;
     for (auto& ent : physicsManager.physEntities) {
@@ -142,6 +144,7 @@ StageID MainLevel::update(double t, double dt)
     }
 
     if (asteroidsRemain && !enemiesRemain && levelElapsedTime >= enemyTime) {
+        levelElapsedTime = 0.0;
         physicsManager.make_enemy(gameWorld, rng, player);
     }
 
@@ -151,10 +154,12 @@ StageID MainLevel::update(double t, double dt)
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
 
-    physicsManager.didBulletsHit();
+    physicsManager.checkBulletsHit();
+    physicsManager.checkPlayerHit(player);
+    bool playerWasKilled{physicsManager.wasPlayerKilled(player)};
     physicsManager.clean_up(gameWorld, scoreManager, rng);
     scoreManager.refresh();
-    if (physicsManager.isPlayerHit()) {
+    if (playerWasKilled) {
         player = nullptr;
         return StageID::HIGH_SCORES;
     }

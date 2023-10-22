@@ -9,12 +9,7 @@
 #include <SDL.h>
 
 #include "../inc/FlagEnums.hpp"
-#include "../inc/Entity.hpp"
 #include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/PhysicsManager.hpp"
-#include "../inc/Player.hpp"
-#include "../inc/ScoreManager.hpp"
 
 namespace GameLoop {
     void process_input(GameWorld& gw, Uint32 windowID,

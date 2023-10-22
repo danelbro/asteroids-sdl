@@ -24,6 +24,8 @@ public:
 
     void setAngle(double angle);
     void setOwner(Entity* new_owner) { if (new_owner) owner = new_owner; }
+    void setVelocity(Vec2d vel) { m_velocity = vel; }
+    void setAcceleration(Vec2d accel) { m_acceleration = accel; }
 
     void update(double dt);
 

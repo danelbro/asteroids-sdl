@@ -24,8 +24,8 @@ Player::Player(GameWorld& new_gameWorld, Vec2d pos,
       hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },
       m_isVulnerable{ true }, m_lives{ lives },
       m_respawnLength{ respawnLength }, m_respawnTimer{ 0.0 },
-      m_isRespawning{ false }, m_flashLength{ flashLength },
-      m_flashTimer{ 0.0 }
+      m_isRespawning{ false }, m_flashTimer{ 0.0 },
+      m_flashLength{ flashLength }
 {
     physicsComponent->setOwner(this);
     // fill = true;
@@ -56,6 +56,9 @@ void Player::respawn()
     m_isRespawning = true;
     m_isVulnerable = false;
     m_isVisible = false;
+    physicsComponent->setAcceleration({0, 0});
+    physicsComponent->setFrameImpulse(0);
+    physicsComponent->setVelocity({0, 0});
     m_pos = { gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
 }
 
