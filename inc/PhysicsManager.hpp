@@ -39,7 +39,7 @@ public:
 
 	void clean_up(GameWorld& gw, ScoreManager& scoreMan, std::mt19937& rng);
 
-	bool isPlayerHit();
+	bool isPlayerHit(Player* player);
 	bool didBulletsHit();
 
 	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;

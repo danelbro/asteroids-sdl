@@ -16,7 +16,7 @@ PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld,
     PhysicsComponent* new_physicsComponent)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },
     physicsComponent{ new_physicsComponent }, wayward{ true },
-    m_transShape{}, m_fillShape{}
+      m_transShape{}, m_fillShape{}, m_isVisible{ true }
 {}
 
 void PhysicsEntity::update_shapes()
@@ -37,6 +37,8 @@ void PhysicsEntity::update_shapes()
 
 void PhysicsEntity::render(SDL_Renderer* renderer)
 {
+    if (!m_isVisible) return;
+
     SdlColor oldColor{ };
     SDL_GetRenderDrawColor(renderer,
         &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);

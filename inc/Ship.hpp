@@ -16,10 +16,10 @@ class PhysicsComponent;
 
 class Ship : public PhysicsEntity {
 public:
+    Vec2d nose() const { return m_fillShape.at(0); }
+
     Engine engine;
     Gun gun;
-
-    Vec2d nose() const { return m_fillShape.at(0); }
 
 protected:
     Ship(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,

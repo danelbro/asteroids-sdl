@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include "../inc/Vec2d.hpp"
+
 std::ofstream errorLogger("exception.log");
 
 namespace utl {
@@ -100,5 +102,16 @@ namespace utl {
         return std::unique_ptr<TTF_Font, sdl_deleter>(
             TTF_OpenFont(path.c_str(), font_size),
             sdl_deleter());
+    }
+
+
+    Vec2d randomPos(std::mt19937& rng, int w, int h)
+    {
+        std::uniform_real_distribution<double> xDist(0.0,
+                                                     static_cast<double>(w));
+        std::uniform_real_distribution<double> yDist(0.0,
+                                                     static_cast<double>(h));
+
+        return {xDist(rng), yDist(rng)};
     }
 }

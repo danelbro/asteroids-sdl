@@ -81,35 +81,30 @@ StageID MainLevel::handle_input(double, double dt,
     if (key_state[KeyFlag::K_ESCAPE])
         return StageID::TITLE_SCREEN;
 
-    if (key_state[KeyFlag::K_UP]) {
-        if (player)
+    if (player && player.isControllable()) {
+        if (key_state[KeyFlag::K_UP]) {
             player->engine.on();
-    }
-    else if (!key_state[KeyFlag::K_UP]) {
-        if (player)
+        }
+        else if (!key_state[KeyFlag::K_UP]) {
             player->engine.off();
-    }
-    if (key_state[KeyFlag::K_LEFT]) {
-        if (player)
+        }
+        if (key_state[KeyFlag::K_LEFT]) {
             player->engine.turnLeft(dt);
-    }
-    if (key_state[KeyFlag::K_RIGHT]) {
-        if (player)
+        }
+        if (key_state[KeyFlag::K_RIGHT]) {
             player->engine.turnRight(dt);
-    }
-    if (key_state[KeyFlag::K_SPACE]) {
-        if (player)
+        }
+        if (key_state[KeyFlag::K_SPACE]) {
             if (!player->gun.fired)
                 player->gun.fire(gameWorld, physicsManager, *player);
-    }
-    if (!key_state[KeyFlag::K_SPACE])
-        if (player)
+        }
+        if (!key_state[KeyFlag::K_SPACE]) {
             player->gun.fired = false;
-
-    if (key_state[KeyFlag::K_LSHIFT])
-        if (player)
+        }
+        if (key_state[KeyFlag::K_LSHIFT]) {
             player->hyperdrive.warp();
-
+        }
+    }
     return StageID::PLAYING;
 }
 

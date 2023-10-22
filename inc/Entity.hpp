@@ -12,21 +12,20 @@
 
 #include "Colors.hpp"
 #include "FlagEnums.hpp"
+#include "GameWorld.hpp"
 #include "Vec2d.hpp"
-
-struct GameWorld;
 
 class Entity {
 public:
     virtual ~Entity() = default;
 
-    virtual void render(SDL_Renderer* renderer) = 0;
     virtual void update(double t, double dt) = 0;
+    virtual void render(SDL_Renderer* renderer) = 0;
 
-    Vec2d& pos() { return m_pos; }
-    bool toBeKilled() const { return kill_me; }
-    void kill_it() { kill_me = true; }
-    double scale() const { return m_scale; }
+    virtual Vec2d& pos() { return m_pos; }
+    virtual bool toBeKilled() const { return kill_me; }
+    virtual void kill_it() { kill_me = true; }
+    virtual double scale() const { return m_scale; }
 
     EntityFlag type;
     const GameWorld& gameWorld;

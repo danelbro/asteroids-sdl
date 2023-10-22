@@ -2,11 +2,14 @@
 
 #include <fstream>
 #include <memory>
+#include <random>
 #include <stdexcept>
 #include <string>
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+
+struct Vec2d;
 
 extern std::ofstream errorLogger;
 
@@ -84,4 +87,6 @@ namespace utl {
 
    std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,
        int font_size);
+
+    Vec2d randomPos(std::mt19937& rng, int w, int h);
 }

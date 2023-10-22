@@ -88,13 +88,10 @@ void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 static Vec2d findRandomDistantPos(std::mt19937& rng,
 	Entity* distant, double distance, int w, int h)
 {
-	std::uniform_real_distribution<double> xDist(0.0, static_cast<double>(w));
-	std::uniform_real_distribution<double> yDist(0.0, static_cast<double>(h));
 	Vec2d new_pos{ };
 	bool isTooClose{ true };
 	do {
-		new_pos.x = xDist(rng);
-		new_pos.y = yDist(rng);
+		new_pos = utl::randomPos(rng, w, h);
 
 		Vec2d distanceToPlayer{ new_pos - distant->pos() };
 		if (distanceToPlayer.magnitude() > distance)
@@ -176,7 +173,7 @@ static const std::vector<Vec2d> playerShape
 	{-20, 30}
 };
 
-Player* PhysicsManager::make_player(GameWorld& gameWorld)
+Player* PhysicsManager::make_player(GameWorld& gameWorld, std::mt19937& rng)
 {
 	const Vec2d pos{ gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
 	const std::vector<Vec2d> shape{ playerShape };
@@ -185,14 +182,17 @@ Player* PhysicsManager::make_player(GameWorld& gameWorld)
 	constexpr double turnSpeed{ 300.0 };
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
-	constexpr double warpTimer{ 1.0 };
+	constexpr double warpLength{ 1.0 };
 	constexpr int lives{ 3 };
+    constexpr double respawnLength{ 2.0 };
+    constexpr double flashLength{ 0.2 };
 
 	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
 
 	auto player(std::make_unique<Player>( gameWorld, pos, shape,
 		customCols::player_col, scale, power, turnSpeed, shotPower,
-		physMan.back().get(), warpTimer, lives ));
+        physMan.back().get(), rng, warpLength,
+        lives, respawnLength, flashLength));
 
 	Player* plPtr = player.get();
 	physEntities.push_back(std::move(player));
@@ -238,26 +238,21 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 	}
 }
 
-bool PhysicsManager::check_player_hit()
+bool PhysicsManager::isPlayerHit(Player* plr)
 {
-	for (auto& plr : physEntities) {
-		if (plr->type == EntityFlag::PLAYER) {
-			for (auto& ast : physEntities) {
-				if (ast->type == EntityFlag::ASTEROID) {
-					bool hit{ PointInPolygon(plr->pos(), ast->fillShape()) };
-					if (hit) {
-						plr->kill_it();
-						return false;
-					}
-				}
-			}
-		}
-	}
+    for (auto& ast : physEntities) {
+        if (ast->type == EntityFlag::ASTEROID) {
+            if (PointInPolygon(plr->pos(), ast->fillShape())) {
+                plr->kill_it();
+                return true;
+            }
+        }
+    }
 
-	return true;
+	return false;
 }
 
-bool PhysicsManager::check_shots_hit()
+bool PhysicsManager::didBulletsHit()
 {
 	bool hits{ false };
 	for (auto& bul : physEntities) {
