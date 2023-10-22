@@ -17,6 +17,7 @@ enum class EntityFlag {
     ASTEROID,
     ENEMY,
     BULLET,
+    ENEMY_BULLET,
     TEXT,
     E_TYPE_TOTAL
 };

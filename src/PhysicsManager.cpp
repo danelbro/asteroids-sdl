@@ -242,9 +242,11 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 // return true if out of lives
 void PhysicsManager::checkPlayerHit(Player* plr)
 {
-    for (auto& ast : physEntities) {
-        if (ast->type == EntityFlag::ASTEROID) {
-            if (utl::PointInPolygon(plr->pos(), ast->fillShape())) {
+    for (auto& ent : physEntities) {
+        if (ent->type == EntityFlag::ASTEROID
+            || ent->type == EntityFlag::ENEMY
+            || ent->type == EntityFlag::ENEMY_BULLET) {
+            if (utl::PointInPolygon(plr->pos(), ent->fillShape())) {
                 plr->kill_it();
             }
         }
