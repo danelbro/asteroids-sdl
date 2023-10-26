@@ -24,6 +24,8 @@ public:
                SDL_Renderer* rend);
     TextObject(const TextObject&) = delete;
     TextObject& operator=(const TextObject&) = delete;
+    TextObject(TextObject&&) = default;
+    TextObject& operator=(TextObject&&) = delete;
     ~TextObject() = default;
 
     void loadFromRenderedText(std::string textureText, SDL_Color text_colour,

@@ -27,6 +27,6 @@ private:
     std::unique_ptr<TTF_Font, utl::sdl_deleter> title_font;
     std::unique_ptr<TTF_Font, utl::sdl_deleter> instruction_font;
     TextObject title;
-    TextObject instructions;
+    std::vector<TextObject> instructions;
 };
 

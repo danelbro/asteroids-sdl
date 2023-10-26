@@ -49,6 +49,9 @@ namespace GameLoop {
                 case SDLK_SPACE:
                     key_state[KeyFlag::K_SPACE] = true;
                     break;
+                case SDLK_RETURN:
+                    key_state[KeyFlag::K_ENTER] = true;
+                    break;
                 case SDLK_LSHIFT:
                     key_state[KeyFlag::K_LSHIFT] = true;
                     break;

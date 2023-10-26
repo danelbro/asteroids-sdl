@@ -6,6 +6,7 @@ enum KeyFlag {
     K_UP,
     K_DOWN,
     K_SPACE,
+    K_ENTER,
     K_LSHIFT,
     K_ESCAPE,
     QUIT,
