@@ -16,7 +16,7 @@
 
 static const std::string fontPath{ "data/Play-Regular.ttf" };
 static constexpr int titleFont_size{ 72 };
-static constexpr int scoreFont_size{ 36 };
+static constexpr int scoreFont_size{ 48 };
 
 GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
              std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
@@ -32,7 +32,7 @@ GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
       m_ScoreText{ m_gameWorld, {}, m_scoreFont.get(),
     customCols::text_col, rend }, m_rng{ utl::makeSeededRNG() }
 {
-    constexpr double padding{150.0};
+    constexpr double padding{ 250.0 };
 
     for (auto& pC : physComs) {
         m_physMan.physMan.push_back(std::move(pC));
