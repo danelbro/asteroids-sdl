@@ -34,11 +34,11 @@ public:
 private:
     void init();
 
-    GameWorld gameWorld;
     std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
-    PhysicsManager physicsManager;
+    GameWorld gameWorld;
     std::mt19937 rng;
-    Player* player;
+    PhysicsManager physicsManager;
+    Player& player;
     ScoreManager scoreManager;
     bool asteroidsRemain;
     int numOfAsteroids;

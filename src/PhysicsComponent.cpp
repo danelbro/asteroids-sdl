@@ -7,7 +7,7 @@
 
 #include "../inc/Box.hpp"
 #include "../inc/GameWorld.hpp"
-#include "../inc/Entity.hpp"
+#include "../inc/PhysicsEntity.hpp"
 #include "../inc/Vec2d.hpp"
 
 void PhysicsComponent::turn(double turnSpeed, double dt)
@@ -40,10 +40,8 @@ void PhysicsComponent::update(double dt)
     auto totalForces{ m_dir_vector * m_impulse };
     m_acceleration = (totalForces / m_mass) * dt;
     m_velocity += m_acceleration * dt;
-    if (m_owner) {
-        m_owner->pos() += m_velocity * dt;
-        wrap(m_owner->pos(), m_owner->gameWorld.screen);
-    }
+    m_owner.pos() += m_velocity * dt;
+    wrap(m_owner.pos(), m_owner.gameWorld.screen);
     m_impulse = 0;
 }
 
@@ -55,5 +53,4 @@ void PhysicsComponent::setAngle(double angle)
         m_angle = angle - 360;
     else
         m_angle = angle;
-
 }

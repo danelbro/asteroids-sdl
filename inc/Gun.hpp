@@ -1,7 +1,5 @@
 #pragma once
 
-struct GameWorld;
-
 class PhysicsManager;
 class Ship;
 
@@ -11,7 +9,7 @@ public:
         : owner{ new_owner }, m_shotPower{ shotPower }
         {}
 
-    void fire(GameWorld& new_GameWorld, PhysicsManager& physMan);
+    void fire(PhysicsManager& physMan);
     bool fired{ false };
 
 private:

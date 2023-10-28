@@ -34,22 +34,17 @@ static constexpr double fluidDensity{ 0.1 };
 MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
     : Stage{ new_screen, windowID, new_renderer, StageID::PLAYING },
-      gameWorld{ new_screen, fluidDensity },
       font{ utl::createFont(font_path, font_size) },
-      physicsManager{},
+      gameWorld{ new_screen, fluidDensity },
       rng{ utl::makeSeededRNG() },
-      player{ physicsManager.make_player(gameWorld, rng) },
+      physicsManager{ gameWorld, rng },
+      player{ physicsManager.player() },
       scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
-                    font.get(), new_renderer, player->lives() },
+                    font.get(), new_renderer, player.lives() },
       asteroidsRemain{ false },
       numOfAsteroids{ startingAsteroids }, enemiesRemain{ false },
       levelElapsedTime{ 0.0 }
 {
-    if (!font) throw(utl::SdlException{ "Failed to make font! TTF_Error: " });
-
-    if (!player)
-        throw std::runtime_error("failed to make player");
-
     SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
         customCols::bg.b, customCols::bg.a);
 }
@@ -64,28 +59,28 @@ StageID MainLevel::handle_input(double, double dt,
     if (key_state[KeyFlag::K_ESCAPE])
         return StageID::TITLE_SCREEN;
 
-    if (player && player->isControllable()) {
+    if (player.isControllable()) {
         if (key_state[KeyFlag::K_UP]) {
-            player->engine.on();
+            player.engine.on();
         }
         else if (!key_state[KeyFlag::K_UP]) {
-            player->engine.off();
+            player.engine.off();
         }
         if (key_state[KeyFlag::K_LEFT]) {
-            player->engine.turnLeft(dt);
+            player.engine.turnLeft(dt);
         }
         if (key_state[KeyFlag::K_RIGHT]) {
-            player->engine.turnRight(dt);
+            player.engine.turnRight(dt);
         }
         if (key_state[KeyFlag::K_SPACE]) {
-            if (!player->gun.fired)
-                player->gun.fire(gameWorld, physicsManager);
+            if (!player.gun.fired)
+                player.gun.fire(physicsManager);
         }
         if (!key_state[KeyFlag::K_SPACE]) {
-            player->gun.fired = false;
+            player.gun.fired = false;
         }
         if (key_state[KeyFlag::K_LSHIFT]) {
-            player->hyperdrive.warp();
+            player.hyperdrive.warp();
         }
     }
     return StageID::PLAYING;
@@ -119,32 +114,28 @@ StageID MainLevel::update(double t, double dt)
                 ent->kill_it();
         }
         levelElapsedTime = 0.0;
-        physicsManager.make_asteroids(gameWorld, numOfAsteroids++,
-                                      asteroidScale,
-                                      true, rng, player);
+        physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
     }
 
     if (asteroidsRemain && !enemiesRemain && levelElapsedTime >= enemyTime) {
         levelElapsedTime = 0.0;
-        physicsManager.make_enemy(gameWorld, rng, player);
+        physicsManager.make_enemy();
     }
 
-    for (auto& physComp : physicsManager.physMan)
-        physComp->update(dt);
+    for (auto& physEnt : physicsManager.physEntities)
+        physEnt->physicsComponent.update(dt);
 
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
 
     physicsManager.checkBulletsHit();
-    physicsManager.checkPlayerHit(player);
-    if (player)
-        if (player->lives() != scoreManager.lives)
-            scoreManager.update_lives(-1);
-    bool playerWasKilled{physicsManager.wasPlayerKilled(player)};
-    physicsManager.clean_up(gameWorld, scoreManager, rng);
+    physicsManager.checkPlayerHit();
+    if (player.lives() != scoreManager.lives)
+        scoreManager.update_lives(-1);
+    bool playerWasKilled{player.lives() == 0};
+    physicsManager.clean_up(scoreManager);
     scoreManager.refresh();
     if (playerWasKilled) {
-        player = nullptr;
         return StageID::HIGH_SCORES;
     }
 
@@ -155,8 +146,7 @@ void MainLevel::render(double, double)
 {
     SDL_RenderClear(renderer());
     for (auto& physEntity : physicsManager.physEntities){
-        if (physEntity)
-            physEntity->render(renderer());
+        physEntity->render(renderer());
     }
     for (auto& textObject : scoreManager.textObjects) {
         textObject.render(renderer());

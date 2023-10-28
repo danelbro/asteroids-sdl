@@ -15,8 +15,8 @@ class PhysicsComponent;
 class Bullet : public PhysicsEntity {
 public:
     Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-        SdlColor color, double scale, PhysicsComponent* new_physicsComponent,
-        double lifespan);
+           SdlColor color, double scale, double mass, double lifespan,
+           double angle, double power);
 
     void update(double t, double dt) override;
 

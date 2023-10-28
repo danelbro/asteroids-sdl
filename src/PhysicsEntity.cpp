@@ -14,9 +14,9 @@
 
 PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld,
     Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
-    PhysicsComponent* new_physicsComponent)
+    double mass)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },
-    physicsComponent{ new_physicsComponent }, wayward{ true },
+      physicsComponent{ mass, *this }, wayward{ true },
       m_transShape{}, m_fillShape{}, m_isVisible{ true }
 {}
 
@@ -25,9 +25,8 @@ void PhysicsEntity::update_shapes()
     m_transShape.clear();
 
     for (auto p : m_shape)
-        if (physicsComponent)
-            m_transShape.push_back(
-                p.rotate_deg(physicsComponent->angle()) * m_scale);
+        m_transShape.push_back(
+            p.rotate_deg(physicsComponent.angle()) * m_scale);
 
     m_fillShape = m_transShape;
     for (auto& p : m_fillShape) {

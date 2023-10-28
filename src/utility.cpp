@@ -100,9 +100,12 @@ namespace utl {
 #ifdef _DEBUG
         errorLogger << "creating a font\n";
 #endif
-        return std::unique_ptr<TTF_Font, sdl_deleter>(
-            TTF_OpenFont(path.c_str(), font_size),
-            sdl_deleter());
+        std::unique_ptr<TTF_Font, sdl_deleter> font{
+            TTF_OpenFont(path.c_str(), font_size), sdl_deleter() };
+
+        if (!font) throw(utl::SdlException{ "Failed to make font! TTF_Error: " });
+
+        return font;
     }
 
 

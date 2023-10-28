@@ -13,14 +13,11 @@
 
 Asteroid::Asteroid(GameWorld& new_gameWorld, Vec2d pos,
     std::vector<Vec2d> shape, SdlColor color, double scale,
-    PhysicsComponent *new_physicsComponent, double impulse, double angle,
-    double new_radius)
-    : PhysicsEntity(EntityFlag::ASTEROID, new_gameWorld, pos, shape,
-        color, scale, new_physicsComponent),
-    radius{ new_radius }
+    double mass, double impulse, double angle, double new_radius)
+    : PhysicsEntity{ EntityFlag::ASTEROID, new_gameWorld, pos, shape,
+        color, scale, mass }, radius{ new_radius }
 {
-    physicsComponent->setOwner(this);
-    physicsComponent->setFrameImpulse(impulse / scale);
-    physicsComponent->setAngle(angle);
+    physicsComponent.setFrameImpulse(impulse / scale);
+    physicsComponent.setAngle(angle);
     // fill = true;
 }

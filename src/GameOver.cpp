@@ -1,6 +1,7 @@
 #include "../inc/GameOver.hpp"
 
 #include <array>
+#include <memory>
 #include <random>
 #include <string>
 
@@ -19,26 +20,27 @@ static constexpr int titleFont_size{ 72 };
 static constexpr int scoreFont_size{ 48 };
 
 GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
-             std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
-             std::vector<std::unique_ptr<PhysicsComponent>>& physComs,
+                   std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
              int score)
     : Stage{ screen, windowID, rend, StageID::HIGH_SCORES },
       m_gameWorld{ screen },
       m_titleFont{ utl::createFont(fontPath, titleFont_size) },
       m_scoreFont{ utl::createFont(fontPath, scoreFont_size) },
-      m_physMan{ }, m_scoreMan{ }, m_score{ score },
+      m_rng{ utl::makeSeededRNG() },
+      m_physMan{ m_gameWorld, m_rng }, m_scoreMan{ }, m_score{ score },
       m_GameOverText{ m_gameWorld, {}, m_titleFont.get(),
           customCols::text_col, rend },
       m_ScoreText{ m_gameWorld, {}, m_scoreFont.get(),
-    customCols::text_col, rend }, m_rng{ utl::makeSeededRNG() }
+    customCols::text_col, rend }
 {
     constexpr double padding{ 250.0 };
 
-    for (auto& pC : physComs) {
-        m_physMan.physMan.push_back(std::move(pC));
-    }
+    // remove Player from m_physMan
+    m_physMan.physEntities.erase(m_physMan.physEntities.begin());
+
     for (auto& pE : physEntities) {
-        m_physMan.physEntities.push_back(std::move(pE));
+        if (pE->type != EntityFlag::PLAYER)
+            m_physMan.physEntities.push_back(std::move(pE));
     }
 
     m_GameOverText.updateText("Game Over", renderer());
@@ -67,15 +69,15 @@ StageID GameOver::handle_input(double, double,
 
 StageID GameOver::update(double t, double dt)
 {
-    for (auto& physComp : m_physMan.physMan) {
-        physComp->update(dt);
+    for (auto& physComp : m_physMan.physEntities) {
+        physComp->physicsComponent.update(dt);
     }
     for (auto& physEnt : m_physMan.physEntities) {
         physEnt->update(t, dt);
     }
 
     m_physMan.checkBulletsHit();
-    m_physMan.clean_up(m_gameWorld, m_scoreMan, m_rng);
+    m_physMan.clean_up(m_scoreMan);
 
     return StageID::HIGH_SCORES;
 }
@@ -84,8 +86,7 @@ void GameOver::render(double, double)
 {
     SDL_RenderClear(renderer());
     for (auto& physEntity : m_physMan.physEntities){
-        if (physEntity)
-            physEntity->render(renderer());
+        physEntity->render(renderer());
     }
     m_GameOverText.render(renderer());
     m_ScoreText.render(renderer());

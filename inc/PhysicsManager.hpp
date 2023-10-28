@@ -22,29 +22,30 @@
 
 class PhysicsManager {
 public:
-	PhysicsManager();
+	PhysicsManager(GameWorld& gameWorld, std::mt19937& rng);
 
-	void make_bullet(GameWorld& new_GameWorld, Vec2d origin,
-		double power, double angle);
+	void make_bullet(Vec2d origin, double power, double angle);
 
-	void make_asteroid(GameWorld& new_GameWorld, double scale,
-		Vec2d pos, std::mt19937& rng);
+	void make_asteroid(double scale, Vec2d pos);
 
-	void make_asteroids(GameWorld& new_GameWorld,
-		int num, double scale, bool isNew, std::mt19937& rng,
-		Player* player = nullptr, Vec2d pos = { 0.0, 0.0 });
+	void make_asteroids(int num, double scale, bool isNew,
+                        Vec2d pos = { 0.0, 0.0 });
 
-	void make_enemy(GameWorld& new_GameWorld, std::mt19937& rng,
-		Player* player);
+	void make_enemy();
 
-	Player* make_player(GameWorld& new_GameWorld, std::mt19937& rng);
+	Player& make_player();
 
-	void clean_up(GameWorld& gw, ScoreManager& scoreMan, std::mt19937& rng);
+	void clean_up(ScoreManager& scoreMan);
 
-	bool wasPlayerKilled(Player* player);
-    void checkPlayerHit(Player* player);
+	bool wasPlayerKilled();
+    void checkPlayerHit();
 	void checkBulletsHit();
 
+    Player& player() { return m_player; }
+
 	std::vector<std::unique_ptr<PhysicsEntity>> physEntities;
-	std::vector<std::unique_ptr<PhysicsComponent>> physMan;
+private:
+    GameWorld& m_gameWorld;
+    std::mt19937& m_rng;
+    Player& m_player;
 };

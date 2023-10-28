@@ -21,9 +21,9 @@ void Hyperdrive::warp()
     m_owner.setVisible(false);
     m_owner.setControllable(false);
 
-    m_owner.physicsComponent->setAcceleration({0, 0});
-    m_owner.physicsComponent->setFrameImpulse(0);
-    m_owner.physicsComponent->setVelocity({0, 0});
+    m_owner.physicsComponent.setAcceleration({0, 0});
+    m_owner.physicsComponent.setFrameImpulse(0);
+    m_owner.physicsComponent.setVelocity({0, 0});
 
     m_owner.pos() = utl::randomPos(m_rng,
                                    m_owner.gameWorld.screen.w,

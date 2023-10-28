@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <random>
+#include <type_traits>
 #include <vector>
 
 #include "../inc/Asteroid.hpp"
@@ -17,12 +18,12 @@
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
 
-PhysicsManager::PhysicsManager()
-	: physEntities{ }, physMan{ }
+PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
+	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },
+      m_player{ make_player() }
 {}
 
-void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
-                                 double power, double angle)
+void PhysicsManager::make_bullet(Vec2d origin, double power, double angle)
 {
 	constexpr double mass{ 0.003 };
 	constexpr double scale{ 1.0 };
@@ -30,35 +31,31 @@ void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
 
 	const std::vector<Vec2d> shape{ {1, -3}, {-1, -3}, {-2, 3}, {2, 3} };
 
-	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
-	physMan.back()->setAngle(angle);
-	physMan.back()->setFrameImpulse(power);
-
-	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin,
-		shape, customCols::bullet_col, scale, physMan.back().get(),
-		lifespan));
+	physEntities.push_back(std::make_unique<Bullet>(m_gameWorld, origin, shape,
+                                                    customCols::bullet_col,
+                                                    scale, mass, lifespan,
+                                                    angle, power));
 }
 
 
-void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
-	Vec2d pos, std::mt19937& rng)
+void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 {
 	const double mass{ 1.0 };
 
 	constexpr double radiusMin = 20.0;
 	constexpr double radiusMax = 25.0;
 	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
-	double radius{ radiusDist(rng) };
+	double radius{ radiusDist(m_rng) };
 
 	constexpr double impulseMin{ 750'000.0 };
 	constexpr double impulseMax{ 1'500'000.0 };
 	std::uniform_real_distribution<double> impulseDist(
 		impulseMin, impulseMax
 	);
-	double impulse{ impulseDist(rng) };
+	double impulse{ impulseDist(m_rng) };
 
 	std::uniform_real_distribution<double> angleDist(0.0, 360.0);
-	double angle{ angleDist(rng) };
+	double angle{ angleDist(m_rng) };
 
 	std::vector<Vec2d> shape{ };
 	int vertexes{ 13 };
@@ -69,52 +66,52 @@ void PhysicsManager::make_asteroid(GameWorld& new_GameWorld, double scale,
 	for (int i{ 0 }; i < vertexes; ++i)
 	{
 		double cragDepth{ };
-		int coin{ coinFlip(rng) };
+		int coin{ coinFlip(m_rng) };
 		if (coin == 2)
-			cragDepth = cragDistHigh(rng);
+			cragDepth = cragDistHigh(m_rng);
 		else
-			cragDepth = cragDistLow(rng);
+			cragDepth = cragDistLow(m_rng);
 		shape.push_back(Vec2d{std::sin(sliceAngle * i) * (radius + cragDepth),
 			-std::cos(sliceAngle * i) * (radius + cragDepth)});
 	}
 
-	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
-
-	physEntities.push_back(std::make_unique<Asteroid>(new_GameWorld, pos,
-		shape, customCols::asteroid_col, scale, physMan.back().get(), impulse,
-		angle, radius));
+	physEntities.push_back(std::make_unique<Asteroid>(m_gameWorld, pos,
+                                                      shape,
+                                                      customCols::asteroid_col,
+                                                      scale, mass, impulse,
+                                                      angle, radius));
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
-	Entity* distant, double distance, int w, int h)
+	Entity& distant, double distance, int w, int h)
 {
 	Vec2d new_pos{ };
 	bool isTooClose{ true };
 	do {
 		new_pos = utl::randomPos(rng, w, h);
 
-		Vec2d distanceToPlayer{ new_pos - distant->pos() };
+		Vec2d distanceToPlayer{ new_pos - distant.pos() };
 		if (distanceToPlayer.magnitude() > distance)
 			isTooClose = false;
 	} while (isTooClose);
 	return new_pos;
 }
 
-void PhysicsManager::make_asteroids(GameWorld& new_GameWorld, int num,
-	double scale, bool isNew, std::mt19937& rng, Player* player, Vec2d pos)
+void PhysicsManager::make_asteroids(int num, double scale, bool isNew,
+                                    Vec2d pos)
 {
 	constexpr double asteroidDistance{ 50.0 };
 
 	for (int i{ num }; i > 0; i--)
 	{
 		if (isNew) {
-			Vec2d new_pos{ findRandomDistantPos(rng, player,
-				asteroidDistance * scale, new_GameWorld.screen.w,
-				new_GameWorld.screen.h) };
-			make_asteroid(new_GameWorld, scale, new_pos, rng);
+			Vec2d new_pos{ findRandomDistantPos(m_rng, m_player,
+				asteroidDistance * scale, m_gameWorld.screen.w,
+				m_gameWorld.screen.h) };
+			make_asteroid(scale, new_pos);
 		}
 		else {
-			make_asteroid(new_GameWorld, scale, pos, rng);
+			make_asteroid(scale, pos);
 		}
 	}
 }
@@ -143,8 +140,7 @@ static const std::vector<Vec2d> enemyUFO
 	{ -20, -20 }
 };
 
-void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
-	Player* player)
+void PhysicsManager::make_enemy()
 {
 	const std::vector<Vec2d> shape{ enemyPointy };
 
@@ -156,14 +152,16 @@ void PhysicsManager::make_enemy(GameWorld& gameWorld, std::mt19937& rng,
 
 	constexpr double enemyDistance{ 100.0 };
 
-	Vec2d new_pos{ findRandomDistantPos(rng, player, enemyDistance * scale,
-		gameWorld.screen.w, gameWorld.screen.h) };
+	Vec2d new_pos{ findRandomDistantPos(m_rng, m_player,
+                                        enemyDistance * scale,
+                                        m_gameWorld.screen.w,
+                                        m_gameWorld.screen.h) };
 
-	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
-
-	physEntities.push_back(std::make_unique<Enemy>(gameWorld, new_pos, shape,
-		customCols::enemy_col, scale, power, turnSpeed, shotPower,
-		physMan.back().get()));
+	physEntities.push_back(std::make_unique<Enemy>( m_gameWorld, new_pos,
+                                                    shape,
+                                                    customCols::enemy_col,
+                                                    scale, power, turnSpeed,
+                                                    shotPower, mass ));
 }
 
 static const std::vector<Vec2d> playerShape
@@ -173,9 +171,9 @@ static const std::vector<Vec2d> playerShape
 	{-20, 30}
 };
 
-Player* PhysicsManager::make_player(GameWorld& gameWorld, std::mt19937& rng)
+Player& PhysicsManager::make_player()
 {
-	const Vec2d pos{ gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
+	const Vec2d pos{ m_gameWorld.screen.w / 2.0, m_gameWorld.screen.h / 2.0 };
 	const std::vector<Vec2d> shape{ playerShape };
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
@@ -187,51 +185,47 @@ Player* PhysicsManager::make_player(GameWorld& gameWorld, std::mt19937& rng)
     constexpr double respawnLength{ 2.0 };
     constexpr double flashLength{ 0.2 };
 
-	physMan.push_back(std::make_unique<PhysicsComponent>(mass, nullptr));
+	physEntities.push_back(std::make_unique<Player>(m_gameWorld, pos, shape,
+                                                    customCols::player_col,
+                                                    scale, power, turnSpeed,
+                                                    shotPower, mass, m_rng,
+                                                    warpLength, lives,
+                                                    respawnLength,
+                                                    flashLength));
 
-	auto player(std::make_unique<Player>( gameWorld, pos, shape,
-		customCols::player_col, scale, power, turnSpeed, shotPower,
-        physMan.back().get(), rng, warpLength,
-        lives, respawnLength, flashLength));
-
-	Player* plPtr = player.get();
-	physEntities.push_back(std::move(player));
-
-	return plPtr;
+	return static_cast<Player&>(*physEntities.back());
 }
 
-void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
-	std::mt19937& rng)
+void PhysicsManager::clean_up(ScoreManager& scoreMan)
 {
-	constexpr int BASE_AST_SCORE = 300;
-	constexpr int BASE_ENEMY_SCORE = 500;
-	constexpr int PENALTY = -5;
+	constexpr int baseAsteroidScore = 300;
+	constexpr int baseEnemyScore = 500;
+	constexpr int penalty = -5;
+    constexpr int newAsteroids = 2;
 
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
-		PhysicsEntity* phys = physEntities[i].get();
-		if (phys->toBeKilled()) {
-			switch (phys->type)
-	{
+		PhysicsEntity& phys = *physEntities[i];
+		if (phys.toBeKilled()) {
+			switch (phys.type)
+            {
 			case EntityFlag::ASTEROID:
 				scoreMan.update_score(
-					static_cast<int>(BASE_AST_SCORE / phys->scale()));
-				if (phys->scale() > 1.0) {
-					make_asteroids(gw, 2, phys->scale() - 1.0, false, rng,
-						nullptr, phys->pos());
-				}
+					static_cast<int>(baseAsteroidScore / phys.scale()));
+				if (phys.scale() > 1.0)
+					make_asteroids(newAsteroids, phys.scale() - 1.0,
+                                   false, phys.pos());
 				break;
 			case EntityFlag::ENEMY:
-				scoreMan.update_score(BASE_ENEMY_SCORE);
+				scoreMan.update_score(baseEnemyScore);
 				break;
 			case EntityFlag::BULLET:
-				if (phys->wayward)
-					scoreMan.update_score(PENALTY);
+				if (phys.wayward)
+					scoreMan.update_score(penalty);
 				break;
 			default:
 				break;
 			}
 
-			physMan.erase(physMan.begin() + static_cast<long>(i));
 			physEntities.erase(physEntities.begin() + static_cast<long>(i));
 		}
 	}
@@ -239,22 +233,22 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 
 // checks whether the player got hit and whether they're out of lives.
 // return true if out of lives
-void PhysicsManager::checkPlayerHit(Player* plr)
+void PhysicsManager::checkPlayerHit()
 {
     for (auto& ent : physEntities) {
         if (ent->type == EntityFlag::ASTEROID
             || ent->type == EntityFlag::ENEMY
             || ent->type == EntityFlag::ENEMY_BULLET) {
-            if (utl::PointInPolygon(plr->pos(), ent->fillShape())) {
-                plr->kill_it();
+            if (utl::PointInPolygon(m_player.pos(), ent->fillShape())) {
+                m_player.kill_it();
             }
         }
     }
 }
 
-bool PhysicsManager::wasPlayerKilled(Player* plr)
+bool PhysicsManager::wasPlayerKilled()
 {
-    if (plr->toBeKilled()) return true;
+    if (m_player.toBeKilled()) return true;
 
     return false;
 }

@@ -113,7 +113,6 @@ void StageManager::handle_stage_transition(Stage* current_stage)
         add_stage(next,
                   std::make_unique<GameOver>(screen, windowID, renderer,
                                              mlptr->physMan().physEntities,
-                                             mlptr->physMan().physMan,
                                              mlptr->scoreMan().score));
         break;
     }

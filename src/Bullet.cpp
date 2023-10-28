@@ -12,12 +12,13 @@
 #include "../inc/Vec2d.hpp"
 
 Bullet::Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-	SdlColor color, double scale,
-	PhysicsComponent* new_physicsComponent, double lifespan)
+               SdlColor color, double scale, double mass, double lifespan,
+               double angle, double power)
 	: PhysicsEntity{ EntityFlag::BULLET, new_gameWorld, pos, shape, color,
-                     scale, new_physicsComponent }, m_lifespan{ lifespan }
+                     scale, mass }, m_lifespan{ lifespan }
 {
-    physicsComponent->setOwner(this);
+    physicsComponent.setAngle(angle);
+    physicsComponent.setFrameImpulse(power);
 	fill = true;
 }
 
@@ -28,11 +29,5 @@ void Bullet::update(double, double dt)
 	m_alive += dt;
 
 	if (m_alive >= m_lifespan)
-	{
 		kill_me = true;
-		if (physicsComponent) {
-			physicsComponent->setOwner(nullptr);
-			physicsComponent = nullptr;
-		}
-	}
 }

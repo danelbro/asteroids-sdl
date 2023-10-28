@@ -15,19 +15,17 @@
 Player::Player(GameWorld& new_gameWorld, Vec2d pos,
                std::vector<Vec2d> shape, SdlColor color, double scale,
                double power, double turnSpeed,
-               double shotPower,
-               PhysicsComponent* new_physicsComponent, std::mt19937& rng,
+               double shotPower, double mass, std::mt19937& rng,
                double warpLength, int lives, double respawnLength,
                double flashLength)
     : Ship{EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
-    power, turnSpeed, shotPower, new_physicsComponent},
+    power, turnSpeed, shotPower, mass},
       hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },
       m_isVulnerable{ true }, m_lives{ lives },
       m_respawnLength{ respawnLength }, m_respawnTimer{ 0.0 },
       m_isRespawning{ false }, m_flashTimer{ 0.0 },
       m_flashLength{ flashLength }
 {
-    physicsComponent->setOwner(this);
     // fill = true;
 }
 
@@ -44,7 +42,6 @@ void Player::kill_it()
     if (!m_isVulnerable) return;
 
     if (--m_lives > 0) respawn();
-    else kill_me = true;
 }
 
 void Player::respawn()
@@ -56,9 +53,9 @@ void Player::respawn()
     m_isRespawning = true;
     m_isVulnerable = false;
     m_isVisible = false;
-    physicsComponent->setAcceleration({0, 0});
-    physicsComponent->setFrameImpulse(0);
-    physicsComponent->setVelocity({0, 0});
+    physicsComponent.setAcceleration({0, 0});
+    physicsComponent.setFrameImpulse(0);
+    physicsComponent.setVelocity({0, 0});
     m_pos = { gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
 }
 

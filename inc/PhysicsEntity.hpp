@@ -6,11 +6,10 @@
 
 #include "Entity.hpp"
 #include "FlagEnums.hpp"
+#include "PhysicsComponent.hpp"
 #include "Vec2d.hpp"
 
 struct GameWorld;
-
-class PhysicsComponent;
 
 class PhysicsEntity : public Entity
 {
@@ -28,14 +27,15 @@ public:
 
     void setVisible(bool vis) { m_isVisible = vis; }
 
-	PhysicsComponent* physicsComponent;
+	PhysicsComponent physicsComponent;
 	bool wayward; // for dealing with wayward bullets - find a better
                   // way to do this?
 
 protected:
     PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
                   std::vector<Vec2d> shape, SdlColor color, double scale,
-                  PhysicsComponent* new_physicsComponent);
+                  double mass);
+
 	std::vector<Vec2d> m_transShape;
 	std::vector<Vec2d> m_fillShape;
     bool m_isVisible;
