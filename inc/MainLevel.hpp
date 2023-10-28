@@ -28,6 +28,9 @@ public:
         std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
     StageID update(double t, double dt) override;
     void render(double t, double dt) override;
+
+    PhysicsManager& physMan() { return physicsManager; }
+    ScoreManager& scoreMan() { return scoreManager; }
 private:
     void init();
 

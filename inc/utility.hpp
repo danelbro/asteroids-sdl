@@ -89,4 +89,6 @@ namespace utl {
        int font_size);
 
     Vec2d randomPos(std::mt19937& rng, int w, int h);
+
+    std::mt19937 makeSeededRNG();
 }

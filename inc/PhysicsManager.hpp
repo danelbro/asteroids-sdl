@@ -25,7 +25,7 @@ public:
 	PhysicsManager();
 
 	void make_bullet(GameWorld& new_GameWorld, Vec2d origin,
-		double power, double angle, Ship& new_owner);
+		double power, double angle);
 
 	void make_asteroid(GameWorld& new_GameWorld, double scale,
 		Vec2d pos, std::mt19937& rng);

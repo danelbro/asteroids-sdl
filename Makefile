@@ -7,7 +7,7 @@ SDL_CFLAGS = $(shell sdl2-config --cflags)
 CFLAGS = $(OPT) -Wall -Wextra -Wsign-conversion -pedantic -std=c++14 -Weffc++
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = -lSDL2_ttf
-OBJ = obj/AIComponent.o obj/Asteroid.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/Vec2d.o obj/VectorDraw.o
+OBJ = obj/AIComponent.o obj/Asteroid.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/GameLoop.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/Vec2d.o obj/VectorDraw.o
 
 all: asteroids
 asteroids: $(OBJ)
@@ -24,6 +24,8 @@ obj/Enemy.o: src/Enemy.cpp inc/Enemy.hpp inc/AIComponent.hpp inc/Colors.hpp inc/
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Enemy.o -c src/Enemy.cpp
 obj/Engine.o: src/Engine.cpp inc/Engine.hpp inc/Ship.hpp inc/PhysicsComponent.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/Engine.o -c src/Engine.cpp
+obj/GameOver.o: src/GameOver.cpp inc/GameOver.hpp inc/FlagEnums.hpp inc/GameLoop.hpp inc/GameWorld.hpp inc/PhysicsManager.hpp inc/Stage.hpp inc/TextObject.hpp inc/utility.hpp
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/GameOver.o -c src/GameOver.cpp
 obj/GameLoop.o: src/GameLoop.cpp inc/GameLoop.hpp inc/FlagEnums.hpp inc/GameWorld.hpp
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) -o obj/GameLoop.o -c src/GameLoop.cpp
 obj/Gun.o: src/Gun.cpp inc/Gun.hpp inc/GameWorld.hpp inc/PhysicsComponent.hpp inc/PhysicsManager.hpp inc/Ship.hpp inc/Vec2d.hpp

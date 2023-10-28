@@ -22,7 +22,7 @@ PhysicsManager::PhysicsManager()
 {}
 
 void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
-	double power, double angle, Ship& new_owner)
+                                 double power, double angle)
 {
 	constexpr double mass{ 0.003 };
 	constexpr double scale{ 1.0 };
@@ -36,7 +36,7 @@ void PhysicsManager::make_bullet(GameWorld& new_GameWorld, Vec2d origin,
 
 	physEntities.push_back(std::make_unique<Bullet>(new_GameWorld, origin,
 		shape, customCols::bullet_col, scale, physMan.back().get(),
-		new_owner, lifespan));
+		lifespan));
 }
 
 
@@ -209,10 +209,9 @@ void PhysicsManager::clean_up(GameWorld& gw, ScoreManager& scoreMan,
 
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity* phys = physEntities[i].get();
-		if (phys->toBeKilled())
-		{
+		if (phys->toBeKilled()) {
 			switch (phys->type)
-			{
+	{
 			case EntityFlag::ASTEROID:
 				scoreMan.update_score(
 					static_cast<int>(BASE_AST_SCORE / phys->scale()));

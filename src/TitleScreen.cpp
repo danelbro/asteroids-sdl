@@ -39,7 +39,7 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
         instructions[i].updateText(insText[i], rend);
         double xpos{ (gw.screen.w / 2.0) - (instructions[i].size().x / 2.0) };
         double ypos{ gw.screen.h - padding - (instructions[i].size().y
-                                              * (insText.size()-i)) };
+                                              * (insText.size() - i)) };
         instructions[i].setPos({ xpos, ypos });
     }
 
@@ -47,12 +47,13 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
 }
 
 TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
-    : Stage{ screen, windowID, renderer }, gameWorld{ screen, 0.0 },
-    title_font{ utl::createFont(font_path, title_font_size)},
-    instruction_font{ utl::createFont(font_path, instruction_font_size)},
-    title{ gameWorld, {}, title_font.get(), customCols::text_col,
+    : Stage{ screen, windowID, renderer, StageID::TITLE_SCREEN },
+      gameWorld{ screen, 0.0 },
+      title_font{ utl::createFont(font_path, title_font_size)},
+      instruction_font{ utl::createFont(font_path, instruction_font_size)},
+      title{ gameWorld, {}, title_font.get(), customCols::text_col,
         renderer },
-    instructions{ makeInstructions(gameWorld, instruction_font.get(),
+      instructions{ makeInstructions(gameWorld, instruction_font.get(),
                                    customCols::text_col, renderer) }
 {
     const std::string titleText{ "Asteroids" };

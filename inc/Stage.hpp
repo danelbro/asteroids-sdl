@@ -23,12 +23,15 @@ public:
     Box screen() const { return m_screen; }
     unsigned windowID() const { return m_windowID; }
     SDL_Renderer* renderer() const { return m_rend; }
+    StageID ID() const { return m_ID; }
 protected:
-    Stage(Box screen, unsigned windowID, SDL_Renderer* renderer)
-        : m_screen{ screen }, m_windowID{ windowID }, m_rend{renderer}
+    Stage(Box screen, unsigned windowID, SDL_Renderer* renderer, StageID id)
+        : m_screen{ screen }, m_windowID{ windowID }, m_rend{renderer},
+          m_ID{ id }
         {}
 private:
     Box m_screen;
     unsigned m_windowID;
     SDL_Renderer* m_rend;
+    StageID m_ID;
 };

@@ -2,8 +2,10 @@
 
 #include <chrono>
 #include <memory>
+#include <stdexcept>
 
 #include "../inc/FlagEnums.hpp"
+#include "../inc/GameOver.hpp"
 #include "../inc/MainLevel.hpp"
 #include "../inc/Stage.hpp"
 #include "../inc/TitleScreen.hpp"
@@ -87,28 +89,40 @@ void StageManager::handle_stage_transition(Stage* current_stage)
     auto windowID{ current_stage->windowID() };
     auto renderer{ current_stage->renderer() };
 
-    stages[current].reset(nullptr);
     keyState.fill(false);
 
     switch (next) {
     case StageID::TITLE_SCREEN:
         add_stage(next,
             std::make_unique<TitleScreen>(screen, windowID, renderer));
-        return;
+        break;
     case StageID::PLAYING:
         add_stage(next,
             std::make_unique<MainLevel>(screen, windowID, renderer));
-        return;
+        break;
     case StageID::HIGH_SCORES:
-        // remove later
-        next = StageID::TITLE_SCREEN;
+    {
+        MainLevel* mlptr{ nullptr };
+        if (current_stage->ID() == StageID::PLAYING)
+            mlptr = static_cast<MainLevel*>(current_stage);
+
+        if (!mlptr)
+            throw std::runtime_error(
+                "Trying to enter game over screen without playing");
+
         add_stage(next,
-            std::make_unique<TitleScreen>(screen, windowID, renderer));;
-        return;
+                  std::make_unique<GameOver>(screen, windowID, renderer,
+                                             mlptr->physMan().physEntities,
+                                             mlptr->physMan().physMan,
+                                             mlptr->scoreMan().score));
+        break;
+    }
     case StageID::QUIT:
         next = StageID::QUIT;
-        return;
+        break;
     default:
         throw std::runtime_error("bad stage");
     }
+
+    stages[current].reset(nullptr);
 }

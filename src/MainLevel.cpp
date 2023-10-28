@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <array>
-#include <chrono>
 #include <cstddef>
 #include <memory>
 #include <random>
@@ -32,21 +31,9 @@ static constexpr int font_size{ 28 };
 static const std::string font_path{ "data/Play-Regular.ttf" };
 static constexpr double fluidDensity{ 0.1 };
 
-static std::mt19937 makeSeededRNG()
-{
-    std::random_device randDev;
-    auto rng = std::mt19937{ randDev() };
-    std::mt19937::result_type seed_val{
-        static_cast<unsigned long>(std::time(nullptr))
-    };
-    rng.seed(seed_val);
-
-    return rng;
-}
-
 MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
-    : Stage{new_screen, windowID, new_renderer},
+    : Stage{ new_screen, windowID, new_renderer, StageID::PLAYING },
       gameWorld{ new_screen, fluidDensity },
       font{ utl::createFont(font_path, font_size) },
       physicsManager{},
@@ -98,7 +85,7 @@ StageID MainLevel::handle_input(double, double dt,
         }
         if (key_state[KeyFlag::K_SPACE]) {
             if (!player->gun.fired)
-                player->gun.fire(gameWorld, physicsManager, *player);
+                player->gun.fire(gameWorld, physicsManager);
         }
         if (!key_state[KeyFlag::K_SPACE]) {
             player->gun.fired = false;
@@ -175,8 +162,7 @@ void MainLevel::render(double, double)
             physEntity->render(renderer());
     }
     for (auto& textObject : scoreManager.textObjects) {
-        if (textObject)
-            textObject->render(renderer());
+        textObject.render(renderer());
     }
 
     SDL_RenderPresent(renderer());
