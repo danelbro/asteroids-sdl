@@ -37,9 +37,9 @@ private:
     GameWorld gameWorld;
     std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
     PhysicsManager physicsManager;
-    ScoreManager scoreManager;
     std::mt19937 rng;
     Player* player;
+    ScoreManager scoreManager;
     bool asteroidsRemain;
     int numOfAsteroids;
     bool enemiesRemain;

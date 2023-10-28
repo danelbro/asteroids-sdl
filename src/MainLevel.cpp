@@ -37,22 +37,16 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID,
       gameWorld{ new_screen, fluidDensity },
       font{ utl::createFont(font_path, font_size) },
       physicsManager{},
+      rng{ utl::makeSeededRNG() },
+      player{ physicsManager.make_player(gameWorld, rng) },
       scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
-                  font.get(), new_renderer},
-      rng{ makeSeededRNG() },
-      player{ nullptr }, asteroidsRemain{ false },
+                    font.get(), new_renderer, player->lives() },
+      asteroidsRemain{ false },
       numOfAsteroids{ startingAsteroids }, enemiesRemain{ false },
       levelElapsedTime{ 0.0 }
 {
-    init();
-}
-
-void MainLevel::init()
-{
     if (!font) throw(utl::SdlException{ "Failed to make font! TTF_Error: " });
 
-    // Make Player
-    player = physicsManager.make_player(gameWorld, rng);
     if (!player)
         throw std::runtime_error("failed to make player");
 
@@ -143,6 +137,9 @@ StageID MainLevel::update(double t, double dt)
 
     physicsManager.checkBulletsHit();
     physicsManager.checkPlayerHit(player);
+    if (player)
+        if (player->lives() != scoreManager.lives)
+            scoreManager.update_lives(-1);
     bool playerWasKilled{physicsManager.wasPlayerKilled(player)};
     physicsManager.clean_up(gameWorld, scoreManager, rng);
     scoreManager.refresh();
