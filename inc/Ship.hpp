@@ -23,5 +23,6 @@ public:
 protected:
     Ship(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
          std::vector<Vec2d> shape, SdlColor color, double scale,
-         double power, double turnSpeed, double shotPower, double mass);
+         double power, double turnSpeed, double shotPower, double mass,
+         double cooldown);
 };

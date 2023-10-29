@@ -24,7 +24,7 @@ public:
            std::vector<Vec2d> shape, SdlColor color, double scale,
            double power, double turnSpeed, double shotPower, double mass,
            std::mt19937& rng, double warpTimer, int lives,
-           double respawnLength, double flashLength);
+           double respawnLength, double flashLength, double cooldown);
 
     void update(double, double) override;
     void respawn();

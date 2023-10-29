@@ -73,11 +73,7 @@ StageID MainLevel::handle_input(double, double dt,
             player.engine.turnRight(dt);
         }
         if (key_state[KeyFlag::K_SPACE]) {
-            if (!player.gun.fired)
-                player.gun.fire(physicsManager);
-        }
-        if (!key_state[KeyFlag::K_SPACE]) {
-            player.gun.fired = false;
+            player.gun.fire(physicsManager);
         }
         if (key_state[KeyFlag::K_LSHIFT]) {
             player.hyperdrive.warp();

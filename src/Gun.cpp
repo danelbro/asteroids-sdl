@@ -8,10 +8,20 @@
 
 void Gun::fire(PhysicsManager& physMan)
 {
-    Vec2d origin{ owner.nose() };
-    double angle{ owner.physicsComponent.angle() };
+    if (!m_fired)
+        physMan.make_bullet(m_owner.nose(), m_shotPower,
+                            m_owner.physicsComponent.angle());
 
-    physMan.make_bullet(origin, m_shotPower, angle);
+    m_fired = true;
+}
 
-    fired = true;
+void Gun::check_cooldown(double dt)
+{
+    if (!m_fired) return;
+
+    m_cooldownTimer += dt;
+    if (m_cooldownTimer < m_cooldown) return;
+
+    m_fired = false;
+    m_cooldownTimer = 0.0;
 }

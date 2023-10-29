@@ -13,8 +13,8 @@
 class Enemy : public Ship {
 public:
     Enemy(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-        SdlColor colour, double scale, double power, double turnSpeed,
-        double shotPower, double mass);
+          SdlColor colour, double scale, double power, double turnSpeed,
+          double shotPower, double mass, double cooldown);
 
     void update(double t, double dt) override;
 

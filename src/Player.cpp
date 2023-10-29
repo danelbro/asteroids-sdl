@@ -17,9 +17,9 @@ Player::Player(GameWorld& new_gameWorld, Vec2d pos,
                double power, double turnSpeed,
                double shotPower, double mass, std::mt19937& rng,
                double warpLength, int lives, double respawnLength,
-               double flashLength)
+               double flashLength, double cooldown)
     : Ship{EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
-    power, turnSpeed, shotPower, mass},
+           power, turnSpeed, shotPower, mass, cooldown},
       hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },
       m_isVulnerable{ true }, m_lives{ lives },
       m_respawnLength{ respawnLength }, m_respawnTimer{ 0.0 },
@@ -31,6 +31,7 @@ Player::Player(GameWorld& new_gameWorld, Vec2d pos,
 
 void Player::update(double, double dt)
 {
+    gun.check_cooldown(dt);
     hyperdrive.check_warp(dt);
     check_flash(dt);
     check_respawn(dt);

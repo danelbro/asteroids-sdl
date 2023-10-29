@@ -152,8 +152,9 @@ void PhysicsManager::make_enemy()
 	constexpr double turnSpeed{ 300.0 };
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
+    constexpr double cooldown{ 1.0 };
 
-	constexpr double enemyDistance{ 100.0 };
+	constexpr double enemyDistance{ 75.0 };
 
 	Vec2d new_pos{ findRandomDistantPos(m_rng, m_player,
                                         enemyDistance * scale,
@@ -164,7 +165,8 @@ void PhysicsManager::make_enemy()
                                                     shape,
                                                     customCols::enemy_col,
                                                     scale, power, turnSpeed,
-                                                    shotPower, mass ));
+                                                    shotPower, mass,
+                                                    cooldown));
 }
 
 static const std::vector<Vec2d> playerShape
@@ -187,6 +189,7 @@ Player& PhysicsManager::make_player()
 	constexpr int lives{ 3 };
     constexpr double respawnLength{ 2.0 };
     constexpr double flashLength{ 0.2 };
+    constexpr double cooldown{ 0.375 };
 
 	physEntities.push_back(std::make_unique<Player>(m_gameWorld, pos, shape,
                                                     customCols::player_col,
@@ -194,7 +197,7 @@ Player& PhysicsManager::make_player()
                                                     shotPower, mass, m_rng,
                                                     warpLength, lives,
                                                     respawnLength,
-                                                    flashLength));
+                                                    flashLength, cooldown));
 
 	return static_cast<Player&>(*physEntities.back());
 }
