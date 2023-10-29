@@ -44,21 +44,24 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 
 	constexpr double radiusMin = 20.0;
 	constexpr double radiusMax = 25.0;
-	std::uniform_real_distribution<double> radiusDist(radiusMin, radiusMax);
+	std::uniform_real_distribution<double> radiusDist{ radiusMin, radiusMax };
 	double radius{ radiusDist(m_rng) };
 
 	constexpr double impulseMin{ 750'000.0 };
 	constexpr double impulseMax{ 1'500'000.0 };
-	std::uniform_real_distribution<double> impulseDist(
+	std::uniform_real_distribution<double> impulseDist{
 		impulseMin, impulseMax
-	);
+	};
 	double impulse{ impulseDist(m_rng) };
 
-	std::uniform_real_distribution<double> angleDist(0.0, 360.0);
+	std::uniform_real_distribution<double> angleDist{ 0.0, 360.0 };
 	double angle{ angleDist(m_rng) };
 
 	std::vector<Vec2d> shape{ };
-	int vertexes{ 13 };
+
+    std::uniform_int_distribution<int> vertexDist{ 10, 15 };
+	int vertexes{ vertexDist(m_rng) };
+
 	std::normal_distribution<double> cragDistLow(-5.0, 0.5);
 	std::normal_distribution<double> cragDistHigh(5.0, 0.5);
 	std::uniform_int_distribution<> coinFlip(1, 2);
@@ -100,7 +103,7 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 void PhysicsManager::make_asteroids(int num, double scale, bool isNew,
                                     Vec2d pos)
 {
-	constexpr double asteroidDistance{ 50.0 };
+	constexpr double asteroidDistance{ 25.0 };
 
 	for (int i{ num }; i > 0; i--)
 	{
