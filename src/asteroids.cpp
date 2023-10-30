@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include "../inc/AsteroidsApp.hpp"
 #include "../inc/Box.hpp"
 #include "../inc/Colors.hpp"
 #include "../inc/MainLevel.hpp"
@@ -15,34 +16,6 @@
 #include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
-
-void runApp() {
-    // Initalise window
-    std::string title = "Asteroids";
-    constexpr int screenWidth{ 960 };
-    constexpr int screenHeight{ 720 };
-    constexpr Box screen{ screenWidth, screenHeight };
-    constexpr auto windowFlags{ SDL_WindowFlags::SDL_WINDOW_RESIZABLE };
-    auto window{ utl::createWindow(title.c_str(),
-                                   SDL_WINDOWPOS_CENTERED,
-                                   SDL_WINDOWPOS_CENTERED,
-                                   screen.w, screen.h,
-                                   windowFlags) };
-    auto windowID{ SDL_GetWindowID(window.get()) };
-
-    // Initalise renderer
-    constexpr auto rendererFlags =
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-    auto renderer{ utl::createRenderer(window.get(), -1, rendererFlags) };
-
-    // Get running
-    auto first_stage{ StageID::TITLE_SCREEN };
-    StageManager stageMan{ first_stage };
-    stageMan.add_stage(first_stage,
-                       std::make_unique<TitleScreen>(screen, windowID,
-                                                     renderer.get()));
-    stageMan.run();
-}
 
 #ifdef _WIN32
 int WinMain()
@@ -54,7 +27,8 @@ try
     constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
     utl::init(sdlFlags);
 
-    runApp();
+    AsteroidsApp asteroids{};
+    asteroids.run();
 
     TTF_Quit();
     SDL_Quit();
