@@ -74,7 +74,7 @@ void StageManager::run()
             t += dt;
         }
 
-        if (next == StageID::QUIT)
+        if (next == utl::StageID::QUIT)
             break;
 
         if (current_stage)

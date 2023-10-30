@@ -5,6 +5,7 @@
 
 #include <SDL.h>
 
+#include "../inc/Application.hpp"
 #include "../inc/Box.hpp"
 #include "../inc/StageManager.hpp"
 #include "../inc/TitleScreen.hpp"
@@ -27,10 +28,10 @@ AsteroidsApp::AsteroidsApp()
 {
     m_stageMan.add_stage(m_first_stage,
         std::make_unique<TitleScreen>(m_screen, m_windowID,
-                                                    m_renderer.get()));
+                                      m_renderer.get()));
 }
 
 void AsteroidsApp::run()
 {
-    m_stageMan.run()
+    m_stageMan.run();
 }

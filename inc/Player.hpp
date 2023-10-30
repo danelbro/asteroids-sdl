@@ -1,9 +1,6 @@
 ﻿#pragma once
 
-#include <array>
-#include <memory>
 #include <random>
-#include <string>
 #include <vector>
 
 #include <SDL.h>

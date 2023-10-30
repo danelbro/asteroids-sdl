@@ -45,7 +45,7 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
 }
 
 TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
-    : Stage{ screen, windowID, renderer, StageID::TITLE_SCREEN },
+    : Stage{ screen, windowID, renderer, utl::StageID::TITLE_SCREEN },
       gameWorld{ screen, 0.0 },
       title_font{ utl::createFont(font_path, title_font_size)},
       instruction_font{ utl::createFont(font_path, instruction_font_size)},
@@ -68,7 +68,7 @@ TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
 utl::StageID TitleScreen::handle_input(double, double,
     std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
-    GameLoop::process_input(gameWorld, windowID(), key_state);
+    utl::process_input(gameWorld, windowID(), key_state);
 
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
         return utl::StageID::QUIT;

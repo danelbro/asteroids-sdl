@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include <SDL.h>
-#include <math.h>
 
 #include "../inc/Box.hpp"
 #include "../inc/GameWorld.hpp"

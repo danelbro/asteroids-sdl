@@ -12,11 +12,11 @@
 #include <SDL_ttf.h>
 
 #include "../inc/Box.hpp"
-#include "../inc/Entity.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/ScoreManager.hpp"
 #include "../inc/Stage.hpp"
 #include "../inc/StageManager.hpp"
+#include "../inc/PhysicsEntity.hpp"
 #include "../inc/PhysicsManager.hpp"
 #include "../inc/Player.hpp"
 #include "../inc/utility.hpp"

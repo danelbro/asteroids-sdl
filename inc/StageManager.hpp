@@ -7,9 +7,8 @@
 
 #include <SDL.h>
 
+#include "Stage.hpp"
 #include "utility.hpp"
-
-class Stage;
 
 class StageManager {
 public:
@@ -20,7 +19,7 @@ public:
 private:
     void handle_stage_transition(Stage* current_stage);
 
-    std::unordered_map<StageID, std::unique_ptr<Stage>> stages{ };
+    std::unordered_map<utl::StageID, std::unique_ptr<Stage>> stages{ };
     utl::StageID current;
     utl::StageID next;
     std::array<bool, static_cast<size_t>(utl::KeyFlag::K_TOTAL)> keyState{ };

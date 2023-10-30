@@ -1,10 +1,8 @@
 ﻿#include "../inc/Gun.hpp"
 
-#include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/PhysicsManager.hpp"
 #include "../inc/Ship.hpp"
-#include "../inc/Vec2d.hpp"
 
 void Gun::fire(PhysicsManager& physMan)
 {

@@ -1,5 +1,6 @@
 ﻿#include "../inc/utility.hpp"
 
+#include <array>
 #include <chrono>
 #include <memory>
 #include <stdexcept>
@@ -8,6 +9,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include "../inc/GameWorld.hpp"
 #include "../inc/Vec2d.hpp"
 
 std::ofstream errorLogger("exception.log");

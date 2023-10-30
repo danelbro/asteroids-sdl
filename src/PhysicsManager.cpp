@@ -16,6 +16,7 @@
 #include "../inc/Ship.hpp"
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
+#include "../inc/utility.hpp"
 
 PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
 	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },

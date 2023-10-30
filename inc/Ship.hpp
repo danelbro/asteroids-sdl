@@ -5,14 +5,12 @@
 
 #include "Colors.hpp"
 #include "Engine.hpp"
-#include "PhysicsEntity.hpp"
 #include "Gun.hpp"
+#include "PhysicsEntity.hpp"
 #include "Vec2d.hpp"
 #include "utility.hpp"
 
 struct GameWorld;
-
-class PhysicsComponent;
 
 class Ship : public PhysicsEntity {
 public:

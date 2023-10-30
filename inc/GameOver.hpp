@@ -8,10 +8,7 @@
 #include <SDL.h>
 
 #include "GameWorld.hpp"
-#include "PhysicsComponent.hpp"
-#include "PhysicsEntity.hpp"
 #include "PhysicsManager.hpp"
-#include "Ship.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
 #include "utility.hpp"

@@ -10,8 +10,9 @@
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
+#include "../inc/utility.hpp"
 
-PhysicsEntity::PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld,
+PhysicsEntity::PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
     Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
     double mass)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },

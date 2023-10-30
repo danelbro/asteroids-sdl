@@ -1,40 +1,37 @@
-﻿// Plays an asteroids game
+﻿// Plays a game of asteroids
 #include <exception>
-#include <memory>
 #include <stdexcept>
-#include <vector>
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
 
 #include "../inc/AsteroidsApp.hpp"
-#include "../inc/Box.hpp"
-#include "../inc/Colors.hpp"
-#include "../inc/MainLevel.hpp"
-#include "../inc/StageManager.hpp"
-#include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
-#include "../inc/Vec2d.hpp"
 
 #ifdef _WIN32
 int WinMain()
 #elif __linux__
 int main()
 #endif
+#ifdef _DEBUG
 try
+#endif
 {
     constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
     utl::init(sdlFlags);
 
-    AsteroidsApp asteroids{};
-    asteroids.run();
+    {
+        AsteroidsApp asteroids{};
+        asteroids.run();
+    }
 
     TTF_Quit();
     SDL_Quit();
 
     return 0;
 }
+#ifdef _DEBUG
 catch (utl::SdlException& se)
 {
     errorLogger << "SDL exception: " << se.what() << '\n';
@@ -60,3 +57,4 @@ catch (...)
     errorLogger << "unknown exception\n";
     return -1;
 }
+#endif
