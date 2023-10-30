@@ -1,4 +1,4 @@
-#include "../inc/GameLoop.hpp"
+﻿#include "../inc/GameLoop.hpp"
 
 #include <algorithm>
 #include <array>

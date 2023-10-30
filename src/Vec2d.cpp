@@ -1,4 +1,4 @@
-#include "../inc/Vec2d.hpp"
+﻿#include "../inc/Vec2d.hpp"
 
 #define _USE_MATH_DEFINES
 #include <cmath>

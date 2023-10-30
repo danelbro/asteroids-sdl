@@ -1,4 +1,4 @@
-// Plays an asteroids game
+﻿// Plays an asteroids game
 #include <exception>
 #include <memory>
 #include <stdexcept>

@@ -1,4 +1,4 @@
-#include "../inc/TextObject.hpp"
+﻿#include "../inc/TextObject.hpp"
 
 #include <algorithm>
 #include <string>

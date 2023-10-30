@@ -1,4 +1,4 @@
-#include "../inc/ScoreManager.hpp"
+﻿#include "../inc/ScoreManager.hpp"
 
 #include <string>
 

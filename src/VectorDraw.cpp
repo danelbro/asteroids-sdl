@@ -1,4 +1,4 @@
-#include "../inc/VectorDraw.hpp"
+﻿#include "../inc/VectorDraw.hpp"
 
 #include <algorithm>
 #include <vector>

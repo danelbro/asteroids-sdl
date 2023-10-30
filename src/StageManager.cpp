@@ -1,4 +1,4 @@
-#include "../inc/StageManager.hpp"
+﻿#include "../inc/StageManager.hpp"
 
 #include <chrono>
 #include <memory>
