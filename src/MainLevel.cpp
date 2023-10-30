@@ -13,8 +13,6 @@
 
 #include "../inc/Box.hpp"
 #include "../inc/Entity.hpp"
-#include "../inc/FlagEnums.hpp"
-#include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/ScoreManager.hpp"
 #include "../inc/Stage.hpp"
@@ -33,7 +31,7 @@ static constexpr double fluidDensity{ 0.1 };
 
 MainLevel::MainLevel(Box new_screen, Uint32 windowID,
     SDL_Renderer* new_renderer)
-    : Stage{ new_screen, windowID, new_renderer, StageID::PLAYING },
+    : Stage{ new_screen, windowID, new_renderer, utl::StageID::PLAYING },
       font{ utl::createFont(font_path, font_size) },
       gameWorld{ new_screen, fluidDensity },
       rng{ utl::makeSeededRNG() },
@@ -49,40 +47,40 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID,
         customCols::bg.b, customCols::bg.a);
 }
 
-StageID MainLevel::handle_input(double, double dt,
-    std::array<bool, KeyFlag::K_TOTAL>& key_state)
+utl::StageID MainLevel::handle_input(double, double dt,
+    std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
-    GameLoop::process_input(gameWorld, windowID(), key_state);
+    utl::process_input(gameWorld, windowID(), key_state);
 
-    if(key_state[KeyFlag::QUIT])
-        return StageID::QUIT;
-    if (key_state[KeyFlag::K_ESCAPE])
-        return StageID::TITLE_SCREEN;
+    if(key_state[utl::KeyFlag::QUIT])
+        return utl::StageID::QUIT;
+    if (key_state[utl::KeyFlag::K_ESCAPE])
+        return utl::StageID::TITLE_SCREEN;
 
     if (player.isControllable()) {
-        if (key_state[KeyFlag::K_UP]) {
+        if (key_state[utl::KeyFlag::K_UP]) {
             player.engine.on();
         }
-        else if (!key_state[KeyFlag::K_UP]) {
+        else if (!key_state[utl::KeyFlag::K_UP]) {
             player.engine.off();
         }
-        if (key_state[KeyFlag::K_LEFT]) {
+        if (key_state[utl::KeyFlag::K_LEFT]) {
             player.engine.turnLeft(dt);
         }
-        if (key_state[KeyFlag::K_RIGHT]) {
+        if (key_state[utl::KeyFlag::K_RIGHT]) {
             player.engine.turnRight(dt);
         }
-        if (key_state[KeyFlag::K_SPACE]) {
+        if (key_state[utl::KeyFlag::K_SPACE]) {
             player.gun.fire(physicsManager);
         }
-        if (key_state[KeyFlag::K_LSHIFT]) {
+        if (key_state[utl::KeyFlag::K_LSHIFT]) {
             player.hyperdrive.warp();
         }
     }
-    return StageID::PLAYING;
+    return utl::StageID::PLAYING;
 }
 
-StageID MainLevel::update(double t, double dt)
+utl::StageID MainLevel::update(double t, double dt)
 {
     constexpr double enemyTime{ 5.0 }; // seconds
 
@@ -90,7 +88,7 @@ StageID MainLevel::update(double t, double dt)
 
     asteroidsRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type == EntityFlag::ASTEROID) {
+        if (ent->type == utl::EntityFlag::ASTEROID) {
             asteroidsRemain = true;
             break;
         }
@@ -98,7 +96,7 @@ StageID MainLevel::update(double t, double dt)
 
     enemiesRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type == EntityFlag::ENEMY) {
+        if (ent->type == utl::EntityFlag::ENEMY) {
             enemiesRemain = true;
             break;
         }
@@ -106,7 +104,7 @@ StageID MainLevel::update(double t, double dt)
 
     if (!asteroidsRemain && !enemiesRemain) {
         for (auto& ent : physicsManager.physEntities) {
-            if (ent->type == EntityFlag::BULLET)
+            if (ent->type == utl::EntityFlag::BULLET)
                 ent->kill_it();
         }
         levelElapsedTime = 0.0;
@@ -128,14 +126,13 @@ StageID MainLevel::update(double t, double dt)
     physicsManager.checkPlayerHit();
     if (player.lives() != scoreManager.lives)
         scoreManager.update_lives(-1);
-    bool playerWasKilled{player.lives() == 0};
     physicsManager.clean_up(scoreManager);
     scoreManager.refresh();
-    if (playerWasKilled) {
-        return StageID::HIGH_SCORES;
+    if (!player.lives()) {
+        return utl::StageID::HIGH_SCORES;
     }
 
-    return StageID::PLAYING;
+    return utl::StageID::PLAYING;
 }
 
 void MainLevel::render(double, double)

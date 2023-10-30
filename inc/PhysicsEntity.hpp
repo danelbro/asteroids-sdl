@@ -5,7 +5,6 @@
 #include <SDL.h>
 
 #include "Entity.hpp"
-#include "FlagEnums.hpp"
 #include "PhysicsComponent.hpp"
 #include "Vec2d.hpp"
 
@@ -32,9 +31,9 @@ public:
                   // way to do this?
 
 protected:
-    PhysicsEntity(EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
-                  std::vector<Vec2d> shape, SdlColor color, double scale,
-                  double mass);
+    PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
+                  Vec2d pos, std::vector<Vec2d> shape, SdlColor color,
+                  double scale, double mass);
 
 	std::vector<Vec2d> m_transShape;
 	std::vector<Vec2d> m_fillShape;

@@ -9,8 +9,6 @@
 #include <SDL_ttf.h>
 
 #include "../inc/Box.hpp"
-#include "../inc/FlagEnums.hpp"
-#include "../inc/GameLoop.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/Stage.hpp"
 #include "../inc/TextObject.hpp"
@@ -67,23 +65,23 @@ TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
         customCols::bg.b, customCols::bg.a);
 }
 
-StageID TitleScreen::handle_input(double, double,
-    std::array<bool, KeyFlag::K_TOTAL>& key_state)
+utl::StageID TitleScreen::handle_input(double, double,
+    std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
     GameLoop::process_input(gameWorld, windowID(), key_state);
 
-    if (key_state[KeyFlag::K_ESCAPE] || key_state[KeyFlag::QUIT])
-        return StageID::QUIT;
+    if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
+        return utl::StageID::QUIT;
 
-    if (key_state[KeyFlag::K_ENTER])
-        return StageID::PLAYING;
+    if (key_state[utl::KeyFlag::K_ENTER])
+        return utl::StageID::PLAYING;
 
-    return StageID::TITLE_SCREEN;
+    return utl::StageID::TITLE_SCREEN;
 }
 
-StageID TitleScreen::update(double, double)
+utl::StageID TitleScreen::update(double, double)
 {
-    return StageID::TITLE_SCREEN;
+    return utl::StageID::TITLE_SCREEN;
 }
 
 void TitleScreen::render(double, double)

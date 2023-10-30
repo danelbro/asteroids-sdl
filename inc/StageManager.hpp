@@ -7,21 +7,21 @@
 
 #include <SDL.h>
 
-#include "FlagEnums.hpp"
+#include "utility.hpp"
 
 class Stage;
 
 class StageManager {
 public:
-    StageManager(StageID first);
+    StageManager(utl::StageID first);
 
-    void add_stage(StageID key, std::unique_ptr<Stage> new_stage);
+    void add_stage(utl::StageID key, std::unique_ptr<Stage> new_stage);
     void run();
 private:
     void handle_stage_transition(Stage* current_stage);
 
     std::unordered_map<StageID, std::unique_ptr<Stage>> stages{ };
-    StageID current;
-    StageID next;
-    std::array<bool, static_cast<size_t>(KeyFlag::K_TOTAL)> keyState{ };
+    utl::StageID current;
+    utl::StageID next;
+    std::array<bool, static_cast<size_t>(utl::KeyFlag::K_TOTAL)> keyState{ };
 };

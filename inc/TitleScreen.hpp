@@ -7,7 +7,6 @@
 #include <SDL_ttf.h>
 
 #include "Box.hpp"
-#include "FlagEnums.hpp"
 #include "GameWorld.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
@@ -18,9 +17,9 @@ class TitleScreen : public Stage
 public:
     TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer);
 
-    StageID handle_input(double t, double dt,
-        std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
-    StageID update(double, double) override;
+    utl::StageID handle_input(double t, double dt,
+        std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
+    utl::StageID update(double, double) override;
     void render(double, double) override;
 private:
     GameWorld gameWorld;

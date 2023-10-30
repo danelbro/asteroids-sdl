@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+struct GameWorld;
 struct Vec2d;
 
 extern std::ofstream errorLogger;
@@ -90,7 +91,42 @@ namespace utl {
    std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,
        int font_size);
 
+    enum KeyFlag {
+        K_LEFT,
+        K_RIGHT,
+        K_UP,
+        K_DOWN,
+        K_SPACE,
+        K_ENTER,
+        K_LSHIFT,
+        K_ESCAPE,
+        QUIT,
+        K_TOTAL
+    };
+
+    void process_input(GameWorld& gw, Uint32 windowID,
+                     std::array<bool,
+                     KeyFlag::K_TOTAL> &key_state);
+
     Vec2d randomPos(std::mt19937& rng, int w, int h);
 
     std::mt19937 makeSeededRNG();
+
+    enum class EntityFlag {
+        PLAYER,
+        ASTEROID,
+        ENEMY,
+        BULLET,
+        ENEMY_BULLET,
+        TEXT,
+        E_TYPE_TOTAL
+    };
+
+    enum class StageID {
+        TITLE_SCREEN,
+        PLAYING,
+        HIGH_SCORES,
+        STAGES_TOTAL,
+        QUIT
+    };
 }

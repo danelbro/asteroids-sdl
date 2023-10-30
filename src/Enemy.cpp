@@ -8,7 +8,6 @@
 
 #include "../inc/AIComponent.hpp"
 #include "../inc/Colors.hpp"
-#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/Ship.hpp"
 #include "../inc/PhysicsComponent.hpp"
@@ -17,8 +16,8 @@
 Enemy::Enemy(GameWorld& new_gameworld, Vec2d pos, std::vector<Vec2d> shape,
              SdlColor colour, double scale, double power, double turnSpeed,
              double shotPower, double mass, double cooldown)
-    : Ship{ EntityFlag::ENEMY, new_gameworld, pos, shape, colour, scale, power,
-            turnSpeed, shotPower, mass, cooldown },
+    : Ship{ utl::EntityFlag::ENEMY, new_gameworld, pos, shape, colour, scale,
+            power, turnSpeed, shotPower, mass, cooldown },
     aiComponent{ *this }
 {}
 

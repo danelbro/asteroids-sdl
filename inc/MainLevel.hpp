@@ -8,7 +8,6 @@
 #include <SDL_ttf.h>
 
 #include "Box.hpp"
-#include "FlagEnums.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
@@ -24,9 +23,9 @@ public:
     MainLevel& operator=(const MainLevel&) = delete;
     ~MainLevel() = default;
 
-    StageID handle_input(double t, double dt,
-        std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
-    StageID update(double t, double dt) override;
+    utl::StageID handle_input(double t, double dt,
+        std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
+    utl::StageID update(double t, double dt) override;
     void render(double t, double dt) override;
 
     PhysicsManager& physMan() { return physicsManager; }

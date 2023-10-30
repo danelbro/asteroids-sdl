@@ -6,8 +6,8 @@
 #include <SDL.h>
 
 #include "../inc/Box.hpp"
-#include "../inc/FlagEnums.hpp"
 #include "../inc/StageManager.hpp"
+#include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 
 AsteroidsApp::AsteroidsApp()
@@ -23,11 +23,11 @@ AsteroidsApp::AsteroidsApp()
       m_rendererFlags{ SDL_RendererFlags::SDL_RENDERER_ACCELERATED |
                        SDL_RendererFlags::SDL_RENDERER_PRESENTVSYNC },
       m_renderer{ utl::createRenderer(m_window.get(), -1, m_rendererFlags) },
-      m_first_stage{ StageID::TITLE_SCREEN }, m_stageMan{ m_first_stage }
+      m_first_stage{ utl::StageID::TITLE_SCREEN }, m_stageMan{ m_first_stage }
 {
     m_stageMan.add_stage(m_first_stage,
-                         std::make_unique<TitleScreen>(m_screen, m_windowID,
-                                                       m_renderer.get()));
+        std::make_unique<TitleScreen>(m_screen, m_windowID,
+                                                    m_renderer.get()));
 }
 
 void AsteroidsApp::run()

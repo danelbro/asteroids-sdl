@@ -6,7 +6,6 @@
 #include <SDL.h>
 
 #include "../inc/Colors.hpp"
-#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Ship.hpp"
@@ -18,7 +17,7 @@ Player::Player(GameWorld& new_gameWorld, Vec2d pos,
                double shotPower, double mass, std::mt19937& rng,
                double warpLength, int lives, double respawnLength,
                double flashLength, double cooldown)
-    : Ship{EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
+    : Ship{utl::EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
            power, turnSpeed, shotPower, mass, cooldown},
       hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },
       m_isVulnerable{ true }, m_lives{ lives },

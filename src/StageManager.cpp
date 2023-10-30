@@ -4,24 +4,23 @@
 #include <memory>
 #include <stdexcept>
 
-#include "../inc/FlagEnums.hpp"
 #include "../inc/GameOver.hpp"
 #include "../inc/MainLevel.hpp"
 #include "../inc/Stage.hpp"
 #include "../inc/TitleScreen.hpp"
 #include "../inc/utility.hpp"
 
-StageManager::StageManager(StageID first)
-    : current{ StageID::STAGES_TOTAL }, next{ first }
+StageManager::StageManager(utl::StageID first)
+    : current{ utl::StageID::STAGES_TOTAL }, next{ first }
 {
     std::fill(keyState.begin(), keyState.end(), false);
 
-    stages[StageID::TITLE_SCREEN] = nullptr;
-    stages[StageID::PLAYING] = nullptr;
-    stages[StageID::HIGH_SCORES] = nullptr;
+    stages[utl::StageID::TITLE_SCREEN] = nullptr;
+    stages[utl::StageID::PLAYING] = nullptr;
+    stages[utl::StageID::HIGH_SCORES] = nullptr;
 }
 
-void StageManager::add_stage(StageID key, std::unique_ptr<Stage> new_stage)
+void StageManager::add_stage(utl::StageID key, std::unique_ptr<Stage> new_stage)
 {
     stages[key] = std::move(new_stage);
 }
@@ -92,18 +91,18 @@ void StageManager::handle_stage_transition(Stage* current_stage)
     keyState.fill(false);
 
     switch (next) {
-    case StageID::TITLE_SCREEN:
+    case utl::StageID::TITLE_SCREEN:
         add_stage(next,
             std::make_unique<TitleScreen>(screen, windowID, renderer));
         break;
-    case StageID::PLAYING:
+    case utl::StageID::PLAYING:
         add_stage(next,
             std::make_unique<MainLevel>(screen, windowID, renderer));
         break;
-    case StageID::HIGH_SCORES:
+    case utl::StageID::HIGH_SCORES:
     {
         MainLevel* mlptr{ nullptr };
-        if (current_stage->ID() == StageID::PLAYING)
+        if (current_stage->ID() == utl::StageID::PLAYING)
             mlptr = static_cast<MainLevel*>(current_stage);
 
         if (!mlptr)
@@ -116,8 +115,8 @@ void StageManager::handle_stage_transition(Stage* current_stage)
                                              mlptr->scoreMan().score));
         break;
     }
-    case StageID::QUIT:
-        next = StageID::QUIT;
+    case utl::StageID::QUIT:
+        next = utl::StageID::QUIT;
         break;
     default:
         throw std::runtime_error("bad stage");

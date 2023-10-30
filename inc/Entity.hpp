@@ -11,9 +11,9 @@
 #include <SDL.h>
 
 #include "Colors.hpp"
-#include "FlagEnums.hpp"
 #include "GameWorld.hpp"
 #include "Vec2d.hpp"
+#include "utility.hpp"
 
 class Entity {
 public:
@@ -27,11 +27,11 @@ public:
     virtual void kill_it() { kill_me = true; }
     virtual double scale() const { return m_scale; }
 
-    EntityFlag type;
-    const GameWorld& gameWorld;
+    utl::EntityFlag type;
+    GameWorld& gameWorld;
 
 protected:
-    Entity(EntityFlag new_type, const GameWorld& new_gameWorld, Vec2d pos,
+    Entity(utl::EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
         std::vector<Vec2d> shape, SdlColor color, double scale)
         : type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
         m_shape{ shape }, m_color{ color }, m_scale{ scale },

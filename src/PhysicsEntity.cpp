@@ -6,7 +6,6 @@
 
 #include "../inc/Colors.hpp"
 #include "../inc/Entity.hpp"
-#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Vec2d.hpp"

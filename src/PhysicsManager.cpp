@@ -9,7 +9,6 @@
 #include "../inc/Bullet.hpp"
 #include "../inc/Enemy.hpp"
 #include "../inc/Entity.hpp"
-#include "../inc/FlagEnums.hpp"
 #include "../inc/GameWorld.hpp"
 #include "../inc/PhysicsComponent.hpp"
 #include "../inc/Player.hpp"
@@ -214,17 +213,17 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 		if (phys.toBeKilled()) {
 			switch (phys.type)
             {
-			case EntityFlag::ASTEROID:
+			case utl::EntityFlag::ASTEROID:
 				scoreMan.update_score(
 					static_cast<int>(baseAsteroidScore / phys.scale()));
 				if (phys.scale() > 1.0)
 					make_asteroids(newAsteroids, phys.scale() - 1.0,
                                    false, phys.pos());
 				break;
-			case EntityFlag::ENEMY:
+			case utl::EntityFlag::ENEMY:
 				scoreMan.update_score(baseEnemyScore);
 				break;
-			case EntityFlag::BULLET:
+			case utl::EntityFlag::BULLET:
 				if (phys.wayward)
 					scoreMan.update_score(penalty);
 				break;
@@ -242,9 +241,9 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 void PhysicsManager::checkPlayerHit()
 {
     for (auto& ent : physEntities) {
-        if (ent->type == EntityFlag::ASTEROID
-            || ent->type == EntityFlag::ENEMY
-            || ent->type == EntityFlag::ENEMY_BULLET) {
+        if (ent->type == utl::EntityFlag::ASTEROID
+            || ent->type == utl::EntityFlag::ENEMY
+            || ent->type == utl::EntityFlag::ENEMY_BULLET) {
             if (utl::PointInPolygon(m_player.pos(), ent->fillShape())) {
                 m_player.kill_it();
             }
@@ -262,10 +261,10 @@ bool PhysicsManager::wasPlayerKilled()
 void PhysicsManager::checkBulletsHit()
 {
 	for (auto& bul : physEntities) {
-		if (bul->type == EntityFlag::BULLET && !bul->toBeKilled()) {
+		if (bul->type == utl::EntityFlag::BULLET && !bul->toBeKilled()) {
 			for (auto& target : physEntities) {
-				if (target->type == EntityFlag::ASTEROID
-					|| target->type == EntityFlag::ENEMY) {
+				if (target->type == utl::EntityFlag::ASTEROID
+					|| target->type == utl::EntityFlag::ENEMY) {
 					if (utl::PointInPolygon(bul->pos(), target->fillShape())) {
 						target->kill_it();
 						bul->kill_it();

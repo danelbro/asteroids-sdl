@@ -2,11 +2,11 @@
 
 #include <array>
 #include <memory>
+#include <random>
 #include <vector>
 
 #include <SDL.h>
 
-#include "FlagEnums.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
 #include "PhysicsEntity.hpp"
@@ -23,9 +23,9 @@ public:
              std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
              int score);
 
-    StageID handle_input(double, double,
-        std::array<bool, KeyFlag::K_TOTAL>& key_state) override;
-    StageID update(double t, double dt) override;
+    utl::StageID handle_input(double, double,
+        std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
+    utl::StageID update(double t, double dt) override;
     void render(double, double) override;
 private:
     GameWorld m_gameWorld;
