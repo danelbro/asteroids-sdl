@@ -16,6 +16,34 @@
 #include "../inc/utility.hpp"
 #include "../inc/Vec2d.hpp"
 
+void runApp() {
+    // Initalise window
+    std::string title = "Asteroids";
+    constexpr int screenWidth{ 960 };
+    constexpr int screenHeight{ 720 };
+    constexpr Box screen{ screenWidth, screenHeight };
+    constexpr auto windowFlags{ SDL_WindowFlags::SDL_WINDOW_RESIZABLE };
+    auto window{ utl::createWindow(title.c_str(),
+                                   SDL_WINDOWPOS_CENTERED,
+                                   SDL_WINDOWPOS_CENTERED,
+                                   screen.w, screen.h,
+                                   windowFlags) };
+    auto windowID{ SDL_GetWindowID(window.get()) };
+
+    // Initalise renderer
+    constexpr auto rendererFlags =
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+    auto renderer{ utl::createRenderer(window.get(), -1, rendererFlags) };
+
+    // Get running
+    auto first_stage{ StageID::TITLE_SCREEN };
+    StageManager stageMan{ first_stage };
+    stageMan.add_stage(first_stage,
+                       std::make_unique<TitleScreen>(screen, windowID,
+                                                     renderer.get()));
+    stageMan.run();
+}
+
 #ifdef _WIN32
 int WinMain()
 #elif __linux__
@@ -26,45 +54,7 @@ try
     constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
     utl::init(sdlFlags);
 
-    // Window initialisation
-    std::string title = "Asteroids";
-
-    constexpr int screenWidth{ 960 };
-    constexpr int screenHeight{ 720 };
-
-    constexpr Box screen{ screenWidth, screenHeight };
-
-    constexpr auto windowFlags = SDL_WindowFlags::SDL_WINDOW_RESIZABLE;
-
-    auto window = std::unique_ptr<SDL_Window, utl::sdl_deleter>{
-        utl::createWindow(title.c_str(),
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        screen.w, screen.h, windowFlags),
-        utl::sdl_deleter()};
-
-    auto windowID = SDL_GetWindowID(window.get());
-
-    // Renderer intialisation
-    constexpr auto rendererFlags =
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-
-    auto renderer = std::unique_ptr<SDL_Renderer, utl::sdl_deleter>{
-        utl::createRenderer(window.get(), -1, rendererFlags),
-        utl::sdl_deleter()};
-
-    {
-        auto first_stage{ StageID::TITLE_SCREEN };
-
-        StageManager stageMan{first_stage};
-
-        stageMan.add_stage(first_stage,
-            std::make_unique<TitleScreen>(screen, windowID, renderer.get()));
-
-        stageMan.run();
-    }
-
-    SDL_DestroyRenderer(renderer.get());
-    SDL_DestroyWindow(window.get());
+    runApp();
 
     TTF_Quit();
     SDL_Quit();

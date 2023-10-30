@@ -1,6 +1,7 @@
 #include "../inc/utility.hpp"
 
 #include <chrono>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -29,15 +30,17 @@ namespace utl {
                 TTF_GetError() });
     }
 
-    SDL_Window* createWindow(const char* title, int x, int y,
-        int w, int h, Uint32 flags)
+    std::unique_ptr<SDL_Window, sdl_deleter> createWindow(const char* title,
+                                                          int x, int y,
+                                                          int w, int h,
+                                                          Uint32 flags)
     {
 #ifdef _DEBUG
         errorLogger << "creating a window\n";
 #endif
-        SDL_Window* window = nullptr;
-
-        window = SDL_CreateWindow(title, x, y, w, h, flags);
+        std::unique_ptr<SDL_Window, sdl_deleter> window{
+            SDL_CreateWindow(title, x, y, w, h, flags), sdl_deleter()
+        };
 
         if (!window)
             throw SdlException(
@@ -47,13 +50,14 @@ namespace utl {
         return window;
     }
 
-    SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags)
+    std::unique_ptr<SDL_Renderer, sdl_deleter> createRenderer(SDL_Window* window, int index, Uint32 flags)
     {
 #ifdef _DEBUG
         errorLogger << "creating a renderer\n";
 #endif
-        SDL_Renderer* rend = nullptr;
-        rend = SDL_CreateRenderer(window, index, flags);
+        std::unique_ptr<SDL_Renderer, sdl_deleter> rend{
+            SDL_CreateRenderer(window, index, flags), sdl_deleter()
+        };
 
         if (!rend)
             throw SdlException(
@@ -63,35 +67,39 @@ namespace utl {
         return rend;
     }
 
+    textStruct::textStruct(std::unique_ptr<SDL_Texture, sdl_deleter> newTexP,
+                           int newW, int newH)
+        : texP{std::move(newTexP)}, w{newW}, h{newH}
+        {}
+
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend)
     {
 #ifdef _DEBUG
         errorLogger << "creating a text texture\n";
 #endif
-        SDL_Surface* textSurface = TTF_RenderUTF8_Blended(font, text.c_str(),
-            text_colour);
+        std::unique_ptr<SDL_Surface, sdl_deleter> textSurface{
+            TTF_RenderUTF8_Blended(font, text.c_str(), text_colour),
+            sdl_deleter()
+        };
 
         if (!textSurface)
             throw SdlException(std::string{
             "Could not create textSurface! SDL_Error: ", SDL_GetError() });
-        else
-        {
-            auto texP = SDL_CreateTextureFromSurface(rend, textSurface);
-            if (!texP)
-                throw SdlException(std::string{
-                "Could not create texture from textSurface! SDL_Error: ",
-                SDL_GetError() });
-            else
-            {
-                auto w{textSurface->w};
-                auto h{textSurface->h};
-                SDL_FreeSurface(textSurface);
-                textSurface = nullptr;
 
-                return textStruct{texP, w, h};
-            }
-        }
+        std::unique_ptr<SDL_Texture, sdl_deleter> texP{
+            SDL_CreateTextureFromSurface(rend, textSurface.get()),
+            sdl_deleter()
+        };
+        if (!texP)
+            throw SdlException(std::string{
+                    "Could not create texture from textSurface! SDL_Error: ",
+                    SDL_GetError() });
+
+        auto w{textSurface->w};
+        auto h{textSurface->h};
+
+        return textStruct{std::move(texP), w, h};
     }
 
     std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,

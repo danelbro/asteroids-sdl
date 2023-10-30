@@ -63,17 +63,19 @@ namespace utl {
     void init(Uint32 sdlFlags);
 
     // Create an SDL_Window*. Throw an SdlException if creation fails
-    SDL_Window* createWindow(const char* title, int x, int y,
-        int w, int h, Uint32 flags);
+    std::unique_ptr<SDL_Window, sdl_deleter> createWindow(const char* title,
+                                                          int x, int y,
+                                                          int w, int h,
+                                                          Uint32 flags);
 
     // Create an SDL_Renderer*. Throw an SdlException if creation fails
-    SDL_Renderer* createRenderer(SDL_Window* window, int index, Uint32 flags);
+    std::unique_ptr<SDL_Renderer, sdl_deleter> createRenderer(
+        SDL_Window* window, int index, Uint32 flags);
 
     struct textStruct
     {
-        textStruct(SDL_Texture* newTexP, int newW, int newH)
-        : texP{newTexP, sdl_deleter()}, w{newW}, h{newH}
-        {}
+        textStruct(std::unique_ptr<SDL_Texture, sdl_deleter> newTexP,
+                   int newW, int newH);
 
         std::unique_ptr<SDL_Texture, sdl_deleter> texP;
         int w;
