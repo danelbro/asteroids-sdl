@@ -1,12 +1,7 @@
 ﻿#include "../inc/MainLevel.hpp"
 
-#include <algorithm>
 #include <array>
-#include <cstddef>
-#include <memory>
-#include <random>
 #include <string>
-#include <vector>
 
 #include <SDL.h>
 #include <SDL_ttf.h>

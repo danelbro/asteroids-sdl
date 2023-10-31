@@ -28,12 +28,12 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
         { "Space to fire. L/R to turn." },
         { "Up to thrust. L-Shift to warp." }
     };
-    constexpr double padding{ 150.0 };
 
     std::vector<TextObject> instructions{};
+    instructions.reserve(insText.size());
 
     for (size_t i{ 0 }; i < insText.size(); ++i) {
-        instructions.push_back(TextObject{gw, {}, font, color, rend});
+        instructions.emplace_back(TextObject{gw, {}, font, color, rend});
         instructions[i].updateText(insText[i], rend);
         double xpos{ (gw.screen.w / 2.0) - (instructions[i].size().x / 2.0) };
         double ypos{ gw.screen.h - padding - (instructions[i].size().y
@@ -52,7 +52,7 @@ TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
       title{ gameWorld, {}, title_font.get(), customCols::text_col,
         renderer },
       instructions{ makeInstructions(gameWorld, instruction_font.get(),
-                                   customCols::text_col, renderer) }
+                                     customCols::text_col, renderer) }
 {
     const std::string titleText{ "Asteroids" };
 

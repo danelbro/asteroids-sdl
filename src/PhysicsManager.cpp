@@ -21,7 +21,9 @@
 PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
 	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },
       m_player{ make_player() }
-{}
+{
+    physEntities.reserve(500);
+}
 
 void PhysicsManager::make_bullet(Vec2d origin, double power, double angle)
 {
@@ -31,10 +33,11 @@ void PhysicsManager::make_bullet(Vec2d origin, double power, double angle)
 
 	const std::vector<Vec2d> shape{ {1, -3}, {-1, -3}, {-2, 3}, {2, 3} };
 
-	physEntities.push_back(std::make_unique<Bullet>(m_gameWorld, origin, shape,
-                                                    customCols::bullet_col,
-                                                    scale, mass, lifespan,
-                                                    angle, power));
+	physEntities.emplace_back(std::make_unique<Bullet>(m_gameWorld, origin,
+                                                       shape,
+                                                       customCols::bullet_col,
+                                                       scale, mass, lifespan,
+                                                       angle, power));
 }
 
 
@@ -57,10 +60,11 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 	std::uniform_real_distribution<double> angleDist{ 0.0, 360.0 };
 	double angle{ angleDist(m_rng) };
 
-	std::vector<Vec2d> shape{ };
-
     std::uniform_int_distribution<int> vertexDist{ 10, 15 };
 	int vertexes{ vertexDist(m_rng) };
+
+	std::vector<Vec2d> shape{ };
+    shape.reserve(static_cast<size_t>(vertexes));
 
 	std::normal_distribution<double> cragDistLow(-5.0, 0.5);
 	std::normal_distribution<double> cragDistHigh(5.0, 0.5);
@@ -74,15 +78,17 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 			cragDepth = cragDistHigh(m_rng);
 		else
 			cragDepth = cragDistLow(m_rng);
-		shape.push_back(Vec2d{std::sin(sliceAngle * i) * (radius + cragDepth),
-			-std::cos(sliceAngle * i) * (radius + cragDepth)});
+		shape.emplace_back(Vec2d{
+                std::sin(sliceAngle * i) * (radius + cragDepth),
+                -std::cos(sliceAngle * i) * (radius + cragDepth)
+            });
 	}
 
-	physEntities.push_back(std::make_unique<Asteroid>(m_gameWorld, pos,
-                                                      shape,
-                                                      customCols::asteroid_col,
-                                                      scale, mass, impulse,
-                                                      angle, radius));
+	physEntities.emplace_back(std::make_unique<Asteroid>(m_gameWorld, pos,
+                                                         shape,
+                                                         customCols::asteroid_col,
+                                                         scale, mass, impulse,
+                                                         angle, radius));
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
@@ -161,7 +167,7 @@ void PhysicsManager::make_enemy()
                                         m_gameWorld.screen.w,
                                         m_gameWorld.screen.h) };
 
-	physEntities.push_back(std::make_unique<Enemy>( m_gameWorld, new_pos,
+	physEntities.emplace_back(std::make_unique<Enemy>( m_gameWorld, new_pos,
                                                     shape,
                                                     customCols::enemy_col,
                                                     scale, power, turnSpeed,
@@ -191,7 +197,7 @@ Player& PhysicsManager::make_player()
     constexpr double flashLength{ 0.2 };
     constexpr double cooldown{ 0.375 };
 
-	physEntities.push_back(std::make_unique<Player>(m_gameWorld, pos, shape,
+	physEntities.emplace_back(std::make_unique<Player>(m_gameWorld, pos, shape,
                                                     customCols::player_col,
                                                     scale, power, turnSpeed,
                                                     shotPower, mass, m_rng,

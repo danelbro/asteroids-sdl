@@ -38,7 +38,7 @@ GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
 
     for (auto& pE : physEntities) {
         if (pE->type != utl::EntityFlag::PLAYER)
-            m_physMan.physEntities.push_back(std::move(pE));
+            m_physMan.physEntities.emplace_back(std::move(pE));
     }
 
     m_GameOverText.updateText("Game Over", renderer());
