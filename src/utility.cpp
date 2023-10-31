@@ -122,6 +122,7 @@ namespace utl {
         std::array<bool, KeyFlag::K_TOTAL>& key_state)
     {
         SDL_Event ev{ };
+        key_state[KeyFlag::WINDOW_CHANGE] = false;
 
         while (SDL_PollEvent(&ev)) {
             if (ev.type == SDL_QUIT)
@@ -132,6 +133,7 @@ namespace utl {
                     if (ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                         gw.screen.w = ev.window.data1;
                         gw.screen.h = ev.window.data2;
+                        key_state[KeyFlag::WINDOW_CHANGE] = true;
                     }
             }
 

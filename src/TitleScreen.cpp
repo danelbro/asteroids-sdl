@@ -16,6 +16,7 @@
 
 static constexpr int title_font_size{ 72 };
 static constexpr int instruction_font_size{ 36 };
+static constexpr double padding{ 150.0 };
 static const std::string font_path{ "data/Play-Regular.ttf" };
 
 static std::vector<TextObject> makeInstructions( GameWorld& gw,
@@ -57,12 +58,32 @@ TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
     const std::string titleText{ "Asteroids" };
 
     title.updateText(titleText, renderer);
-    const double title_xPos{ (screen.w / 2.0) - (title.size().x / 2.0) };
-    const double title_yPos{ screen.h / 3.0 };
+    const double title_xPos{ (gameWorld.screen.w / 2.0) - (title.size().x / 2.0) };
+    const double title_yPos{ gameWorld.screen.h / 3.0 };
     title.setPos({title_xPos, title_yPos});
 
     SDL_SetRenderDrawColor(renderer, customCols::bg.r, customCols::bg.g,
         customCols::bg.b, customCols::bg.a);
+}
+
+static void reset_title(TextObject& title)
+{
+    title.setPos({
+            title.gameWorld.screen.w / 2.0 - title.size().x / 2.0,
+            title.gameWorld.screen.h / 3.0
+        });
+}
+
+static void reset_instructions(std::vector<TextObject>& instructions)
+{
+    for (size_t i{ 0 }; i < instructions.size(); ++i) {
+        instructions[i].setPos({
+            (instructions[i].gameWorld.screen.w / 2.0)
+            - (instructions[i].size().x / 2.0),
+            instructions[i].gameWorld.screen.h - padding
+            - (instructions[i].size().y * (instructions.size() - i))
+            });
+    }
 }
 
 utl::StageID TitleScreen::handle_input(double, double,
@@ -72,6 +93,11 @@ utl::StageID TitleScreen::handle_input(double, double,
 
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
         return utl::StageID::QUIT;
+
+    if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
+        reset_title(title);
+        reset_instructions(instructions);
+    }
 
     if (key_state[utl::KeyFlag::K_ENTER])
         return utl::StageID::PLAYING;

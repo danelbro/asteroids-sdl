@@ -41,6 +41,12 @@ void TextObject::loadFromRenderedText(std::string textureText,
     m_size.y = texPstruct.h;
 }
 
+void TextObject::recentre()
+{
+    m_pos.x = gameWorld.screen.w / 2.0 - m_size.x / 2.0;
+    m_pos.y = gameWorld.screen.h / 2.0 - m_size.y / 2.0;
+}
+
 void TextObject::updateText(std::string new_text, SDL_Renderer* renderer)
 {
     text = new_text;

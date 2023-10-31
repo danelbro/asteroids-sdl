@@ -101,6 +101,7 @@ namespace utl {
         K_LSHIFT,
         K_ESCAPE,
         QUIT,
+        WINDOW_CHANGE,
         K_TOTAL
     };
 

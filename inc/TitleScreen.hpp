@@ -21,6 +21,8 @@ public:
         std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
     utl::StageID update(double, double) override;
     void render(double, double) override;
+
+    GameWorld& gameworld() { return gameWorld; }
 private:
     GameWorld gameWorld;
     std::unique_ptr<TTF_Font, utl::sdl_deleter> title_font;

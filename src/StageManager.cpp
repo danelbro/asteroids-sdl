@@ -84,7 +84,31 @@ void StageManager::run()
 
 void StageManager::handle_stage_transition(Stage* current_stage)
 {
-    auto screen{ current_stage->screen() };
+    TitleScreen* tsptr{ nullptr };
+    MainLevel* mlptr{ nullptr };
+    GameOver* goptr{ nullptr };
+
+    Box screen{};
+    switch(current_stage->ID()) {
+    case utl::StageID::TITLE_SCREEN:
+        tsptr = static_cast<TitleScreen*>(current_stage);
+        if (!tsptr) throw std::runtime_error("buhhh");
+        screen = tsptr->gameworld().screen;
+        break;
+    case utl::StageID::PLAYING:
+        mlptr = static_cast<MainLevel*>(current_stage);
+        if (!mlptr) throw std::runtime_error("buhhh");
+        screen = mlptr->gameworld().screen;
+        break;
+    case utl::StageID::HIGH_SCORES:
+        goptr = static_cast<GameOver*>(current_stage);
+        if (!goptr) throw std::runtime_error("buhhh");
+        screen = goptr->gameworld().screen;
+        break;
+    default:
+        break;
+    }
+
     auto windowID{ current_stage->windowID() };
     auto renderer{ current_stage->renderer() };
 
@@ -92,19 +116,17 @@ void StageManager::handle_stage_transition(Stage* current_stage)
 
     switch (next) {
     case utl::StageID::TITLE_SCREEN:
+    {
         add_stage(next,
             std::make_unique<TitleScreen>(screen, windowID, renderer));
         break;
+    }
     case utl::StageID::PLAYING:
         add_stage(next,
             std::make_unique<MainLevel>(screen, windowID, renderer));
         break;
     case utl::StageID::HIGH_SCORES:
     {
-        MainLevel* mlptr{ nullptr };
-        if (current_stage->ID() == utl::StageID::PLAYING)
-            mlptr = static_cast<MainLevel*>(current_stage);
-
         if (!mlptr)
             throw std::runtime_error(
                 "Trying to enter game over screen without playing");

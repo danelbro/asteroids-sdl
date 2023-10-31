@@ -30,6 +30,7 @@ public:
 
     PhysicsManager& physMan() { return physicsManager; }
     ScoreManager& scoreMan() { return scoreManager; }
+    GameWorld& gameworld() { return gameWorld; }
 private:
     void init();
 

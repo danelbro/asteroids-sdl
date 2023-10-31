@@ -30,6 +30,7 @@ public:
 
     void loadFromRenderedText(std::string textureText, SDL_Color text_colour,
         SDL_Renderer* renderer);
+    void recentre();
 
     void free();
 
