@@ -22,7 +22,7 @@ GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
                 std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
                 int score)
 : Stage{ screen, windowID, rend, utl::StageID::HIGH_SCORES },
-    m_gameWorld{ screen },
+  m_gameWorld{ screen, 0.1 },
     m_titleFont{ utl::createFont(fontPath, titleFont_size) },
     m_scoreFont{ utl::createFont(fontPath, scoreFont_size) },
     m_rng{ utl::makeSeededRNG() },
@@ -81,6 +81,10 @@ utl::StageID GameOver::handle_input(double, double,
     {
         reset_title(m_GameOverText);
         reset_score(m_ScoreText);
+
+        for (auto& pE : m_physMan.physEntities) {
+            pE->gameWorld.screen = m_gameWorld.screen;
+        }
     }
 
     return utl::StageID::HIGH_SCORES;
