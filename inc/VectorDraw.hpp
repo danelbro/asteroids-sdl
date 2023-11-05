@@ -19,4 +19,7 @@ namespace utl {
 
     void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly,
     SdlColor col, SDL_Renderer* renderer);
+
+    bool areColliding_SAT(const std::vector<Vec2d>& shape1,
+                          const std::vector<Vec2d>& shape2);
 }

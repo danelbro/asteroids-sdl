@@ -6,18 +6,18 @@ struct Vec2d {
     double angle() const;
     double angleDeg() const;
 
-    Vec2d operator*(double x);
+    Vec2d operator*(const double& x) const;
     // dot product
-    double operator*(Vec2d otherVec);
+    double operator*(const Vec2d& otherVec) const;
 
-    Vec2d operator/(double x);
+    Vec2d operator/(const double& x) const;
 
-    Vec2d operator+(Vec2d otherVec);
+    Vec2d operator+(const Vec2d& otherVec) const;
 
-    Vec2d operator+=(Vec2d otherVec);
+    Vec2d operator+=(const Vec2d& otherVec);
 
-    Vec2d operator-();
-    Vec2d operator-(Vec2d otherVec);
+    Vec2d operator-() const;
+    Vec2d operator-(const Vec2d& otherVec) const;
 
     Vec2d normalize();
     Vec2d normalizeInPlace();

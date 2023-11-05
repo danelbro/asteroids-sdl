@@ -81,37 +81,38 @@ void Vec2d::rotate_deg_ip(double deg)
     rotate_rad_ip(deg * (M_PI / 180.0));
 }
 
-Vec2d Vec2d::operator*(double n)
+Vec2d Vec2d::operator*(const double& n) const
 {
     return Vec2d{ x * n, y * n };
 }
-double Vec2d::operator*(Vec2d otherVec)
+
+double Vec2d::operator*(const Vec2d& otherVec) const
 {
     return x * otherVec.x + y * otherVec.y;
 }
 
-Vec2d Vec2d::operator/(double n)
+Vec2d Vec2d::operator/(const double& n) const
 {
     return Vec2d{ x / n, y / n };
 }
 
-Vec2d Vec2d::operator+(Vec2d otherVec)
+Vec2d Vec2d::operator+(const Vec2d& otherVec) const
 {
     return Vec2d{ x + otherVec.x, y + otherVec.y };
 }
 
-Vec2d Vec2d::operator+=(Vec2d otherVec)
+Vec2d Vec2d::operator+=(const Vec2d& otherVec)
 {
     *this = *this + otherVec;
     return *this;
 }
 
-Vec2d Vec2d::operator-()
+Vec2d Vec2d::operator-() const
 {
     return Vec2d{ *this * -1 };
 }
 
-Vec2d Vec2d::operator-(Vec2d otherVec)
+Vec2d Vec2d::operator-(const Vec2d& otherVec) const
 {
     return Vec2d{ x - otherVec.x, y - otherVec.y };
 }

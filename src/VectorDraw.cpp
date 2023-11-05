@@ -107,19 +107,19 @@ namespace utl {
 
             j = poly.size() - 1;
             for (i = 0; i < poly.size(); i++) {
-              if ((poly.at(i).y < pixel.y && poly.at(j).y >= pixel.y) ||
-                  (poly.at(j).y < pixel.y && poly.at(i).y >= pixel.y))
-                nodesX.push_back(poly.at(i).x +
-                                 (pixel.y - poly.at(i).y) /
-                                     (poly.at(j).y - poly.at(i).y) *
-                                     (poly.at(j).x - poly.at(i).x));
+              if ((poly[i].y < pixel.y && poly[j].y >= pixel.y) ||
+                  (poly[j].y < pixel.y && poly[i].y >= pixel.y))
+                nodesX.push_back(poly[i].x +
+                                 (pixel.y - poly[i].y) /
+                                     (poly[j].y - poly[i].y) *
+                                     (poly[j].x - poly[i].x));
               j = i;
             }
 
             std::sort(nodesX.begin(), nodesX.end());
 
             for (i = 0; i < nodesX.size(); i += 2) {
-              for (pixel.x = nodesX.at(i); pixel.x < nodesX.at(i + 1);
+              for (pixel.x = nodesX[i]; pixel.x < nodesX.at(i + 1);
                    pixel.x += 1)
                 DrawWrapLine(renderer, gw.screen, pixel.x, pixel.y,
                              nodesX.at(i + 1), pixel.y);
@@ -127,5 +127,52 @@ namespace utl {
         }
 
         SDL_SetRenderDrawColor(renderer, old.r, old.g, old.b, old.a);
+    }
+
+
+    static void populateNormals(const std::vector<Vec2d>& shape,
+                                std::vector<Vec2d>& axes)
+    {
+        size_t i{};
+        for (i = 0; i < shape.size(); ++i) {
+            axes.emplace_back(Vec2d{-(shape[i+1 % shape.size()].y - shape[i].y),
+                                    shape[i+1 % shape.size()].x - shape[i].x}.normalizeInPlace());
+        }
+    }
+
+    bool areColliding_SAT(const std::vector<Vec2d>& shape1,
+                          const std::vector<Vec2d>& shape2)
+    {
+        size_t shape1size = shape1.size();
+        size_t shape2size = shape2.size();
+
+        std::vector<Vec2d> axes{};
+        axes.reserve(shape1size + shape2size);
+
+        populateNormals(shape1, axes);
+        populateNormals(shape2, axes);
+
+        // project shapes onto axes
+        for (const auto& axis : axes) {
+            double shape1min{ INFINITY }, shape1max{ -INFINITY };
+            double shape2min{ INFINITY }, shape2max{ -INFINITY };
+
+            for (const auto& p : shape1) {
+                double q = p * axis;
+                shape1min = std::min(q, shape1min);
+                shape1max = std::max(q, shape1max);
+            }
+
+            for (const auto& p : shape2) {
+                double q = p * axis;
+                shape2min = std::min(q, shape2min);
+                shape2max = std::max(q, shape2max);
+            }
+
+            if (!(shape2max > shape1min && shape1max > shape2min))
+                return false;
+        }
+
+        return true;
     }
 } // namespace utl

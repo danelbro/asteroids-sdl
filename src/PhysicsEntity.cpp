@@ -17,22 +17,33 @@ PhysicsEntity::PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
     double mass)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },
       physicsComponent{ mass, *this }, wayward{ true },
-      m_transShape{}, m_fillShape{}, m_isVisible{ true }
-{}
+      m_transShape{}, m_fillShape{}, m_collider{}, m_isVisible{ true }
+{
+    update_shapes();
+}
 
 void PhysicsEntity::update_shapes()
 {
     m_transShape.clear();
+    m_transShape.reserve(m_shape.size());
+    m_fillShape.clear();
+    m_fillShape.reserve(m_shape.size());
+    m_collider.clear();
+    m_collider.reserve(m_shape.size());
 
-    for (auto p : m_shape)
-        m_transShape.push_back(
-            p.rotate_deg(physicsComponent.angle()) * m_scale);
-
-    m_fillShape = m_transShape;
-    for (auto& p : m_fillShape) {
-        p.x += m_pos.x;
-        p.y += m_pos.y;
+    for (auto p : m_shape) {
+        p = p.rotate_deg(physicsComponent.angle());
+        p = p * m_scale;
+        m_transShape.emplace_back(p);
+        m_fillShape.emplace_back(p);
+        m_collider.emplace_back(p);
     }
+
+    for (auto& p : m_fillShape)
+        p += m_pos;
+
+    for (auto& p : m_collider)
+        p += m_pos;
 }
 
 void PhysicsEntity::render(SDL_Renderer* renderer)
@@ -66,3 +77,10 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
     SDL_SetRenderDrawColor(renderer,
         oldColor.r, oldColor.g, oldColor.b, oldColor.a);
 }
+
+namespace utl {
+    bool areColliding(const PhysicsEntity &pe1, const PhysicsEntity &pe2)
+    {
+        return areColliding_SAT(pe1.collider(), pe2.collider());
+    }
+} // namespace utl

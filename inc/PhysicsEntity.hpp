@@ -19,9 +19,10 @@ public:
 
 	void render(SDL_Renderer* renderer) override;
 
-	std::vector<Vec2d> shape() const { return m_shape; }
-	std::vector<Vec2d> transShape() const { return m_transShape; }
-	std::vector<Vec2d> fillShape() const { return m_fillShape; }
+	const std::vector<Vec2d>& shape() const { return m_shape; }
+	const std::vector<Vec2d>& transShape() const { return m_transShape; }
+	const std::vector<Vec2d>& fillShape() const { return m_fillShape; }
+    const std::vector<Vec2d>& collider() const { return m_collider; }
     bool isVisible() const { return m_isVisible; }
 
     void setVisible(bool vis) { m_isVisible = vis; }
@@ -37,7 +38,12 @@ protected:
 
 	std::vector<Vec2d> m_transShape;
 	std::vector<Vec2d> m_fillShape;
+    std::vector<Vec2d> m_collider;
     bool m_isVisible;
 
 	void update_shapes();
 };
+
+namespace utl {
+    bool areColliding(const PhysicsEntity& pe1, const PhysicsEntity& pe2);
+} // namespace utl

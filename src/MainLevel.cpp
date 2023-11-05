@@ -123,7 +123,7 @@ utl::StageID MainLevel::update(double t, double dt)
         scoreManager.update_lives(-1);
     physicsManager.clean_up(scoreManager);
     scoreManager.refresh();
-    if (!player.lives()) {
+    if (player.lives() <= 0) {
         return utl::StageID::HIGH_SCORES;
     }
 

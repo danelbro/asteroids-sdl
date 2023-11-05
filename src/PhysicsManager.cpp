@@ -45,8 +45,8 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 {
 	const double mass{ 1.0 };
 
-	constexpr double radiusMin = 20.0;
-	constexpr double radiusMax = 25.0;
+	constexpr double radiusMin = 25.0;
+	constexpr double radiusMax = 30.0;
 	std::uniform_real_distribution<double> radiusDist{ radiusMin, radiusMax };
 	double radius{ radiusDist(m_rng) };
 
@@ -109,7 +109,7 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 void PhysicsManager::make_asteroids(int num, double scale, bool isNew,
                                     Vec2d pos)
 {
-	constexpr double asteroidDistance{ 25.0 };
+	constexpr double asteroidDistance{ 50.0 };
 
 	for (int i{ num }; i > 0; i--)
 	{
@@ -251,7 +251,7 @@ void PhysicsManager::checkPlayerHit()
         if (ent->type == utl::EntityFlag::ASTEROID
             || ent->type == utl::EntityFlag::ENEMY
             || ent->type == utl::EntityFlag::ENEMY_BULLET) {
-            if (utl::PointInPolygon(m_player.pos(), ent->fillShape())) {
+            if (utl::areColliding(m_player, *ent)) {
                 m_player.kill_it();
             }
         }
@@ -272,7 +272,7 @@ void PhysicsManager::checkBulletsHit()
 			for (auto& target : physEntities) {
 				if (target->type == utl::EntityFlag::ASTEROID
 					|| target->type == utl::EntityFlag::ENEMY) {
-					if (utl::PointInPolygon(bul->pos(), target->fillShape())) {
+					if (utl::PointInPolygon(bul->pos(), target->collider())) {
 						target->kill_it();
 						bul->kill_it();
 						bul->wayward = false;
