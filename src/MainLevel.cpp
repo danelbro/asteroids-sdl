@@ -68,6 +68,9 @@ utl::StageID MainLevel::handle_input(double, double dt,
         if (key_state[utl::KeyFlag::K_SPACE]) {
             player.gun.fire(physicsManager);
         }
+        if (!key_state[utl::KeyFlag::K_SPACE]) {
+            player.gun.reset();
+        }
         if (key_state[utl::KeyFlag::K_LSHIFT]) {
             player.hyperdrive.warp();
         }

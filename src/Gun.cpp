@@ -20,6 +20,11 @@ void Gun::check_cooldown(double dt)
     m_cooldownTimer += dt;
     if (m_cooldownTimer < m_cooldown) return;
 
+    reset();
+}
+
+void Gun::reset()
+{
     m_fired = false;
     m_cooldownTimer = 0.0;
 }

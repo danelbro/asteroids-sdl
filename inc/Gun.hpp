@@ -12,6 +12,7 @@ public:
 
     void fire(PhysicsManager& physMan);
     void check_cooldown(double dt);
+    void reset();
 
     bool fired() const { return m_fired; }
 
