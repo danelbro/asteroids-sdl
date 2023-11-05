@@ -7,7 +7,7 @@ SDL_CFLAGS = $(shell sdl2-config --cflags)
 CFLAGS = -Wall -Wextra -Wsign-conversion -pedantic -std=c++14 -Weffc++
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 LDLIBS = -lSDL2_ttf
-OBJ = obj/AIComponent.o obj/Asteroid.o obj/AsteroidsApp.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/Vec2d.o obj/VectorDraw.o
+OBJ = obj/AIComponent.o obj/Asteroid.o obj/AsteroidsApp.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/ValtrAlgorithm.o obj/Vec2d.o obj/VectorDraw.o
 
 all: asteroids
 asteroids: $(OBJ)
@@ -56,6 +56,8 @@ obj/TitleScreen.o: src/TitleScreen.cpp inc/TitleScreen.hpp inc/Box.hpp inc/GameW
 	$(CC) $(DEBUG_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/TitleScreen.o -c src/TitleScreen.cpp
 obj/utility.o: src/utility.cpp inc/utility.hpp inc/GameWorld.hpp inc/Vec2d.hpp
 	$(CC) $(DEBUG_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/utility.o -c src/utility.cpp
+obj/ValtrAlgorithm.o: src/ValtrAlgorithm.cpp inc/ValtrAlgorithm.hpp inc/Vec2d.hpp
+	$(CC) $(DEBUG_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/ValtrAlgorithm.o -c src/ValtrAlgorithm.cpp
 obj/Vec2d.o: src/Vec2d.cpp inc/Vec2d.hpp
 	$(CC) $(DEBUG_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/Vec2d.o -c src/Vec2d.cpp
 obj/VectorDraw.o: src/VectorDraw.cpp inc/VectorDraw.hpp inc/Box.hpp inc/Colors.hpp inc/GameWorld.hpp inc/Vec2d.hpp

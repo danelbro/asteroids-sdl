@@ -17,6 +17,7 @@
 #include "../inc/Vec2d.hpp"
 #include "../inc/VectorDraw.hpp"
 #include "../inc/utility.hpp"
+#include "../inc/ValtrAlgorithm.hpp"
 
 PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
 	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },
@@ -60,35 +61,18 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 	std::uniform_real_distribution<double> angleDist{ 0.0, 360.0 };
 	double angle{ angleDist(m_rng) };
 
-    std::uniform_int_distribution<int> vertexDist{ 10, 15 };
+    std::uniform_int_distribution<int> vertexDist{ 8, 10 };
 	int vertexes{ vertexDist(m_rng) };
 
 	std::vector<Vec2d> shape{ };
     shape.reserve(static_cast<size_t>(vertexes));
 
-	std::normal_distribution<double> cragDistLow(-5.0, 0.5);
-	std::normal_distribution<double> cragDistHigh(5.0, 0.5);
-	std::uniform_int_distribution<> coinFlip(1, 2);
-	double sliceAngle{ (2 * M_PI / vertexes) };
-	for (int i{ 0 }; i < vertexes; ++i)
-	{
-		double cragDepth{ };
-		int coin{ coinFlip(m_rng) };
-		if (coin == 2)
-			cragDepth = cragDistHigh(m_rng);
-		else
-			cragDepth = cragDistLow(m_rng);
-		shape.emplace_back(Vec2d{
-                std::sin(sliceAngle * i) * (radius + cragDepth),
-                -std::cos(sliceAngle * i) * (radius + cragDepth)
-            });
-	}
+    shape = utl::genRandConvexPolygon(vertexes, radius, m_rng);
 
-	physEntities.emplace_back(std::make_unique<Asteroid>(m_gameWorld, pos,
-                                                         shape,
-                                                         customCols::asteroid_col,
-                                                         scale, mass, impulse,
-                                                         angle, radius));
+	physEntities.emplace_back(
+        std::make_unique<Asteroid>(m_gameWorld, pos, shape,
+                                   customCols::asteroid_col, scale, mass,
+                                   impulse, angle, radius));
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
@@ -130,9 +114,9 @@ static const std::vector<Vec2d> enemyPointy
 {
 	{0, -30},  // top
 	{15, -10}, // top right
-	{-15, -10}, {15, -10}, // cross bar
+	// {-15, -10}, {15, -10}, // cross bar
 	{20, 30},  // bottom right
-	{0, 15},   // bottom
+	// {0, 15},   // bottom
 	// {0, -30}, {0, 15}, // dorsal line
 	{-20, 30}, // bottom right
 	{-15, -10} // top left
@@ -195,15 +179,15 @@ Player& PhysicsManager::make_player()
 	constexpr int lives{ 3 };
     constexpr double respawnLength{ 2.0 };
     constexpr double flashLength{ 0.2 };
-    constexpr double cooldown{ 0.375 };
+    constexpr double cooldown{ 0.25 };
 
 	physEntities.emplace_back(std::make_unique<Player>(m_gameWorld, pos, shape,
-                                                    customCols::player_col,
-                                                    scale, power, turnSpeed,
-                                                    shotPower, mass, m_rng,
-                                                    warpLength, lives,
-                                                    respawnLength,
-                                                    flashLength, cooldown));
+                                                       customCols::player_col,
+                                                       scale, power, turnSpeed,
+                                                       shotPower, mass, m_rng,
+                                                       warpLength, lives,
+                                                       respawnLength,
+                                                       flashLength, cooldown));
 
 	return static_cast<Player&>(*physEntities.back());
 }
