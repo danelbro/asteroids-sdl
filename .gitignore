@@ -13,6 +13,10 @@
 !/assets
 !/data
 !/dep
+!/dep/SDL2
+!/dep/SDL2_d
+!/dep/SDL2_ttf
+!/dep/SDL2_ttf_d
 !*.png
 !*.sh
 !*.md
