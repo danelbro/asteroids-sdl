@@ -1,4 +1,4 @@
-﻿#include "../inc/MainLevel.hpp"
+﻿#include "MainLevel.hpp"
 
 #include <array>
 #include <string>
@@ -6,15 +6,15 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/Box.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/ScoreManager.hpp"
-#include "../inc/Stage.hpp"
-#include "../inc/StageManager.hpp"
-#include "../inc/PhysicsEntity.hpp"
-#include "../inc/PhysicsManager.hpp"
-#include "../inc/Player.hpp"
-#include "../inc/utility.hpp"
+#include "Box.hpp"
+#include "GameWorld.hpp"
+#include "ScoreManager.hpp"
+#include "Stage.hpp"
+#include "StageManager.hpp"
+#include "PhysicsEntity.hpp"
+#include "PhysicsManager.hpp"
+#include "Player.hpp"
+#include "utility.hpp"
 
 static constexpr int startingAsteroids{ 3 };
 static constexpr double asteroidScale{ 3.0 };

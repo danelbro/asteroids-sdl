@@ -1,15 +1,15 @@
-﻿#include "../inc/Bullet.hpp"
+﻿#include "Bullet.hpp"
 
 #include <vector>
 
 #include <SDL.h>
 
-#include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/PhysicsEntity.hpp"
-#include "../inc/Ship.hpp"
-#include "../inc/Vec2d.hpp"
-#include "../inc/utility.hpp"
+#include "GameWorld.hpp"
+#include "PhysicsComponent.hpp"
+#include "PhysicsEntity.hpp"
+#include "Ship.hpp"
+#include "Vec2d.hpp"
+#include "utility.hpp"
 
 Bullet::Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
                SdlColor color, double scale, double mass, double lifespan,

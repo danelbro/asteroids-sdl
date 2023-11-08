@@ -1,14 +1,14 @@
-﻿#include "../inc/StageManager.hpp"
+﻿#include "StageManager.hpp"
 
 #include <chrono>
 #include <memory>
 #include <stdexcept>
 
-#include "../inc/GameOver.hpp"
-#include "../inc/MainLevel.hpp"
-#include "../inc/Stage.hpp"
-#include "../inc/TitleScreen.hpp"
-#include "../inc/utility.hpp"
+#include "GameOver.hpp"
+#include "MainLevel.hpp"
+#include "Stage.hpp"
+#include "TitleScreen.hpp"
+#include "utility.hpp"
 
 StageManager::StageManager(utl::StageID first)
     : current{ utl::StageID::STAGES_TOTAL }, next{ first }
@@ -91,17 +91,17 @@ void StageManager::handle_stage_transition(Stage* current_stage)
     Box screen{};
     switch(current_stage->ID()) {
     case utl::StageID::TITLE_SCREEN:
-        tsptr = static_cast<TitleScreen*>(current_stage);
+        tsptr = dynamic_cast<TitleScreen*>(current_stage);
         if (!tsptr) throw std::runtime_error("buhhh");
         screen = tsptr->gameworld().screen;
         break;
     case utl::StageID::PLAYING:
-        mlptr = static_cast<MainLevel*>(current_stage);
+        mlptr = dynamic_cast<MainLevel*>(current_stage);
         if (!mlptr) throw std::runtime_error("buhhh");
         screen = mlptr->gameworld().screen;
         break;
     case utl::StageID::HIGH_SCORES:
-        goptr = static_cast<GameOver*>(current_stage);
+        goptr = dynamic_cast<GameOver*>(current_stage);
         if (!goptr) throw std::runtime_error("buhhh");
         screen = goptr->gameworld().screen;
         break;

@@ -1,4 +1,4 @@
-﻿#include "../inc/Enemy.hpp"
+﻿#include "Enemy.hpp"
 
 #include <stdexcept>
 #include <memory>
@@ -6,12 +6,12 @@
 
 #include <SDL.h>
 
-#include "../inc/AIComponent.hpp"
-#include "../inc/Colors.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/Ship.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/Vec2d.hpp"
+#include "AIComponent.hpp"
+#include "Colors.hpp"
+#include "GameWorld.hpp"
+#include "Ship.hpp"
+#include "PhysicsComponent.hpp"
+#include "Vec2d.hpp"
 
 Enemy::Enemy(GameWorld& new_gameworld, Vec2d pos, std::vector<Vec2d> shape,
              SdlColor colour, double scale, double power, double turnSpeed,

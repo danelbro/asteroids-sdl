@@ -1,4 +1,4 @@
-﻿#include "../inc/TextObject.hpp"
+﻿#include "TextObject.hpp"
 
 #include <algorithm>
 #include <string>
@@ -7,11 +7,11 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/Colors.hpp"
-#include "../inc/Entity.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/utility.hpp"
-#include "../inc/Vec2d.hpp"
+#include "Colors.hpp"
+#include "Entity.hpp"
+#include "GameWorld.hpp"
+#include "utility.hpp"
+#include "Vec2d.hpp"
 
 TextObject::TextObject(GameWorld& gw, Vec2d pos, TTF_Font* font,
     SdlColor color, SDL_Renderer* rend)

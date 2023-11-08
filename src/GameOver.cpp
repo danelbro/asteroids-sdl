@@ -1,4 +1,4 @@
-﻿#include "../inc/GameOver.hpp"
+﻿#include "GameOver.hpp"
 
 #include <array>
 #include <memory>
@@ -7,11 +7,11 @@
 
 #include <SDL.h>
 
-#include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsManager.hpp"
-#include "../inc/Stage.hpp"
-#include "../inc/TextObject.hpp"
-#include "../inc/utility.hpp"
+#include "GameWorld.hpp"
+#include "PhysicsManager.hpp"
+#include "Stage.hpp"
+#include "TextObject.hpp"
+#include "utility.hpp"
 
 static const std::string fontPath{ "data/Play-Regular.ttf" };
 static constexpr int titleFont_size{ 72 };

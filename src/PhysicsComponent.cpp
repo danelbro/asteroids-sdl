@@ -1,13 +1,13 @@
-﻿#include "../inc/PhysicsComponent.hpp"
+﻿#include "PhysicsComponent.hpp"
 
 #include <cmath>
 
 #include <SDL.h>
 
-#include "../inc/Box.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsEntity.hpp"
-#include "../inc/Vec2d.hpp"
+#include "Box.hpp"
+#include "GameWorld.hpp"
+#include "PhysicsEntity.hpp"
+#include "Vec2d.hpp"
 
 void PhysicsComponent::turn(double turnSpeed, double dt)
 {

@@ -1,4 +1,4 @@
-﻿#include "../inc/utility.hpp"
+﻿#include "utility.hpp"
 
 #include <array>
 #include <chrono>
@@ -9,8 +9,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/GameWorld.hpp"
-#include "../inc/Vec2d.hpp"
+#include "GameWorld.hpp"
+#include "Vec2d.hpp"
 
 std::ofstream errorLogger("exception.log");
 

@@ -1,12 +1,12 @@
-﻿#include "../inc/Ship.hpp"
+﻿#include "Ship.hpp"
 
-#include "../inc/Colors.hpp"
-#include "../inc/Engine.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/Gun.hpp"
-#include "../inc/PhysicsEntity.hpp"
-#include "../inc/Vec2d.hpp"
-#include "../inc/utility.hpp"
+#include "Colors.hpp"
+#include "Engine.hpp"
+#include "GameWorld.hpp"
+#include "Gun.hpp"
+#include "PhysicsEntity.hpp"
+#include "Vec2d.hpp"
+#include "utility.hpp"
 
 Ship::Ship(utl::EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
            std::vector<Vec2d> shape, SdlColor color, double scale,

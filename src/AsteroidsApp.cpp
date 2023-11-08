@@ -1,15 +1,15 @@
-#include "../inc/AsteroidsApp.hpp"
+#include "AsteroidsApp.hpp"
 
 #include <memory>
 #include <string>
 
 #include <SDL.h>
 
-#include "../inc/Application.hpp"
-#include "../inc/Box.hpp"
-#include "../inc/StageManager.hpp"
-#include "../inc/TitleScreen.hpp"
-#include "../inc/utility.hpp"
+#include "Application.hpp"
+#include "Box.hpp"
+#include "StageManager.hpp"
+#include "TitleScreen.hpp"
+#include "utility.hpp"
 
 AsteroidsApp::AsteroidsApp()
     : Application{},

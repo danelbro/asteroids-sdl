@@ -1,16 +1,16 @@
-﻿#include "../inc/PhysicsEntity.hpp"
+﻿#include "PhysicsEntity.hpp"
 
 #include <vector>
 
 #include <SDL.h>
 
-#include "../inc/Colors.hpp"
-#include "../inc/Entity.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/Vec2d.hpp"
-#include "../inc/VectorDraw.hpp"
-#include "../inc/utility.hpp"
+#include "Colors.hpp"
+#include "Entity.hpp"
+#include "GameWorld.hpp"
+#include "PhysicsComponent.hpp"
+#include "Vec2d.hpp"
+#include "VectorDraw.hpp"
+#include "utility.hpp"
 
 PhysicsEntity::PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
     Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,

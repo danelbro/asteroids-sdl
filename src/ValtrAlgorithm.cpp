@@ -26,14 +26,14 @@
 // algorithm found at the following page:
 // https://cglab.ca/~sander/misc/ConvexGeneration/convex.html
 
-#include "../inc/ValtrAlgorithm.hpp"
+#include "ValtrAlgorithm.hpp"
 
 #include <algorithm>
 #include <cstddef>
 #include <random>
 #include <vector>
 
-#include "../inc/Vec2d.hpp"
+#include "Vec2d.hpp"
 
 namespace utl {
     std::vector<Vec2d> genRandConvexPolygon(int m, double radius,

@@ -1,7 +1,7 @@
-﻿#include "../inc/AIComponent.hpp"
+﻿#include "AIComponent.hpp"
 
-#include "../inc/Enemy.hpp"
-#include "../inc/Player.hpp"
+#include "Enemy.hpp"
+#include "Player.hpp"
 
 AIComponent::AIComponent(Enemy& new_owner)
     : owner{ new_owner }

@@ -1,14 +1,14 @@
-﻿#include "../inc/VectorDraw.hpp"
+﻿#include "VectorDraw.hpp"
 
 #include <algorithm>
 #include <vector>
 
 #include <SDL.h>
 
-#include "../inc/Box.hpp"
-#include "../inc/Colors.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/Vec2d.hpp"
+#include "Box.hpp"
+#include "Colors.hpp"
+#include "GameWorld.hpp"
+#include "Vec2d.hpp"
 
 namespace utl {
     int wrapCoord(int p, int dim) {

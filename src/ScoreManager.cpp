@@ -1,13 +1,13 @@
-﻿#include "../inc/ScoreManager.hpp"
+﻿#include "ScoreManager.hpp"
 
 #include <string>
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/Colors.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/TextObject.hpp"
+#include "Colors.hpp"
+#include "GameWorld.hpp"
+#include "TextObject.hpp"
 
 ScoreManager::ScoreManager(GameWorld& gw, Vec2d pos, TTF_Font* font,
                            SDL_Renderer* renderer, int playerLives)

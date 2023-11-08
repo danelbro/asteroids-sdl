@@ -6,8 +6,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/AsteroidsApp.hpp"
-#include "../inc/utility.hpp"
+#include "AsteroidsApp.hpp"
+#include "utility.hpp"
 
 #ifdef _WIN32
 int WinMain()

@@ -1,8 +1,8 @@
-﻿#include "../inc/Gun.hpp"
+﻿#include "Gun.hpp"
 
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/PhysicsManager.hpp"
-#include "../inc/Ship.hpp"
+#include "PhysicsComponent.hpp"
+#include "PhysicsManager.hpp"
+#include "Ship.hpp"
 
 void Gun::fire(PhysicsManager& physMan)
 {

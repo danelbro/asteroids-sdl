@@ -1,23 +1,23 @@
-﻿#include "../inc/PhysicsManager.hpp"
+﻿#include "PhysicsManager.hpp"
 
 #include <memory>
 #include <random>
 #include <type_traits>
 #include <vector>
 
-#include "../inc/Asteroid.hpp"
-#include "../inc/Bullet.hpp"
-#include "../inc/Enemy.hpp"
-#include "../inc/Entity.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/Player.hpp"
-#include "../inc/ScoreManager.hpp"
-#include "../inc/Ship.hpp"
-#include "../inc/Vec2d.hpp"
-#include "../inc/VectorDraw.hpp"
-#include "../inc/utility.hpp"
-#include "../inc/ValtrAlgorithm.hpp"
+#include "Asteroid.hpp"
+#include "Bullet.hpp"
+#include "Enemy.hpp"
+#include "Entity.hpp"
+#include "GameWorld.hpp"
+#include "PhysicsComponent.hpp"
+#include "Player.hpp"
+#include "ScoreManager.hpp"
+#include "Ship.hpp"
+#include "Vec2d.hpp"
+#include "VectorDraw.hpp"
+#include "utility.hpp"
+#include "ValtrAlgorithm.hpp"
 
 PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
 	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },
@@ -189,7 +189,7 @@ Player& PhysicsManager::make_player()
                                                        respawnLength,
                                                        flashLength, cooldown));
 
-	return static_cast<Player&>(*physEntities.back());
+	return dynamic_cast<Player&>(*physEntities.back());
 }
 
 void PhysicsManager::clean_up(ScoreManager& scoreMan)

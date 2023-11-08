@@ -1,4 +1,4 @@
-﻿#include "../inc/TitleScreen.hpp"
+﻿#include "TitleScreen.hpp"
 
 #include <array>
 #include <memory>
@@ -8,11 +8,11 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "../inc/Box.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/Stage.hpp"
-#include "../inc/TextObject.hpp"
-#include "../inc/utility.hpp"
+#include "Box.hpp"
+#include "GameWorld.hpp"
+#include "Stage.hpp"
+#include "TextObject.hpp"
+#include "utility.hpp"
 
 static constexpr int title_font_size{ 72 };
 static constexpr int instruction_font_size{ 36 };

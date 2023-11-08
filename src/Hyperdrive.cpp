@@ -1,10 +1,10 @@
-﻿#include "../inc/Hyperdrive.hpp"
+﻿#include "Hyperdrive.hpp"
 
 #include <random>
 
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/Player.hpp"
-#include "../inc/utility.hpp"
+#include "PhysicsComponent.hpp"
+#include "Player.hpp"
+#include "utility.hpp"
 
 Hyperdrive::Hyperdrive(Player& owner, double warpLength, std::mt19937& rng)
     : m_isWarping{ false }, m_warpLength{warpLength}, m_warpTimer{ 0.0 },

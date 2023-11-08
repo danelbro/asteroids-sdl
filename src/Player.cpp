@@ -1,17 +1,17 @@
-﻿#include "../inc/Player.hpp"
+﻿#include "Player.hpp"
 
 #include <random>
 #include <vector>
 
 #include <SDL.h>
 
-#include "../inc/Colors.hpp"
-#include "../inc/GameWorld.hpp"
-#include "../inc/Hyperdrive.hpp"
-#include "../inc/PhysicsComponent.hpp"
-#include "../inc/Ship.hpp"
-#include "../inc/Vec2d.hpp"
-#include "../inc/utility.hpp"
+#include "Colors.hpp"
+#include "GameWorld.hpp"
+#include "Hyperdrive.hpp"
+#include "PhysicsComponent.hpp"
+#include "Ship.hpp"
+#include "Vec2d.hpp"
+#include "utility.hpp"
 
 Player::Player(GameWorld& new_gameWorld, Vec2d pos,
                std::vector<Vec2d> shape, SdlColor color, double scale,
