@@ -11,6 +11,8 @@
 !/src
 !/inc
 !/assets
+!/data
+!/dep
 !*.png
 !*.sh
 !*.md
