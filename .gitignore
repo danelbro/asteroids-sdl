@@ -1,29 +1,11 @@
-# Ignore all
-*
-
-# Unignore source files
-!*.cpp
-!*.h
-!*.c
-!*.hpp
-!Makefile
-!.gitignore
-!/src/*
-!/inc/*
-!/assets/*
-!/data/*
-!/dep/*
-!/dep/SDL2/*
-!/dep/SDL2_d/*
-!/dep/SDL2_ttf/*
-!/dep/SDL2_ttf_d/*
-!*.png
-!*.sh
-!*.md
-
-#Unignore text and fonts
-!*.ttf
-!*.txt
-
-#Reignore valgrind output
 valgrind-out.txt
+.cache/
+.gdbinit
+.gitignore.swp
+asteroids
+asteroids_debug
+compile_commands.json
+exception.log
+obj/
+*.pc
+/dep/

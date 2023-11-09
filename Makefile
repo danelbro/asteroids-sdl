@@ -7,13 +7,13 @@ INC_DIRS = -iquote inc/
 
 ## ’Release’ mode
 MODE_FLAGS = -O2
-SDL_CFLAGS = -Idep/SDL2/include/SDL2 -D_REENTRANT -Idep/SDL2_ttf/include/SDL2
-SDL_LDFLAGS = -Wl,-rpath,dep/SDL2/lib -Wl,--enable-new-dtags -lSDL2 -Ldep/SDL2_ttf/lib/ -lSDL2_ttf
+SDL_CFLAGS = -Idep/linux_64/SDL2/include/SDL2 -D_REENTRANT -Idep/linux_64/SDL2_ttf/include/SDL2
+SDL_LDFLAGS = -Wl,-rpath,dep/linux_64/SDL2/lib -Wl,--enable-new-dtags -lSDL2 -Ldep/linux_64/SDL2_ttf/lib/ -lSDL2_ttf
 
 ## ’Debug’ mode
 # MODE_FLAGS = -Og -g -D_DEBUG
-# SDL_CFLAGS = -Idep/SDL2_d/include/SDL2 -D_REENTRANT -Idep/SDL2_ttf_d/include/SDL2
-# SDL_LDFLAGS = -Wl,-rpath,dep/SDL2_d/lib -Wl,--enable-new-dtags -lSDL2 -Ldep/SDL2_ttf_d/lib/ -lSDL2_ttf
+# SDL_CFLAGS = -Idep/linux_64/SDL2_d/include/SDL2 -D_REENTRANT -Idep/linux_64/SDL2_ttf_d/include/SDL2
+# SDL_LDFLAGS = -Wl,-rpath,dep/linux_64/SDL2_d/lib -Wl,--enable-new-dtags -lSDL2 -Ldep/linux_64/SDL2_ttf_d/lib/ -lSDL2_ttf
 
 OBJ = obj/AIComponent.o obj/Asteroid.o obj/AsteroidsApp.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/ValtrAlgorithm.o obj/Vec2d.o obj/VectorDraw.o
 
