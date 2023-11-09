@@ -15,7 +15,7 @@ Bullet::Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
                SdlColor color, double scale, double mass, double lifespan,
                double angle, double power)
 	: PhysicsEntity{ utl::EntityFlag::BULLET, new_gameWorld, pos, shape, color,
-                     scale, mass }, m_lifespan{ lifespan }
+                     scale, mass }, m_lifespan{ lifespan }, m_wayward{ true }
 {
     physicsComponent.setAngle(angle);
     physicsComponent.setFrameImpulse(power);

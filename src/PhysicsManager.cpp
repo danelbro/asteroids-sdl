@@ -264,7 +264,7 @@ void PhysicsManager::checkBulletsHit()
 					if (utl::PointInPolygon(bptr->pos(), target->collider())) {
 						target->kill_it();
 						bptr->kill_it();
-						bptr->wayward = false;
+						bptr->wayward() = false;
 						break;
 					}
 				}
