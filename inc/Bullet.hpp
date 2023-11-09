@@ -19,8 +19,10 @@ public:
            double angle, double power);
 
     void update(double t, double dt) override;
+    bool& wayward() { return m_wayward; }
 
 private:
     double m_lifespan;
     double m_alive{ 0.0 };
+    bool m_wayward;
 };

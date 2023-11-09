@@ -215,9 +215,12 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 				scoreMan.update_score(baseEnemyScore);
 				break;
 			case utl::EntityFlag::BULLET:
-				if (phys.wayward)
+            {
+                Bullet& bulref = dynamic_cast<Bullet&>(phys);
+				if (bulref.wayward())
 					scoreMan.update_score(penalty);
 				break;
+            }
 			default:
 				break;
 			}
@@ -253,13 +256,15 @@ void PhysicsManager::checkBulletsHit()
 {
 	for (auto& bul : physEntities) {
 		if (bul->type == utl::EntityFlag::BULLET && !bul->toBeKilled()) {
+            PhysicsEntity* ptr{ bul.get() };
+            Bullet* bptr{ dynamic_cast<Bullet*>(ptr) };
 			for (auto& target : physEntities) {
 				if (target->type == utl::EntityFlag::ASTEROID
 					|| target->type == utl::EntityFlag::ENEMY) {
-					if (utl::PointInPolygon(bul->pos(), target->collider())) {
+					if (utl::PointInPolygon(bptr->pos(), target->collider())) {
 						target->kill_it();
-						bul->kill_it();
-						bul->wayward = false;
+						bptr->kill_it();
+						bptr->wayward = false;
 						break;
 					}
 				}

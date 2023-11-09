@@ -28,9 +28,6 @@ public:
     void setVisible(bool vis) { m_isVisible = vis; }
 
 	PhysicsComponent physicsComponent;
-	bool wayward; // for dealing with wayward bullets - find a better
-                  // way to do this?
-
 protected:
     PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
                   Vec2d pos, std::vector<Vec2d> shape, SdlColor color,
