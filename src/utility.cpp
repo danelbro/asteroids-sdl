@@ -12,9 +12,9 @@
 #include "GameWorld.hpp"
 #include "Vec2d.hpp"
 
-std::ofstream errorLogger("exception.log");
-
 namespace utl {
+    std::ofstream errorLogger("exception.log");
+
     SdlException::SdlException(std::string message)
         : std::runtime_error{ message }
     {}
@@ -31,6 +31,47 @@ namespace utl {
                 std::string{ "Cannot initialise SDL_TTF! TTF_Error: ",
                 TTF_GetError() });
     }
+
+    void quit_sdl()
+    {
+        TTF_Quit();
+        SDL_Quit();
+    }
+
+    // thanks to https://stackoverflow.com/a/24252225
+    struct sdl_deleter
+    {
+        void operator()(SDL_Window* w) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a window\n";
+#endif
+            SDL_DestroyWindow(w);
+        }
+        void operator()(SDL_Renderer* r) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a renderer\n";
+#endif
+            SDL_DestroyRenderer(r);
+        }
+        void operator()(SDL_Surface* s) const {
+#ifdef _DEBUG
+            errorLogger << "freeing a surface\n";
+#endif
+            SDL_FreeSurface(s);
+        }
+        void operator()(SDL_Texture* t) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a texture\n";
+#endif
+            SDL_DestroyTexture(t);
+        }
+        void operator()(TTF_Font* f) {
+#ifdef _DEBUG
+            errorLogger << "closing a font\n";
+#endif
+            TTF_CloseFont(f);
+        }
+    };
 
     std::unique_ptr<SDL_Window, sdl_deleter> createWindow(const char* title,
                                                           int x, int y,

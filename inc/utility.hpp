@@ -12,44 +12,11 @@
 struct GameWorld;
 struct Vec2d;
 
-extern std::ofstream errorLogger;
-
 namespace utl {
+    extern std::ofstream errorLogger;
 
-    // thanks to https://stackoverflow.com/a/24252225
-    struct sdl_deleter
-    {
-        void operator()(SDL_Window* w) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a window\n";
-#endif
-            SDL_DestroyWindow(w);
-        }
-        void operator()(SDL_Renderer* r) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a renderer\n";
-#endif
-            SDL_DestroyRenderer(r);
-        }
-        void operator()(SDL_Surface* s) const {
-#ifdef _DEBUG
-            errorLogger << "freeing a surface\n";
-#endif
-            SDL_FreeSurface(s);
-        }
-        void operator()(SDL_Texture* t) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a texture\n";
-#endif
-            SDL_DestroyTexture(t);
-        }
-        void operator()(TTF_Font* f) {
-#ifdef _DEBUG
-            errorLogger << "closing a font\n";
-#endif
-            TTF_CloseFont(f);
-        }
-    };
+    // Custom deleters for SDL types. Pass when constructing a unique_ptr
+    struct sdl_deleter;
 
     // wrapper around std::runtime_error to make SDL exception handling
     // smoother
@@ -62,6 +29,9 @@ namespace utl {
     // Initialise SDL with sdlFlags.
     // Throw SdlException if initialisation fails
     void init(Uint32 sdlFlags);
+
+    // Run SDL and TTF quit functions
+    void quit_sdl();
 
     // Create an SDL_Window*. Throw an SdlException if creation fails
     std::unique_ptr<SDL_Window, sdl_deleter> createWindow(const char* title,
@@ -88,6 +58,7 @@ namespace utl {
     textStruct createTextTexture(TTF_Font* font, std::string text,
         SDL_Color text_colour, SDL_Renderer* rend);
 
+    // Create a TTF_Font. Throw an SdlException if creation fails
    std::unique_ptr<TTF_Font, sdl_deleter> createFont(std::string path,
        int font_size);
 
@@ -105,6 +76,8 @@ namespace utl {
         K_TOTAL
     };
 
+    // process SDL input into a more friendly form. Also deals withh
+    // window resizing
     void process_input(GameWorld& gw, Uint32 windowID,
                      std::array<bool,
                      KeyFlag::K_TOTAL> &key_state);

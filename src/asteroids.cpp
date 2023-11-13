@@ -14,9 +14,7 @@ int WinMain()
 #elif __linux__
 int main()
 #endif
-#ifdef _DEBUG
 try
-#endif
 {
     constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
     utl::init(sdlFlags);
@@ -26,35 +24,37 @@ try
         asteroids.run();
     }
 
-    TTF_Quit();
-    SDL_Quit();
+    utl::quit_sdl();
 
     return 0;
 }
-#ifdef _DEBUG
 catch (utl::SdlException& se)
 {
-    errorLogger << "SDL exception: " << se.what() << '\n';
+    utl::errorLogger << "SDL exception: " << se.what() << '\n';
+    utl::quit_sdl();
     return 1;
 }
 catch (std::runtime_error &re)
 {
-    errorLogger << "exception: " << re.what() << '\n';
+    utl::errorLogger << "exception: " << re.what() << '\n';
+    utl::quit_sdl();
     return 2;
 }
 catch (std::out_of_range& oor)
 {
-    errorLogger << "out of range: " << oor.what() << '\n';
+    utl::errorLogger << "out of range: " << oor.what() << '\n';
+    utl::quit_sdl();
     return 3;
 }
 catch (std::exception& e)
 {
-    errorLogger << "std::exception: " << e.what() << '\n';
+    utl::errorLogger << "std::exception: " << e.what() << '\n';
+    utl::quit_sdl();
     return 4;
 }
 catch (...)
 {
-    errorLogger << "unknown exception\n";
+    utl::errorLogger << "unknown exception\n";
+    utl::quit_sdl();
     return -1;
 }
-#endif
