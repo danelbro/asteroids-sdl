@@ -91,17 +91,17 @@ void StageManager::handle_stage_transition(Stage* current_stage)
     Box screen{};
     switch(current_stage->ID()) {
     case utl::StageID::TITLE_SCREEN:
-        tsptr = dynamic_cast<TitleScreen*>(current_stage);
+        tsptr = static_cast<TitleScreen*>(current_stage);
         if (!tsptr) throw std::runtime_error("buhhh");
         screen = tsptr->gameworld().screen;
         break;
     case utl::StageID::PLAYING:
-        mlptr = dynamic_cast<MainLevel*>(current_stage);
+        mlptr = static_cast<MainLevel*>(current_stage);
         if (!mlptr) throw std::runtime_error("buhhh");
         screen = mlptr->gameworld().screen;
         break;
     case utl::StageID::HIGH_SCORES:
-        goptr = dynamic_cast<GameOver*>(current_stage);
+        goptr = static_cast<GameOver*>(current_stage);
         if (!goptr) throw std::runtime_error("buhhh");
         screen = goptr->gameworld().screen;
         break;
