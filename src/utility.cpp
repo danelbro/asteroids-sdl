@@ -38,40 +38,6 @@ namespace utl {
         SDL_Quit();
     }
 
-    // thanks to https://stackoverflow.com/a/24252225
-    struct sdl_deleter
-    {
-        void operator()(SDL_Window* w) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a window\n";
-#endif
-            SDL_DestroyWindow(w);
-        }
-        void operator()(SDL_Renderer* r) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a renderer\n";
-#endif
-            SDL_DestroyRenderer(r);
-        }
-        void operator()(SDL_Surface* s) const {
-#ifdef _DEBUG
-            errorLogger << "freeing a surface\n";
-#endif
-            SDL_FreeSurface(s);
-        }
-        void operator()(SDL_Texture* t) const {
-#ifdef _DEBUG
-            errorLogger << "destroying a texture\n";
-#endif
-            SDL_DestroyTexture(t);
-        }
-        void operator()(TTF_Font* f) {
-#ifdef _DEBUG
-            errorLogger << "closing a font\n";
-#endif
-            TTF_CloseFont(f);
-        }
-    };
 
     std::unique_ptr<SDL_Window, sdl_deleter> createWindow(const char* title,
                                                           int x, int y,
@@ -183,25 +149,25 @@ namespace utl {
                 case SDLK_ESCAPE:
                     key_state[KeyFlag::K_ESCAPE] = true;
                     break;
-                case SDLK_LEFT:
+                case SDLK_LEFT: case SDLK_a:
                     key_state[KeyFlag::K_LEFT] = true;
                     break;
-                case SDLK_RIGHT:
+                case SDLK_RIGHT: case SDLK_d:
                     key_state[KeyFlag::K_RIGHT] = true;
                     break;
-                case SDLK_UP:
+                case SDLK_UP: case SDLK_w:
                     key_state[KeyFlag::K_UP] = true;
                     break;
-                case SDLK_DOWN:
+                case SDLK_DOWN: case SDLK_s:
                     key_state[KeyFlag::K_DOWN] = true;
                     break;
-                case SDLK_SPACE:
+                case SDLK_SPACE: case SDLK_p:
                     key_state[KeyFlag::K_SPACE] = true;
                     break;
                 case SDLK_RETURN:
                     key_state[KeyFlag::K_ENTER] = true;
                     break;
-                case SDLK_LSHIFT:
+                case SDLK_LSHIFT: case SDLK_t:
                     key_state[KeyFlag::K_LSHIFT] = true;
                     break;
                 default:

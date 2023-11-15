@@ -254,16 +254,17 @@ bool PhysicsManager::wasPlayerKilled()
 
 void PhysicsManager::checkBulletsHit()
 {
-	for (auto& bul : physEntities) {
-		if (bul->type == utl::EntityFlag::BULLET && !bul->toBeKilled()) {
-            Bullet& bref{ static_cast<Bullet&>(*bul) };
+	for (auto& physEnt : physEntities) {
+		if (physEnt->type == utl::EntityFlag::BULLET 
+                        && !physEnt->toBeKilled()) {
+            Bullet& bul{ static_cast<Bullet&>(*physEnt) };
 			for (auto& target : physEntities) {
 				if (target->type == utl::EntityFlag::ASTEROID
 					|| target->type == utl::EntityFlag::ENEMY) {
-					if (utl::PointInPolygon(bptr->pos(), target->collider())) {
+					if (utl::PointInPolygon(bul.pos(), target->collider())) {
 						target->kill_it();
-						bref.kill_it();
-						bref.wayward() = false;
+						bul.kill_it();
+						bul.wayward() = false;
 						break;
 					}
 				}

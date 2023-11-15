@@ -16,7 +16,40 @@ namespace utl {
     extern std::ofstream errorLogger;
 
     // Custom deleters for SDL types. Pass when constructing a unique_ptr
-    struct sdl_deleter;
+    // thanks to https://stackoverflow.com/a/24252225
+    struct sdl_deleter
+    {
+        void operator()(SDL_Window* w) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a window\n";
+#endif
+            SDL_DestroyWindow(w);
+        }
+        void operator()(SDL_Renderer* r) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a renderer\n";
+#endif
+            SDL_DestroyRenderer(r);
+        }
+        void operator()(SDL_Surface* s) const {
+#ifdef _DEBUG
+            errorLogger << "freeing a surface\n";
+#endif
+            SDL_FreeSurface(s);
+        }
+        void operator()(SDL_Texture* t) const {
+#ifdef _DEBUG
+            errorLogger << "destroying a texture\n";
+#endif
+            SDL_DestroyTexture(t);
+        }
+        void operator()(TTF_Font* f) {
+#ifdef _DEBUG
+            errorLogger << "closing a font\n";
+#endif
+            TTF_CloseFont(f);
+        }
+    };
 
     // wrapper around std::runtime_error to make SDL exception handling
     // smoother
