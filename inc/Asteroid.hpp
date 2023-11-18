@@ -2,7 +2,6 @@
 
 #include <SDL.h>
 #include <vector>
-#include <random>
 
 #include "Colors.hpp"
 #include "PhysicsEntity.hpp"

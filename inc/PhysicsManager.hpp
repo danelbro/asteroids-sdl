@@ -10,21 +10,21 @@
 
 #include "Asteroid.hpp"
 #include "Bullet.hpp"
-#include "Enemy.hpp"
-#include "Entity.hpp"
+#include "Colors.hpp"
 #include "GameWorld.hpp"
-#include "PhysicsComponent.hpp"
 #include "Player.hpp"
 #include "ScoreManager.hpp"
 #include "Ship.hpp"
 #include "Vec2d.hpp"
 #include "VectorDraw.hpp"
+#include "utility.hpp"
 
 class PhysicsManager {
 public:
 	PhysicsManager(GameWorld& gameWorld, std::mt19937& rng);
 
-	void make_bullet(Vec2d origin, double power, double angle);
+	void make_bullet(Vec2d origin, double power, double angle,
+                     SdlColor col, utl::EntityFlag flag);
 
 	void make_asteroid(double scale, Vec2d pos);
 

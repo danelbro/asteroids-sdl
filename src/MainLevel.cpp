@@ -7,10 +7,9 @@
 #include <SDL_ttf.h>
 
 #include "Box.hpp"
-#include "GameWorld.hpp"
+#include "Enemy.hpp"
 #include "ScoreManager.hpp"
 #include "Stage.hpp"
-#include "StageManager.hpp"
 #include "PhysicsEntity.hpp"
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
@@ -127,6 +126,11 @@ utl::StageID MainLevel::update(double t, double dt)
     physicsManager.clean_up(scoreManager);
     scoreManager.refresh();
     if (player.lives() <= 0) {
+        for (auto& physEnt : physicsManager.physEntities) {
+            Enemy* eptr{ dynamic_cast<Enemy*>(physEnt.get())};
+            if (eptr)
+                eptr->playerKilled();
+        }
         return utl::StageID::HIGH_SCORES;
     }
 

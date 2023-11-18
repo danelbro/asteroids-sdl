@@ -2,11 +2,11 @@
 
 #include <memory>
 #include <random>
-#include <type_traits>
 #include <vector>
 
 #include "Asteroid.hpp"
 #include "Bullet.hpp"
+#include "Colors.hpp"
 #include "Enemy.hpp"
 #include "Entity.hpp"
 #include "GameWorld.hpp"
@@ -26,7 +26,8 @@ PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
     physEntities.reserve(500);
 }
 
-void PhysicsManager::make_bullet(Vec2d origin, double power, double angle)
+void PhysicsManager::make_bullet(Vec2d origin, double power, double angle,
+                                 SdlColor col, utl::EntityFlag flag)
 {
 	constexpr double mass{ 0.003 };
 	constexpr double scale{ 1.0 };
@@ -35,10 +36,9 @@ void PhysicsManager::make_bullet(Vec2d origin, double power, double angle)
 	const std::vector<Vec2d> shape{ {1, -3}, {-1, -3}, {-2, 3}, {2, 3} };
 
 	physEntities.emplace_back(std::make_unique<Bullet>(m_gameWorld, origin,
-                                                       shape,
-                                                       customCols::bullet_col,
+                                                       shape, col,
                                                        scale, mass, lifespan,
-                                                       angle, power));
+                                                       angle, power, flag));
 }
 
 
@@ -140,6 +140,7 @@ void PhysicsManager::make_enemy()
 	constexpr double scale{ 1.0 };
 	constexpr double power{ 5000.0 };
 	constexpr double turnSpeed{ 300.0 };
+    constexpr double maxVel{ 150.0 };
 	constexpr double shotPower{ 20000.0 };
 	constexpr double mass{ 0.1 };
     constexpr double cooldown{ 1.0 };
@@ -152,11 +153,13 @@ void PhysicsManager::make_enemy()
                                         m_gameWorld.screen.h) };
 
 	physEntities.emplace_back(std::make_unique<Enemy>( m_gameWorld, new_pos,
-                                                    shape,
-                                                    customCols::enemy_col,
-                                                    scale, power, turnSpeed,
-                                                    shotPower, mass,
-                                                    cooldown));
+                                                       shape,
+                                                       customCols::enemy_col,
+                                                       scale, power, turnSpeed,
+                                                       maxVel,
+                                                       shotPower, mass,
+                                                       cooldown, &m_player,
+                                                       *this));
 }
 
 static const std::vector<Vec2d> playerShape
@@ -255,7 +258,7 @@ bool PhysicsManager::wasPlayerKilled()
 void PhysicsManager::checkBulletsHit()
 {
 	for (auto& physEnt : physEntities) {
-		if (physEnt->type == utl::EntityFlag::BULLET 
+		if (physEnt->type == utl::EntityFlag::BULLET
                         && !physEnt->toBeKilled()) {
             Bullet& bul{ static_cast<Bullet&>(*physEnt) };
 			for (auto& target : physEntities) {

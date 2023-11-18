@@ -136,7 +136,7 @@ namespace utl {
         size_t i{};
         for (i = 0; i < shape.size(); ++i) {
             axes.emplace_back(Vec2d{-(shape[i+1 % shape.size()].y - shape[i].y),
-                                    shape[i+1 % shape.size()].x - shape[i].x}.normalizeInPlace());
+                                    shape[i+1 % shape.size()].x - shape[i].x}.normalize());
         }
     }
 

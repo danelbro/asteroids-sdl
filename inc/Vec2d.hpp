@@ -5,6 +5,7 @@ struct Vec2d {
     double magnitude_squared() const;
     double angle() const;
     double angleDeg() const;
+    double angleTo(const Vec2d& otherVec) const;
 
     Vec2d operator*(const double& x) const;
     // dot product
@@ -19,8 +20,8 @@ struct Vec2d {
     Vec2d operator-() const;
     Vec2d operator-(const Vec2d& otherVec) const;
 
-    Vec2d normalize();
-    Vec2d normalizeInPlace();
+    Vec2d normalize() const;
+    void normalizeInPlace();
     Vec2d update(double new_x, double new_y);
     Vec2d update(Vec2d new_vec);
     Vec2d rotate_rad(double rad);

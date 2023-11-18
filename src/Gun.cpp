@@ -1,14 +1,32 @@
 ﻿#include "Gun.hpp"
 
+#include "Colors.hpp"
 #include "PhysicsComponent.hpp"
 #include "PhysicsManager.hpp"
 #include "Ship.hpp"
+#include "utility.hpp"
 
 void Gun::fire(PhysicsManager& physMan)
 {
+    SdlColor col{};
+    utl::EntityFlag flag{};
+    switch (m_owner.type) {
+    case utl::EntityFlag::PLAYER:
+        col = customCols::bullet_col;
+        flag = utl::EntityFlag::BULLET;
+        break;
+    case utl::EntityFlag::ENEMY:
+        col = customCols::enemy_col;
+        flag = utl::EntityFlag::ENEMY_BULLET;
+        break;
+    default:
+        break;
+    }
+
     if (!m_fired)
         physMan.make_bullet(m_owner.nose(), m_shotPower,
-                            m_owner.physicsComponent.angle());
+                            m_owner.physicsComponent.angle(),
+                            col, flag);
 
     m_fired = true;
 }

@@ -1,6 +1,5 @@
 ﻿#include "TextObject.hpp"
 
-#include <algorithm>
 #include <string>
 #include <vector>
 

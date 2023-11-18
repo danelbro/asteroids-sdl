@@ -3,9 +3,6 @@
 // Entity class representing an on-screen object
 // to be drawn with vector graphics
 
-#include <array>
-#include <memory>
-#include <string>
 #include <vector>
 
 #include <SDL.h>
@@ -22,6 +19,7 @@ public:
     virtual void update(double t, double dt) = 0;
     virtual void render(SDL_Renderer* renderer) = 0;
 
+    virtual const Vec2d& getPos() const { return m_pos; }
     virtual Vec2d& pos() { return m_pos; }
     virtual bool toBeKilled() const { return kill_me; }
     virtual void kill_it() { kill_me = true; }

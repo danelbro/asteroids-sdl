@@ -2,7 +2,6 @@
 
 #include <array>
 #include <memory>
-#include <random>
 #include <string>
 
 #include <SDL.h>
@@ -30,7 +29,7 @@ GameOver::GameOver(Box screen, Uint32 windowID, SDL_Renderer* rend,
     m_GameOverText{ m_gameWorld, {}, m_titleFont.get(),
         customCols::text_col, rend },
     m_ScoreText{ m_gameWorld, {}, m_scoreFont.get(),
-customCols::text_col, rend }
+    customCols::text_col, rend }
 {
     // remove Player from m_physMan
     m_physMan.physEntities.erase(m_physMan.physEntities.begin());

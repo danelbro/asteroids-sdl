@@ -2,7 +2,6 @@
 
 #include <SDL.h>
 
-#include "Box.hpp"
 #include "Vec2d.hpp"
 
 class Entity;
