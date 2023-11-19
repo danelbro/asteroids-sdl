@@ -11,15 +11,32 @@
 #include "Vec2d.hpp"
 
 namespace utl {
-    int wrapCoord(int p, int dim) {
+    int wrapCoord(int p, int dim)
+    {
         if (p < 0)
             return dim + p;
         else
             return p % dim;
     }
 
-    void DrawWrapLine(SDL_Renderer *rend, Box screen, double x1, double y1,
-                      double x2, double y2) {
+    void wrap(Vec2d &pos, const Box& screen)
+    {
+        if (pos.x < 0)
+            pos.x = screen.w + pos.x;
+        else if (pos.x > screen.w)
+            pos.x -= screen.w;
+
+        if (pos.y < 0)
+            pos.y = screen.h + pos.y;
+        else if (pos.y > screen.h)
+            pos.y -= screen.h;
+    }
+
+
+    void DrawWrapLine(SDL_Renderer *rend, const Box& screen,
+                      double x1, double y1,
+                      double x2, double y2)
+    {
         double x{};
         double y{};
         double dy{y2 - y1};
@@ -66,7 +83,8 @@ namespace utl {
         }
     }
 
-    bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon) {
+    bool PointInPolygon(const Vec2d& point, const std::vector<Vec2d>& polygon)
+    {
         // adatpted from https://alienryderflex.com/polygon/
         size_t i, j{polygon.size() - 1};
         bool oddNodes{false};
@@ -85,8 +103,10 @@ namespace utl {
         return oddNodes;
     }
 
-    void ScanFill(const GameWorld &gw, std::vector<Vec2d> poly, SdlColor col,
-                  SDL_Renderer *renderer) {
+    void ScanFill(const GameWorld& gw, const std::vector<Vec2d>& poly,
+                  const SdlColor& col,
+                  SDL_Renderer *renderer)
+    {
         // adapted frpm https://alienryderflex.com/polygon_fill/
         SdlColor old{};
         SDL_GetRenderDrawColor(renderer, &old.r, &old.g, &old.b, &old.a);
@@ -136,7 +156,8 @@ namespace utl {
         size_t i{};
         for (i = 0; i < shape.size(); ++i) {
             axes.emplace_back(Vec2d{-(shape[i+1 % shape.size()].y - shape[i].y),
-                                    shape[i+1 % shape.size()].x - shape[i].x}.normalize());
+                                    shape[i+1 % shape.size()].x - shape[i].x}
+                .normalize());
         }
     }
 

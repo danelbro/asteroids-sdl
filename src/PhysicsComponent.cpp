@@ -4,10 +4,10 @@
 
 #include <SDL.h>
 
-#include "Box.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsEntity.hpp"
 #include "Vec2d.hpp"
+#include "VectorDraw.hpp"
 
 void PhysicsComponent::turn(double turnSpeed, double dt)
 {
@@ -19,19 +19,6 @@ void PhysicsComponent::turn(double turnSpeed, double dt)
         m_angle -= 360;
 }
 
-void wrap(Vec2d &pos, Box screen)
-{
-    if (pos.x < 0)
-        pos.x = screen.w + pos.x;
-    else if (pos.x > screen.w)
-        pos.x -= screen.w;
-
-    if (pos.y < 0)
-        pos.y = screen.h + pos.y;
-    else if (pos.y > screen.h)
-        pos.y -= screen.h;
-}
-
 void PhysicsComponent::update(double dt)
 {
     m_dir_vector = { std::sin((m_angle * M_PI) / 180),
@@ -40,7 +27,7 @@ void PhysicsComponent::update(double dt)
     m_acceleration = (totalForces / m_mass) * dt;
     m_velocity += m_acceleration * dt;
     m_owner.pos() += m_velocity * dt;
-    wrap(m_owner.pos(), m_owner.gameWorld.screen);
+    utl::wrap(m_owner.pos(), m_owner.gameWorld.screen);
     m_impulse = 0;
 }
 

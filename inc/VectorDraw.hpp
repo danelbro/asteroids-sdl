@@ -11,14 +11,16 @@ struct Box;
 struct GameWorld;
 
 namespace utl {
-    void DrawWrapLine(SDL_Renderer *rend, Box screen,
-                  double x1, double y1,
-                  double x2, double y2);
+    void wrap(Vec2d& pos, const Box& bounds);
 
-    bool PointInPolygon(Vec2d point, std::vector<Vec2d> polygon);
+    void DrawWrapLine(SDL_Renderer *rend, const Box& screen,
+                      double x1, double y1,
+                      double x2, double y2);
 
-    void ScanFill(const GameWorld& gw, std::vector<Vec2d> poly,
-    SdlColor col, SDL_Renderer* renderer);
+    bool PointInPolygon(const Vec2d& point, const std::vector<Vec2d>& polygon);
+
+    void ScanFill(const GameWorld& gw, const std::vector<Vec2d>& poly,
+    const SdlColor& col, SDL_Renderer* renderer);
 
     bool areColliding_SAT(const std::vector<Vec2d>& shape1,
                           const std::vector<Vec2d>& shape2);
