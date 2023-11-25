@@ -1,12 +1,11 @@
 #pragma once
 
-#include <memory>
+#include <cstdint>
 #include <string>
-
-#include <SDL.h>
 
 #include "Application.hpp"
 #include "Box.hpp"
+#include "SDL_Interface.hpp"
 #include "StageManager.hpp"
 #include "utility.hpp"
 
@@ -21,11 +20,11 @@ private:
     const int m_screenWidth;
     const int m_screenHeight;
     const Box m_screen;
-    const Uint32 m_windowFlags;
-    const std::unique_ptr<SDL_Window, utl::sdl_deleter> m_window;
-    const Uint32 m_windowID;
-    const Uint32 m_rendererFlags;
-    const std::unique_ptr<SDL_Renderer, utl::sdl_deleter> m_renderer;
+    const uint32_t m_windowFlags;
+    const utl::WindowPtr m_window;
+    const uint32_t m_windowID;
+    const uint32_t m_rendererFlags;
+    const utl::RendererPtr m_renderer;
     const utl::StageID m_first_stage;
     StageManager m_stageMan;
 };

@@ -13,6 +13,10 @@ struct GameWorld;
 
 class Ship : public PhysicsEntity {
 public:
+    virtual ~Ship() = default;
+    Ship(const Ship&) = delete;
+    Ship& operator=(const Ship&) = delete;
+
     Vec2d nose() const { return m_fillShape.at(0); }
 
     Engine engine;
