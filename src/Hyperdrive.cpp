@@ -2,6 +2,7 @@
 
 #include <random>
 
+#include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
 #include "Player.hpp"
 #include "utility.hpp"

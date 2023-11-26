@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-#include <SDL.h>
-
+#include "SDL_Interface.hpp"
 #include "Box.hpp"
 #include "Colors.hpp"
 #include "GameWorld.hpp"
@@ -33,7 +32,7 @@ namespace utl {
     }
 
 
-    void DrawWrapLine(SDL_Renderer *rend, const Box& screen,
+    void DrawWrapLine(utl::Renderer& rend, const Box& screen,
                       double x1, double y1,
                       double x2, double y2)
     {
@@ -49,9 +48,8 @@ namespace utl {
               y1 = y;
             }
             for (y = y1; y <= y2; ++y)
-              SDL_RenderDrawPoint(rend,
-                                  wrapCoord(static_cast<int>(x1), screen.w),
-                                  wrapCoord(static_cast<int>(y), screen.h));
+              drawPoint(rend, wrapCoord(static_cast<int>(x1), screen.w),
+                             wrapCoord(static_cast<int>(y), screen.h));
         } else {
             double m{dy / dx};
             double c{y1 - (m * x1)};
@@ -63,9 +61,8 @@ namespace utl {
               }
               for (x = x1; x <= x2; ++x) {
                 y = (m * x) + c;
-                SDL_RenderDrawPoint(rend,
-                                    wrapCoord(static_cast<int>(x), screen.w),
-                                    wrapCoord(static_cast<int>(y), screen.h));
+                drawPoint(rend, wrapCoord(static_cast<int>(x), screen.w),
+                               wrapCoord(static_cast<int>(y), screen.h));
               }
             } else {
               if (y1 > y2) {
@@ -75,9 +72,8 @@ namespace utl {
               }
               for (y = y1; y <= y2; ++y) {
                 x = (y - c) / m;
-                SDL_RenderDrawPoint(rend,
-                                    wrapCoord(static_cast<int>(x), screen.w),
-                                    wrapCoord(static_cast<int>(y), screen.h));
+                drawPoint(rend, wrapCoord(static_cast<int>(x), screen.w),
+                               wrapCoord(static_cast<int>(y), screen.h));
               }
             }
         }
@@ -104,13 +100,11 @@ namespace utl {
     }
 
     void ScanFill(const GameWorld& gw, const std::vector<Vec2d>& poly,
-                  const SdlColor& col,
-                  SDL_Renderer *renderer)
+                  const Colour& col, Renderer& renderer)
     {
         // adapted frpm https://alienryderflex.com/polygon_fill/
-        SdlColor old{};
-        SDL_GetRenderDrawColor(renderer, &old.r, &old.g, &old.b, &old.a);
-        SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+        Colour old{ getRendererDrawColour(renderer) };
+        setRendererDrawColour(renderer, col);
 
         std::vector<double> ys{};
         for (auto p : poly)
@@ -146,7 +140,7 @@ namespace utl {
             }
         }
 
-        SDL_SetRenderDrawColor(renderer, old.r, old.g, old.b, old.a);
+        setRendererDrawColour(renderer, old);
     }
 
 
@@ -154,9 +148,11 @@ namespace utl {
                                 std::vector<Vec2d>& axes)
     {
         size_t i{};
-        for (i = 0; i < shape.size(); ++i) {
-            axes.emplace_back(Vec2d{-(shape[i+1 % shape.size()].y - shape[i].y),
-                                    shape[i+1 % shape.size()].x - shape[i].x}
+        auto size{ shape.size() };
+        for (i = 0; i < size; ++i) {
+            // auto x = i + 1 % size;
+            axes.emplace_back(Vec2d{-(shape[(i+1) % size].y - shape[i].y),
+                                      shape[(i+1) % size].x - shape[i].x}
                 .normalize());
         }
     }

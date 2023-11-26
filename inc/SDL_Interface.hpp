@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <memory>
 
@@ -8,7 +9,19 @@
 
 #include "utility.hpp"
 
+struct GameWorld;
+
 namespace utl {
+
+    struct Colour {
+        std::uint8_t r{ };
+        std::uint8_t g{ };
+        std::uint8_t b{ };
+        std::uint8_t a{ };
+
+        operator SDL_Color() const { return { r, g, b, a }; }
+    };
+
     // Custom deleters for SDL types. Pass when constructing a unique_ptr
     // thanks to https://stackoverflow.com/a/24252225
     struct sdl_deleter
@@ -60,33 +73,113 @@ namespace utl {
     // Run SDL and TTF quit functions
     void quit_sdl();
 
-    using WindowPtr = std::unique_ptr<SDL_Window, sdl_deleter>;
-    using RendererPtr = std::unique_ptr<SDL_Renderer, sdl_deleter>;
-    using SurfacePtr = std::unique_ptr<SDL_Surface, sdl_deleter>;
-    using TexturePtr = std::unique_ptr<SDL_Texture, sdl_deleter>;
-    using FontPtr = std::unique_ptr<TTF_Font, sdl_deleter>;
+    struct Window {
+    public:
+        Window(SDL_Window*);
+
+        uint32_t ID() { return SDL_GetWindowID(m_winPtr.get()); }
+        SDL_Window* get() { return m_winPtr.get(); }
+    private:
+        std::unique_ptr<SDL_Window, sdl_deleter> m_winPtr;
+    };
+
+    struct Renderer {
+    public:
+        Renderer(SDL_Renderer*);
+
+        SDL_Renderer* get() { return m_rendPtr.get(); }
+    private:
+        std::unique_ptr<SDL_Renderer, sdl_deleter> m_rendPtr;
+    };
+
+    struct Surface {
+    public:
+        Surface(SDL_Surface*);
+
+        SDL_Surface* get() { return m_surfPtr.get(); }
+    private:
+        std::unique_ptr<SDL_Surface, sdl_deleter> m_surfPtr;
+    };
+
+    struct Texture {
+    public:
+        Texture(SDL_Texture*);
+
+        SDL_Texture* get() { return m_texPtr.get(); }
+        void reset(SDL_Texture* new_ptr) { m_texPtr.reset(new_ptr); }
+    private:
+        std::unique_ptr<SDL_Texture, sdl_deleter> m_texPtr;
+    };
+
+    struct Font {
+    public:
+        Font(TTF_Font*);
+
+        TTF_Font* get() { return m_fontPtr.get(); }
+    private:
+        std::unique_ptr<TTF_Font, sdl_deleter> m_fontPtr;
+    };
+
+    struct Rect {
+    public:
+        Rect(SDL_Rect*);
+        Rect(int x, int y, int w, int h);
+
+        SDL_Rect* get() { return m_rectPtr.get(); }
+    private:
+        std::unique_ptr<SDL_Rect> m_rectPtr;
+    };
 
     // Create an SDL_Window*. Throw an SdlException if creation fails
-    WindowPtr createWindow(const std::string& title, int x, int y,
-                           int w, int h, uint32_t flags);
+    Window createWindow(const std::string& title, int x, int y,
+                        int w, int h, uint32_t flags);
 
     // Create an SDL_Renderer*. Throw an SdlException if creation fails
-    RendererPtr createRenderer(SDL_Window* window, int index, uint32_t flags);
+    Renderer createRenderer(Window& window, int index, uint32_t flags);
 
-    struct textStruct
+    void clearScreen(Renderer&);
+    void presentRenderer(Renderer&);
+    void setRendererDrawColour(Renderer&, const Colour&);
+    Colour getRendererDrawColour(Renderer&);
+    void copyTexturePortion(Renderer&, Texture&, Rect& src, Rect& dst);
+    void drawPoint(Renderer&, int x, int y);
+
+    struct textureAndSize
     {
-        textStruct(TexturePtr newTexP, int newW, int newH);
+        textureAndSize(Texture newTexP, int newW, int newH);
 
-        TexturePtr texP;
+        Texture texP;
         int w;
         int h;
     };
 
     // Create an SDL_Texture* rendered from text.
     // Throw an SdlException if creation fails
-    textStruct createTextTexture(TTF_Font* font, const std::string& text,
-        SDL_Color text_colour, SDL_Renderer* rend);
+    textureAndSize createTextTexture(Font& font,
+        const std::string& text, const Colour& text_colour,
+        Renderer& rend);
 
     // Create a TTF_Font. Throw an SdlException if creation fails
-    FontPtr createFont(const std::string& path, int font_size);
+    Font createFont(const std::string& path, int font_size);
+
+    enum KeyFlag {
+        K_LEFT,
+        K_RIGHT,
+        K_UP,
+        K_DOWN,
+        K_SPACE,
+        K_ENTER,
+        K_LSHIFT,
+        K_ESCAPE,
+        QUIT,
+        WINDOW_CHANGE,
+        K_TOTAL
+    };
+
+    // process SDL input into a more friendly form. Also deals withh
+    // window resizing
+    void process_input(GameWorld& gw, uint32_t windowID,
+        std::array<bool,
+        KeyFlag::K_TOTAL>& key_state);
+
 } // namespace utl

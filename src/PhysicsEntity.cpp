@@ -2,8 +2,7 @@
 
 #include <vector>
 
-#include <SDL.h>
-
+#include "SDL_Interface.hpp"
 #include "Colors.hpp"
 #include "Entity.hpp"
 #include "GameWorld.hpp"
@@ -12,11 +11,13 @@
 #include "VectorDraw.hpp"
 #include "utility.hpp"
 
-PhysicsEntity::PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
-    Vec2d pos, std::vector<Vec2d> shape, SdlColor color, double scale,
-    double mass)
+PhysicsEntity::PhysicsEntity(const utl::EntityFlag& new_type,
+                             GameWorld& new_gameWorld, const Vec2d& pos,
+                             const std::vector<Vec2d>& shape,
+                             const utl::Colour& color, const double& scale,
+                             const double& mass)
     : Entity{ new_type, new_gameWorld, pos, shape, color, scale },
-      physicsComponent{ mass, *this },
+      physicsComponent{ mass, this },
       m_transShape{}, m_fillShape{}, m_collider{}, m_isVisible{ true }
 {
     update_shapes();
@@ -46,15 +47,12 @@ void PhysicsEntity::update_shapes()
         p += m_pos;
 }
 
-void PhysicsEntity::render(SDL_Renderer* renderer)
+void PhysicsEntity::render(utl::Renderer& renderer)
 {
     if (!m_isVisible) return;
 
-    SdlColor oldColor{ };
-    SDL_GetRenderDrawColor(renderer,
-        &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
-    SDL_SetRenderDrawColor(renderer,
-        m_color.r, m_color.g, m_color.b, m_color.a);
+    auto oldColor{ utl::getRendererDrawColour(renderer) };
+    utl::setRendererDrawColour(renderer, m_color);
 
     for (size_t i{ 0 }; i < m_fillShape.size(); ++i) {
         if (i == m_fillShape.size() - 1) {
@@ -74,8 +72,7 @@ void PhysicsEntity::render(SDL_Renderer* renderer)
     if (fill)
         utl::ScanFill(gameWorld, m_fillShape, m_color, renderer);
 
-    SDL_SetRenderDrawColor(renderer,
-        oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+    utl::setRendererDrawColour(renderer, oldColor);
 }
 
 namespace utl {

@@ -2,22 +2,19 @@
 
 #include <vector>
 
-#include <SDL.h>
-
 #include "PhysicsEntity.hpp"
-#include "utility.hpp"
+#include "SDL_Interface.hpp"
 
 struct GameWorld;
 struct Vec2d;
 
-class Ship;
-class PhysicsComponent;
-
 class Bullet : public PhysicsEntity {
 public:
-    Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-           SdlColor color, double scale, double mass, double lifespan,
-           double angle, double power, utl::EntityFlag flag);
+    Bullet(GameWorld& new_gameWorld, const Vec2d& pos,
+           const std::vector<Vec2d>& shape, const utl::Colour& color,
+           const double& scale, const double& mass, const double& lifespan,
+           const double& angle, const double& power,
+           const utl::EntityFlag& flag);
 
     void update(double t, double dt) override;
     bool& wayward() { return m_wayward; }

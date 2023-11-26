@@ -1,7 +1,6 @@
 valgrind-out.txt
 .cache/
 .gdbinit
-.gitignore.swp
 asteroids
 asteroids_debug
 compile_commands.json
@@ -9,3 +8,7 @@ exception.log
 obj/
 *.pc
 /dep/
+/.vs/
+*.sln
+*.vcxproj*
+/bin

@@ -13,6 +13,7 @@
 #include "PhysicsComponent.hpp"
 #include "Player.hpp"
 #include "ScoreManager.hpp"
+#include "SDL_Interface.hpp"
 #include "Ship.hpp"
 #include "Vec2d.hpp"
 #include "VectorDraw.hpp"
@@ -26,8 +27,9 @@ PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
     physEntities.reserve(500);
 }
 
-void PhysicsManager::make_bullet(Vec2d origin, double power, double angle,
-                                 SdlColor col, utl::EntityFlag flag)
+void PhysicsManager::make_bullet(const Vec2d& origin, const double& power,
+								 const double& angle, const utl::Colour& col,
+								 const utl::EntityFlag& flag)
 {
 	constexpr double mass{ 0.003 };
 	constexpr double scale{ 1.0 };
@@ -35,14 +37,20 @@ void PhysicsManager::make_bullet(Vec2d origin, double power, double angle,
 
 	const std::vector<Vec2d> shape{ {1, -3}, {-1, -3}, {-2, 3}, {2, 3} };
 
-	physEntities.emplace_back(std::make_unique<Bullet>(m_gameWorld, origin,
-                                                       shape, col,
-                                                       scale, mass, lifespan,
-                                                       angle, power, flag));
+ 	physEntities.push_back(std::make_unique<Bullet>(m_gameWorld, origin,
+                                                    shape, col,
+                                                    scale, mass, lifespan,
+                                                    angle, power, flag));
 }
 
+void PhysicsManager::make_bullet(const Bullet& oldBullet)
+{
+	physEntities.emplace_back(
+		std::make_unique<Bullet>(oldBullet));
+	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
+}
 
-void PhysicsManager::make_asteroid(double scale, Vec2d pos)
+void PhysicsManager::make_asteroid(const double& scale, const Vec2d& pos)
 {
 	const double mass{ 1.0 };
 
@@ -71,8 +79,15 @@ void PhysicsManager::make_asteroid(double scale, Vec2d pos)
 
 	physEntities.emplace_back(
         std::make_unique<Asteroid>(m_gameWorld, pos, shape,
-                                   customCols::asteroid_col, scale, mass,
+                                   utl::customCols::asteroid_col, scale, mass,
                                    impulse, angle, radius));
+}
+
+void PhysicsManager::make_asteroid(const Asteroid& ast)
+{
+	physEntities.emplace_back(
+		std::make_unique<Asteroid>(ast));
+	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
@@ -90,8 +105,8 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 	return new_pos;
 }
 
-void PhysicsManager::make_asteroids(int num, double scale, bool isNew,
-                                    Vec2d pos)
+void PhysicsManager::make_asteroids(int num, const double& scale, bool isNew,
+                                    const Vec2d& pos)
 {
 	constexpr double asteroidDistance{ 50.0 };
 
@@ -152,14 +167,18 @@ void PhysicsManager::make_enemy()
                                         m_gameWorld.screen.w,
                                         m_gameWorld.screen.h) };
 
-	physEntities.emplace_back(std::make_unique<Enemy>( m_gameWorld, new_pos,
-                                                       shape,
-                                                       customCols::enemy_col,
-                                                       scale, power, turnSpeed,
-                                                       maxVel,
-                                                       shotPower, mass,
-                                                       cooldown, &m_player,
-                                                       *this));
+	physEntities.emplace_back(
+		std::make_unique<Enemy>(m_gameWorld, new_pos, shape,
+								utl::customCols::enemy_col, scale, power,
+								turnSpeed, maxVel, shotPower, mass, cooldown,
+								&m_player, *this));
+}
+
+void PhysicsManager::make_enemy(const Enemy& oldEnemy)
+{
+	physEntities.emplace_back(
+		std::make_unique<Enemy>(oldEnemy));
+	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
 }
 
 static const std::vector<Vec2d> playerShape
@@ -184,13 +203,12 @@ Player& PhysicsManager::make_player()
     constexpr double flashLength{ 0.2 };
     constexpr double cooldown{ 0.25 };
 
-	physEntities.emplace_back(std::make_unique<Player>(m_gameWorld, pos, shape,
-                                                       customCols::player_col,
-                                                       scale, power, turnSpeed,
-                                                       shotPower, mass, m_rng,
-                                                       warpLength, lives,
-                                                       respawnLength,
-                                                       flashLength, cooldown));
+	physEntities.emplace_back(
+		std::make_unique<Player>(m_gameWorld, pos, shape,
+								 utl::customCols::player_col, scale, power,
+								 turnSpeed, shotPower, mass, m_rng,
+								 warpLength, lives, respawnLength,
+								 flashLength, cooldown));
 
 	return static_cast<Player&>(*physEntities.back());
 }
@@ -205,7 +223,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity& phys = *physEntities[i];
 		if (phys.toBeKilled()) {
-			switch (phys.type)
+			switch (phys.type())
             {
 			case utl::EntityFlag::ASTEROID:
 				scoreMan.update_score(
@@ -238,9 +256,9 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 void PhysicsManager::checkPlayerHit()
 {
     for (auto& ent : physEntities) {
-        if (ent->type == utl::EntityFlag::ASTEROID
-            || ent->type == utl::EntityFlag::ENEMY
-            || ent->type == utl::EntityFlag::ENEMY_BULLET) {
+        if (ent->type() == utl::EntityFlag::ASTEROID
+            || ent->type() == utl::EntityFlag::ENEMY
+            || ent->type() == utl::EntityFlag::ENEMY_BULLET) {
             if (utl::areColliding(m_player, *ent)) {
                 m_player.kill_it();
             }
@@ -258,12 +276,12 @@ bool PhysicsManager::wasPlayerKilled()
 void PhysicsManager::checkBulletsHit()
 {
 	for (auto& physEnt : physEntities) {
-		if (physEnt->type == utl::EntityFlag::BULLET
+		if (physEnt->type() == utl::EntityFlag::BULLET
                         && !physEnt->toBeKilled()) {
             Bullet& bul{ static_cast<Bullet&>(*physEnt) };
 			for (auto& target : physEntities) {
-				if (target->type == utl::EntityFlag::ASTEROID
-					|| target->type == utl::EntityFlag::ENEMY) {
+				if (target->type() == utl::EntityFlag::ASTEROID
+					|| target->type() == utl::EntityFlag::ENEMY) {
 					if (utl::PointInPolygon(bul.pos(), target->collider())) {
 						target->kill_it();
 						bul.kill_it();

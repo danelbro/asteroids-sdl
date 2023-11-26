@@ -109,8 +109,8 @@ void StageManager::handle_stage_transition(Stage* current_stage)
         break;
     }
 
-    auto windowID{ current_stage->windowID() };
-    auto renderer{ current_stage->renderer() };
+    uint32_t windowID{ current_stage->windowID() };
+    utl::Renderer& renderer{ current_stage->renderer() };
 
     keyState.fill(false);
 

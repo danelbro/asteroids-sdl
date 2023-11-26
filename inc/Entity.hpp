@@ -5,40 +5,45 @@
 
 #include <vector>
 
-#include <SDL.h>
-
-#include "Colors.hpp"
-#include "GameWorld.hpp"
-#include "Vec2d.hpp"
+#include "SDL_Interface.hpp"
 #include "utility.hpp"
+#include "Vec2d.hpp"
+
+struct GameWorld;
 
 class Entity {
 public:
     virtual ~Entity() = default;
+    Entity(const Entity&) = default;
+    Entity& operator=(const Entity&) = delete;
 
     virtual void update(double t, double dt) = 0;
-    virtual void render(SDL_Renderer* renderer) = 0;
+    virtual void render(utl::Renderer& renderer) = 0;
+
+    virtual Vec2d& pos() { return m_pos; }
 
     virtual const Vec2d& getPos() const { return m_pos; }
-    virtual Vec2d& pos() { return m_pos; }
     virtual bool toBeKilled() const { return kill_me; }
-    virtual void kill_it() { kill_me = true; }
     virtual double scale() const { return m_scale; }
+    virtual const utl::EntityFlag type() const { return m_type; };
 
-    utl::EntityFlag type;
+    virtual void kill_it() { kill_me = true; }
+
     GameWorld& gameWorld;
 
 protected:
-    Entity(utl::EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
-        std::vector<Vec2d> shape, SdlColor color, double scale)
-        : type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
+    Entity(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
+           const Vec2d& pos, const std::vector<Vec2d>& shape,
+           const utl::Colour& color, const double& scale)
+        : m_type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
         m_shape{ shape }, m_color{ color }, m_scale{ scale },
         kill_me{ false }, fill{ false }
     {}
 
+    const utl::EntityFlag m_type;
     Vec2d m_pos;
     std::vector<Vec2d> m_shape;
-    SdlColor m_color;
+    utl::Colour m_color;
     double m_scale;
     bool kill_me;
     bool fill;

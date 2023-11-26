@@ -1,10 +1,8 @@
 ﻿// Plays a game of asteroids
-#include <exception>
+
 #include <stdexcept>
 
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "SDL_Interface.hpp"
 
 #include "AsteroidsApp.hpp"
 #include "utility.hpp"
@@ -20,7 +18,11 @@ try
     utl::init(sdlFlags);
 
     {
-        AsteroidsApp asteroids{};
+        AsteroidsApp asteroids{ "Asteroids", 960, 720,
+                                SDL_WINDOW_RESIZABLE,
+                                SDL_RENDERER_ACCELERATED |
+                                SDL_RENDERER_PRESENTVSYNC
+        };
         asteroids.run();
     }
 
@@ -45,12 +47,6 @@ catch (std::out_of_range& oor)
     utl::errorLogger << "out of range: " << oor.what() << '\n';
     utl::quit_sdl();
     return 3;
-}
-catch (std::exception& e)
-{
-    utl::errorLogger << "std::exception: " << e.what() << '\n';
-    utl::quit_sdl();
-    return 4;
 }
 catch (...)
 {

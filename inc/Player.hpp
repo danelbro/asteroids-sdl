@@ -3,25 +3,22 @@
 #include <random>
 #include <vector>
 
-#include <SDL.h>
+#include "SDL_Interface.hpp"
 
-#include "Colors.hpp"
 #include "Hyperdrive.hpp"
-#include "PhysicsEntity.hpp"
 #include "Ship.hpp"
-#include "Vec2d.hpp"
 
 struct GameWorld;
-
-class PhysicsComponent;
+struct Vec2d;
 
 class Player : public Ship {
 public:
-    Player(GameWorld& new_gameWorld, Vec2d pos,
-           std::vector<Vec2d> shape, SdlColor color, double scale,
-           double power, double turnSpeed, double shotPower, double mass,
-           std::mt19937& rng, double warpTimer, int lives,
-           double respawnLength, double flashLength, double cooldown);
+    Player(GameWorld& new_gameWorld, const Vec2d& pos,
+           const std::vector<Vec2d>& shape, const utl::Colour& color,
+           const double& scale, const double& power, const double& turnSpeed,
+           const double& shotPower, const double& mass, std::mt19937& rng,
+           const double& warpTimer, int lives, const double& respawnLength,
+           const double& flashLength, const double& cooldown);
 
     void update(double, double) override;
     void respawn();

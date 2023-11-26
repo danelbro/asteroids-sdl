@@ -3,7 +3,7 @@
 #include <random>
 #include <vector>
 
-#include <SDL.h>
+#include "SDL_Interface.hpp"
 
 #include "Colors.hpp"
 #include "GameWorld.hpp"
@@ -13,12 +13,14 @@
 #include "Vec2d.hpp"
 #include "utility.hpp"
 
-Player::Player(GameWorld& new_gameWorld, Vec2d pos,
-               std::vector<Vec2d> shape, SdlColor color, double scale,
-               double power, double turnSpeed,
-               double shotPower, double mass, std::mt19937& rng,
-               double warpLength, int lives, double respawnLength,
-               double flashLength, double cooldown)
+Player::Player(GameWorld& new_gameWorld, const Vec2d& pos,
+               const std::vector<Vec2d>& shape, const utl::Colour& color,
+               const double& scale, const double& power,
+               const double& turnSpeed, const double& shotPower,
+               const double& mass, std::mt19937& rng,
+               const double& warpLength, int lives,
+               const double& respawnLength, const double& flashLength,
+               const double& cooldown)
     : Ship{utl::EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
            power, turnSpeed, shotPower, mass, cooldown},
       hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },

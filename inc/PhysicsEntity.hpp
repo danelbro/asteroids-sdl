@@ -2,13 +2,12 @@
 
 #include <vector>
 
-#include <SDL.h>
-
 #include "Entity.hpp"
 #include "PhysicsComponent.hpp"
-#include "Vec2d.hpp"
+#include "SDL_Interface.hpp"
 
 struct GameWorld;
+struct Vec2d;
 
 class PhysicsEntity : public Entity
 {
@@ -17,7 +16,8 @@ public:
     PhysicsEntity& operator=(const PhysicsEntity&) = delete;
     virtual ~PhysicsEntity() = default;
 
-	void render(SDL_Renderer* renderer) override;
+    void update(double, double) override { update_shapes(); }
+	void render(utl::Renderer& renderer) override;
 
 	const std::vector<Vec2d>& shape() const { return m_shape; }
 	const std::vector<Vec2d>& transShape() const { return m_transShape; }
@@ -29,9 +29,10 @@ public:
 
 	PhysicsComponent physicsComponent;
 protected:
-    PhysicsEntity(utl::EntityFlag new_type, GameWorld& new_gameWorld,
-                  Vec2d pos, std::vector<Vec2d> shape, SdlColor color,
-                  double scale, double mass);
+    PhysicsEntity(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
+                  const Vec2d& pos, const std::vector<Vec2d>& shape,
+                  const utl::Colour& color, const double& scale,
+                  const double& mass);
 
 	std::vector<Vec2d> m_transShape;
 	std::vector<Vec2d> m_fillShape;

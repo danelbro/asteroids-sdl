@@ -2,20 +2,17 @@
 
 #include <cstdint>
 
-struct SdlColor {
-    std::uint8_t r{ };
-    std::uint8_t g{ };
-    std::uint8_t b{ };
-    std::uint8_t a{ };
-};
+#include "SDL_Interface.hpp"
 
-namespace customCols
-{
-    const SdlColor bg{ 0x10, 0x13, 0x26, 0xff }; // midnight
-    const SdlColor debug{ 0x00, 0xff, 0xff, 0xff }; // cyan
-    const SdlColor asteroid_col{ 0xff, 0xff, 0xff, 0xff }; // white
-    const SdlColor bullet_col{ 0x00, 0xff, 0x00, 0xff }; // green
-    const SdlColor player_col{ 0xff, 0xff, 0x00, 0xff }; // yellow
-    const SdlColor enemy_col{ 0xff, 0x00, 0x00, 0xff }; // red
-    const SdlColor text_col{ 0x99, 0xd9, 0xea, 0xff }; // light blue
-}
+namespace utl {
+    namespace customCols
+    {
+        const Colour bg{ 0x10, 0x13, 0x26, 0xff }; // midnight
+        const Colour debug{ 0x00, 0xff, 0xff, 0xff }; // cyan
+        const Colour asteroid_col{ 0xff, 0xff, 0xff, 0xff }; // white
+        const Colour bullet_col{ 0x00, 0xff, 0x00, 0xff }; // green
+        const Colour player_col{ 0xff, 0xff, 0x00, 0xff }; // yellow
+        const Colour enemy_col{ 0xff, 0x00, 0x00, 0xff }; // red
+        const Colour text_col{ 0x99, 0xd9, 0xea, 0xff }; // light blue
+    } // namespace customCols
+} // namespace utl

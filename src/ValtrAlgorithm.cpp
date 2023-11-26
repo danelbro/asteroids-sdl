@@ -36,7 +36,7 @@
 #include "Vec2d.hpp"
 
 namespace utl {
-    std::vector<Vec2d> genRandConvexPolygon(int m, double radius,
+    std::vector<Vec2d> genRandConvexPolygon(int m, const double& radius,
                                             std::mt19937& rng)
     {
         size_t n = static_cast<size_t>(m);

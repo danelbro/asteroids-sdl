@@ -3,16 +3,16 @@
 #include <array>
 #include <string>
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
 #include "Box.hpp"
+#include "Colors.hpp"
 #include "Enemy.hpp"
 #include "ScoreManager.hpp"
+#include "SDL_Interface.hpp"
 #include "Stage.hpp"
 #include "PhysicsEntity.hpp"
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
+#include "TextObject.hpp"
 #include "utility.hpp"
 
 static constexpr int startingAsteroids{ 3 };
@@ -23,8 +23,8 @@ static constexpr int font_size{ 28 };
 static const std::string font_path{ "data/Play-Regular.ttf" };
 static constexpr double fluidDensity{ 0.1 };
 
-MainLevel::MainLevel(Box new_screen, Uint32 windowID,
-    SDL_Renderer* new_renderer)
+MainLevel::MainLevel(const Box& new_screen, uint32_t windowID,
+    utl::Renderer& new_renderer)
     : Stage{ new_screen, windowID, new_renderer, utl::StageID::PLAYING },
       font{ utl::createFont(font_path, font_size) },
       gameWorld{ new_screen, fluidDensity },
@@ -32,13 +32,12 @@ MainLevel::MainLevel(Box new_screen, Uint32 windowID,
       physicsManager{ gameWorld, rng },
       player{ physicsManager.player() },
       scoreManager{ gameWorld, {scoreboard_xPos, scoreboard_yPos},
-                    font.get(), new_renderer, player.lives() },
+                    font, new_renderer, player.lives() },
       asteroidsRemain{ false },
       numOfAsteroids{ startingAsteroids }, enemiesRemain{ false },
       levelElapsedTime{ 0.0 }
 {
-    SDL_SetRenderDrawColor(renderer(), customCols::bg.r, customCols::bg.g,
-        customCols::bg.b, customCols::bg.a);
+    utl::setRendererDrawColour(renderer(), utl::customCols::bg);
 }
 
 utl::StageID MainLevel::handle_input(double, double dt,
@@ -85,7 +84,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     asteroidsRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type == utl::EntityFlag::ASTEROID) {
+        if (ent->type() == utl::EntityFlag::ASTEROID) {
             asteroidsRemain = true;
             break;
         }
@@ -93,7 +92,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     enemiesRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type == utl::EntityFlag::ENEMY) {
+        if (ent->type() == utl::EntityFlag::ENEMY) {
             enemiesRemain = true;
             break;
         }
@@ -101,7 +100,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     if (!asteroidsRemain && !enemiesRemain) {
         for (auto& ent : physicsManager.physEntities) {
-            if (ent->type == utl::EntityFlag::BULLET)
+            if (ent->type() == utl::EntityFlag::BULLET)
                 ent->kill_it();
         }
         levelElapsedTime = 0.0;
@@ -139,13 +138,12 @@ utl::StageID MainLevel::update(double t, double dt)
 
 void MainLevel::render(double, double)
 {
-    SDL_RenderClear(renderer());
+    utl::clearScreen(renderer());
     for (auto& physEntity : physicsManager.physEntities){
         physEntity->render(renderer());
     }
     for (auto& textObject : scoreManager.textObjects) {
         textObject.render(renderer());
     }
-
-    SDL_RenderPresent(renderer());
+    utl::presentRenderer(renderer());
 }

@@ -1,22 +1,27 @@
 ﻿#pragma once
 
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <random>
 #include <vector>
 
-#include <SDL.h>
-
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
+#include "SDL_Interface.hpp"
+#include "ScoreManager.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
 #include "utility.hpp"
 
+struct Box;
+
+class PhysicsEntity;
+
 class GameOver : public Stage
 {
 public:
-    GameOver(Box screen, Uint32 windowID, SDL_Renderer* renderer,
+    GameOver(const Box& screen, uint32_t windowID, utl::Renderer& renderer,
              std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
              int score);
 
@@ -28,8 +33,8 @@ public:
     GameWorld& gameworld() { return m_gameWorld; }
 private:
     GameWorld m_gameWorld;
-    std::unique_ptr<TTF_Font, utl::sdl_deleter> m_titleFont;
-    std::unique_ptr<TTF_Font, utl::sdl_deleter> m_scoreFont;
+    utl::Font m_titleFont;
+    utl::Font m_scoreFont;
     std::mt19937 m_rng;
     PhysicsManager m_physMan;
     ScoreManager m_scoreMan;

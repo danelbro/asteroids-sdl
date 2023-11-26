@@ -6,32 +6,37 @@
 #include <random>
 #include <vector>
 
-#include <SDL.h>
+#include "SDL_Interface.hpp"
 
 #include "Asteroid.hpp"
 #include "Bullet.hpp"
-#include "Colors.hpp"
-#include "GameWorld.hpp"
-#include "Player.hpp"
-#include "ScoreManager.hpp"
-#include "Ship.hpp"
-#include "Vec2d.hpp"
-#include "VectorDraw.hpp"
 #include "utility.hpp"
+#include "Vec2d.hpp"
+
+struct GameWorld;
+
+class Enemy;
+class PhysicsEntity;
+class Player;
+class ScoreManager;
 
 class PhysicsManager {
 public:
 	PhysicsManager(GameWorld& gameWorld, std::mt19937& rng);
 
-	void make_bullet(Vec2d origin, double power, double angle,
-                     SdlColor col, utl::EntityFlag flag);
+	void make_bullet(const Vec2d& origin, const double& power,
+					 const double& angle, const utl::Colour& col,
+					 const utl::EntityFlag& flag);
+	void make_bullet(const Bullet& oldBullet);
 
-	void make_asteroid(double scale, Vec2d pos);
+	void make_asteroid(const double& scale, const Vec2d& pos);
+	void make_asteroid(const Asteroid& oldAsteroid);
 
-	void make_asteroids(int num, double scale, bool isNew,
-                        Vec2d pos = { 0.0, 0.0 });
+	void make_asteroids(int num, const double& scale, bool isNew,
+                        const Vec2d& pos = { 0.0, 0.0 });
 
 	void make_enemy();
+	void make_enemy(const Enemy& oldEnemy);
 
 	Player& make_player();
 

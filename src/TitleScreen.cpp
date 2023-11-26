@@ -5,11 +5,10 @@
 #include <string>
 #include <vector>
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
 #include "Box.hpp"
+#include "Colors.hpp"
 #include "GameWorld.hpp"
+#include "SDL_Interface.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
 #include "utility.hpp"
@@ -20,9 +19,9 @@ static constexpr double padding{ 150.0 };
 static const std::string font_path{ "data/Play-Regular.ttf" };
 
 static std::vector<TextObject> makeInstructions( GameWorld& gw,
-                                                 TTF_Font* font,
-                                                 SdlColor color,
-                                                 SDL_Renderer* rend)
+                                                 utl::Font& font,
+                                                 const utl::Colour& color,
+                                                 utl::Renderer& rend)
 {
     const std::vector<std::string> insText{
         { "Enter to begin. ESC to quit." },
@@ -35,7 +34,7 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
 
     for (size_t i{ 0 }; i < insText.size(); ++i) {
         instructions.emplace_back(TextObject{gw, {}, font, color, rend});
-        instructions[i].updateText(insText[i], rend);
+        instructions[i].updateText(insText[i]);
         double xpos{ (gw.screen.w / 2.0) - (instructions[i].size().x / 2.0) };
         double ypos{ gw.screen.h - padding - (instructions[i].size().y
                                               * (insText.size() - i)) };
@@ -45,25 +44,27 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
     return instructions;
 }
 
-TitleScreen::TitleScreen(Box screen, Uint32 windowID, SDL_Renderer* renderer)
+TitleScreen::TitleScreen(const Box& screen, uint32_t windowID,
+    utl::Renderer& renderer)
     : Stage{ screen, windowID, renderer, utl::StageID::TITLE_SCREEN },
       gameWorld{ screen, 0.0 },
       title_font{ utl::createFont(font_path, title_font_size)},
       instruction_font{ utl::createFont(font_path, instruction_font_size)},
-      title{ gameWorld, {}, title_font.get(), customCols::text_col,
+      title{ gameWorld, {}, title_font, utl::customCols::text_col,
         renderer },
-      instructions{ makeInstructions(gameWorld, instruction_font.get(),
-                                     customCols::text_col, renderer) }
+      instructions{ makeInstructions(gameWorld, instruction_font,
+                                     utl::customCols::text_col, renderer) }
 {
     const std::string titleText{ "Asteroids" };
 
-    title.updateText(titleText, renderer);
-    const double title_xPos{ (gameWorld.screen.w / 2.0) - (title.size().x / 2.0) };
+    title.updateText(titleText);
+    const double title_xPos{
+        (gameWorld.screen.w / 2.0) - (title.size().x / 2.0)
+    };
     const double title_yPos{ gameWorld.screen.h / 3.0 };
     title.setPos({title_xPos, title_yPos});
 
-    SDL_SetRenderDrawColor(renderer, customCols::bg.r, customCols::bg.g,
-        customCols::bg.b, customCols::bg.a);
+    utl::setRendererDrawColour(renderer, utl::customCols::bg);
 }
 
 static void reset_title(TextObject& title)
@@ -112,9 +113,9 @@ utl::StageID TitleScreen::update(double, double)
 
 void TitleScreen::render(double, double)
 {
-    SDL_RenderClear(renderer());
+    utl::clearScreen(renderer());
     title.render(renderer());
     for (auto& to : instructions)
         to.render(renderer());
-    SDL_RenderPresent(renderer());
+    utl::presentRenderer(renderer());
 }

@@ -1,23 +1,24 @@
 ﻿#pragma once
 
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <random>
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include "Box.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
-#include "Player.hpp"
 #include "ScoreManager.hpp"
+#include "SDL_Interface.hpp"
 #include "Stage.hpp"
 #include "utility.hpp"
 
+struct Box;
+
+class Player;
+
 class MainLevel : public Stage {
 public:
-    MainLevel(Box screen, Uint32 windowID, SDL_Renderer* renderer);
+    MainLevel(const Box& screen, uint32_t windowID, utl::Renderer& renderer);
 
     MainLevel(const MainLevel&) = delete;
     MainLevel& operator=(const MainLevel&) = delete;
@@ -34,7 +35,7 @@ public:
 private:
     void init();
 
-    std::unique_ptr<TTF_Font, utl::sdl_deleter> font;
+    utl::Font font;
     GameWorld gameWorld;
     std::mt19937 rng;
     PhysicsManager physicsManager;

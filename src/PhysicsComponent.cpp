@@ -2,11 +2,8 @@
 
 #include <cmath>
 
-#include <SDL.h>
-
+#include "Entity.hpp"
 #include "GameWorld.hpp"
-#include "PhysicsEntity.hpp"
-#include "Vec2d.hpp"
 #include "VectorDraw.hpp"
 
 void PhysicsComponent::turn(double turnSpeed, double dt)
@@ -26,8 +23,8 @@ void PhysicsComponent::update(double dt)
     auto totalForces{ m_dir_vector * m_impulse };
     m_acceleration = (totalForces / m_mass) * dt;
     m_velocity += m_acceleration * dt;
-    m_owner.pos() += m_velocity * dt;
-    utl::wrap(m_owner.pos(), m_owner.gameWorld.screen);
+    m_owner->pos() += m_velocity * dt;
+    utl::wrap(m_owner->pos(), m_owner->gameWorld.screen);
     m_impulse = 0;
 }
 

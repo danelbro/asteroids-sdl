@@ -3,20 +3,21 @@
 #include "Colors.hpp"
 #include "PhysicsComponent.hpp"
 #include "PhysicsManager.hpp"
+#include "SDL_Interface.hpp"
 #include "Ship.hpp"
 #include "utility.hpp"
 
 void Gun::fire(PhysicsManager& physMan)
 {
-    SdlColor col{};
+    utl::Colour col{};
     utl::EntityFlag flag{};
-    switch (m_owner.type) {
+    switch (m_owner.type()) {
     case utl::EntityFlag::PLAYER:
-        col = customCols::bullet_col;
+        col = utl::customCols::bullet_col;
         flag = utl::EntityFlag::BULLET;
         break;
     case utl::EntityFlag::ENEMY:
-        col = customCols::enemy_col;
+        col = utl::customCols::enemy_col;
         flag = utl::EntityFlag::ENEMY_BULLET;
         break;
     default:

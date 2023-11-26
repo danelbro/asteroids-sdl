@@ -8,10 +8,12 @@
 #include "Vec2d.hpp"
 #include "utility.hpp"
 
-Ship::Ship(utl::EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
-           std::vector<Vec2d> shape, SdlColor color, double scale,
-           double power, double turnSpeed, double shotPower, double mass,
-           double cooldown)
+Ship::Ship(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
+           const Vec2d& pos, const std::vector<Vec2d>& shape,
+           const utl::Colour& color, const double& scale,
+           const double& power, const double& turnSpeed,
+           const double& shotPower, const double& mass,
+           const double& cooldown)
     : PhysicsEntity{ new_type, new_gameWorld, pos, shape,
                      color, scale, mass },
       engine{ *this, power, turnSpeed },

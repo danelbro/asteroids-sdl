@@ -2,22 +2,21 @@
 
 #include <vector>
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include "GameWorld.hpp"
+#include "SDL_Interface.hpp"
 #include "TextObject.hpp"
+
+struct GameWorld;
 
 class ScoreManager
 {
 public:
-    ScoreManager()
-        : score{ 0 }, lives{ 0 }, textObjects{ }, m_renderer{ nullptr }
+    ScoreManager(utl::Renderer& rend)
+        : score{ 0 }, lives{ 0 }, textObjects{ }, m_renderer{ rend }
         {}
 
     // scoreboard_pos = top left
-    ScoreManager(GameWorld &gw, Vec2d scoreboard_pos, TTF_Font *font,
-                 SDL_Renderer *renderer, int playerLives);
+    ScoreManager(GameWorld &gw, const Vec2d& scoreboard_pos, utl::Font& font,
+                 utl::Renderer& renderer, int playerLives);
 
     ScoreManager(const ScoreManager&) = delete;
     ScoreManager& operator=(const ScoreManager&) = delete;
@@ -32,7 +31,7 @@ public:
     int score;
     int lives;
     std::vector<TextObject> textObjects;
-    SDL_Renderer* m_renderer;
+    utl::Renderer& m_renderer;
     bool changed{ false };
 };
 

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <SDL.h>
+#include "SDL_Interface.hpp"
 
 #include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
@@ -11,9 +11,11 @@
 #include "Vec2d.hpp"
 #include "utility.hpp"
 
-Bullet::Bullet(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-               SdlColor color, double scale, double mass, double lifespan,
-               double angle, double power, utl::EntityFlag flag)
+Bullet::Bullet(GameWorld& new_gameWorld, const Vec2d& pos,
+			   const std::vector<Vec2d>& shape, const utl::Colour& color,
+			   const double& scale, const double& mass,
+			   const double& lifespan, const double& angle,
+			   const double& power, const utl::EntityFlag& flag)
 	: PhysicsEntity{ flag, new_gameWorld, pos, shape, color,
                      scale, mass }, m_lifespan{ lifespan }, m_wayward{ true }
 {

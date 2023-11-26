@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "Colors.hpp"
 #include "PhysicsEntity.hpp"
+#include "SDL_Interface.hpp"
 #include "Vec2d.hpp"
 
 struct GameWorld;
@@ -12,11 +12,10 @@ class PhysicsComponent;
 
 class Asteroid : public PhysicsEntity {
 public:
-    Asteroid(GameWorld& new_gameWorld, Vec2d pos, std::vector<Vec2d> shape,
-             SdlColor color, double scale, double mass,
-             double impulse, double angle, double new_radius);
-
-    void update(double, double) override { update_shapes(); }
+    Asteroid(GameWorld& new_gameWorld, const Vec2d& pos,
+             const std::vector<Vec2d>& shape, const utl::Colour& color,
+             const double& scale, const double& mass, const double& impulse,
+             const double& angle, const double& new_radius);
 
     double radius;
 };

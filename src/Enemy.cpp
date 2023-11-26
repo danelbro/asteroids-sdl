@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <SDL.h>
+#include "SDL_Interface.hpp"
 
 #include "AIComponent.hpp"
 #include "Colors.hpp"
@@ -11,10 +11,12 @@
 #include "Ship.hpp"
 #include "Vec2d.hpp"
 
-Enemy::Enemy(GameWorld& new_gameworld, Vec2d pos, std::vector<Vec2d> shape,
-             SdlColor colour, double scale, double power, double turnSpeed,
-             double maxVel, double shotPower, double mass, double cooldown,
-             Player* plr, PhysicsManager& physMan)
+Enemy::Enemy(GameWorld& new_gameworld, const Vec2d& pos,
+             const std::vector<Vec2d>& shape, const utl::Colour& colour,
+             const double& scale, const double& power,
+             const double& turnSpeed, const double& maxVel,
+             const double& shotPower, const double& mass,
+             const double& cooldown, Player* plr, PhysicsManager& physMan)
     : Ship{ utl::EntityFlag::ENEMY, new_gameworld, pos, shape, colour, scale,
             power, turnSpeed, shotPower, mass, cooldown },
       m_maxVel{ maxVel }, m_aiComponent{ *this, physMan }, m_plr{ plr }

@@ -2,28 +2,29 @@
 
 #include <vector>
 
-#include "Colors.hpp"
 #include "Engine.hpp"
 #include "Gun.hpp"
 #include "PhysicsEntity.hpp"
-#include "Vec2d.hpp"
+#include "SDL_Interface.hpp"
 #include "utility.hpp"
 
 struct GameWorld;
+struct Vec2d;
 
 class Ship : public PhysicsEntity {
 public:
     virtual ~Ship() = default;
-    Ship(const Ship&) = delete;
+    Ship(const Ship&) = default;
     Ship& operator=(const Ship&) = delete;
 
-    Vec2d nose() const { return m_fillShape.at(0); }
+    const Vec2d& nose() const { return m_fillShape.at(0); }
 
     Engine engine;
     Gun gun;
 protected:
-    Ship(utl::EntityFlag new_type, GameWorld& new_gameWorld, Vec2d pos,
-         std::vector<Vec2d> shape, SdlColor color, double scale,
-         double power, double turnSpeed, double shotPower, double mass,
-         double cooldown);
+    Ship(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
+         const Vec2d& pos, const std::vector<Vec2d>& shape,
+         const utl::Colour& color, const double& scale, const double& power,
+         const double& turnSpeed, const double& shotPower, const double& mass,
+         const double& cooldown);
 };
