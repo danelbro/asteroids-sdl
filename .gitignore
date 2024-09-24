@@ -2,6 +2,7 @@ valgrind-out.txt
 .cache/
 .gdbinit
 asteroids
+*.exe
 asteroids_debug
 compile_commands.json
 exception.log
