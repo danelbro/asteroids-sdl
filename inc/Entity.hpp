@@ -25,7 +25,7 @@ public:
     virtual const Vec2d& getPos() const { return m_pos; }
     virtual bool toBeKilled() const { return kill_me; }
     virtual double scale() const { return m_scale; }
-    virtual const utl::EntityFlag type() const { return m_type; };
+    virtual utl::EntityFlag type() const { return m_type; };
 
     virtual void kill_it() { kill_me = true; }
 
@@ -35,7 +35,7 @@ protected:
     Entity(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
            const Vec2d& pos, const std::vector<Vec2d>& shape,
            const utl::Colour& color, const double& scale)
-        : m_type{ new_type }, gameWorld{ new_gameWorld }, m_pos{ pos },
+        : gameWorld{ new_gameWorld }, m_type{ new_type }, m_pos{ pos },
         m_shape{ shape }, m_color{ color }, m_scale{ scale },
         kill_me{ false }, fill{ false }
     {}
