@@ -126,9 +126,10 @@ utl::StageID MainLevel::update(double t, double dt)
     scoreManager.refresh();
     if (player.lives() <= 0) {
         for (auto& physEnt : physicsManager.physEntities) {
-            Enemy* eptr{ dynamic_cast<Enemy*>(physEnt.get())};
-            if (eptr)
+            if (physEnt->type() == utl::EntityFlag::ENEMY) {
+                Enemy* eptr{ static_cast<Enemy*>(physEnt.get())};
                 eptr->playerKilled();
+            }
         }
         return utl::StageID::HIGH_SCORES;
     }
