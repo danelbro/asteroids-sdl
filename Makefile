@@ -15,7 +15,7 @@ SDL_LDFLAGS = -Wl,-rpath,dep/linux_64/SDL2/lib -Wl,--enable-new-dtags -lSDL2 -Ld
 # SDL_CFLAGS = -Idep/linux_64/SDL2_d/include/SDL2 -D_REENTRANT -Idep/linux_64/SDL2_ttf_d/include/SDL2
 # SDL_LDFLAGS = -Wl,-rpath,dep/linux_64/SDL2_d/lib -Wl,--enable-new-dtags -lSDL2 -Ldep/linux_64/SDL2_ttf_d/lib/ -lSDL2_ttf
 
-OBJ = obj/AIComponent.o obj/Asteroid.o obj/AsteroidsApp.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/ValtrAlgorithm.o obj/Vec2d.o obj/VectorDraw.o
+OBJ = obj/AIComponent.o obj/Asteroid.o obj/AsteroidsApp.o obj/asteroids.o obj/Bullet.o obj/Enemy.o obj/Engine.o obj/GameOver.o obj/Gun.o obj/Hyperdrive.o obj/MainLevel.o obj/PhysicsComponent.o obj/PhysicsEntity.o obj/PhysicsManager.o obj/Player.o obj/SDL_Interface.o obj/ScoreManager.o obj/Ship.o obj/StageManager.o obj/TextObject.o obj/TitleScreen.o obj/utility.o obj/ValtrAlgorithm.o obj/Vec2d.o obj/VectorDraw.o
 
 all: asteroids
 release: asteroids
@@ -53,6 +53,8 @@ obj/PhysicsManager.o: src/PhysicsManager.cpp inc/PhysicsManager.hpp inc/Asteroid
 	$(CC) $(INC_DIRS) $(MODE_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/PhysicsManager.o -c src/PhysicsManager.cpp
 obj/Player.o: src/Player.cpp inc/Player.hpp inc/Colors.hpp inc/GameWorld.hpp inc/Hyperdrive.hpp inc/PhysicsComponent.hpp inc/Ship.hpp inc/Vec2d.hpp
 	$(CC) $(INC_DIRS) $(MODE_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/Player.o -c src/Player.cpp
+obj/SDL_Interface.o: src/SDL_Interface.cpp inc/SDL_Interface.hpp inc/GameWorld.hpp
+	$(CC) $(INC_DIRS) $(MODE_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/SDL_Interface.o -c src/SDL_Interface.cpp
 obj/ScoreManager.o: src/ScoreManager.cpp inc/ScoreManager.hpp inc/Colors.hpp inc/GameWorld.hpp inc/TextObject.hpp
 	$(CC) $(INC_DIRS) $(MODE_FLAGS) $(CFLAGS) $(SDL_CFLAGS) -o obj/ScoreManager.o -c src/ScoreManager.cpp
 obj/Ship.o: src/Ship.cpp inc/Ship.hpp inc/Colors.hpp inc/Engine.hpp inc/GameWorld.hpp inc/Gun.hpp inc/PhysicsEntity.hpp inc/Vec2d.hpp inc/utility.hpp
