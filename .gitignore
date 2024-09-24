@@ -12,3 +12,6 @@ obj/
 *.sln
 *.vcxproj*
 /bin
+.project
+.cproject
+/.settings/
