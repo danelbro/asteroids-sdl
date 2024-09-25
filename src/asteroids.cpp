@@ -14,16 +14,20 @@ int main()
 #endif
 try
 {
-    constexpr auto sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
+    constexpr auto sdlFlags{ SDL_INIT_VIDEO | SDL_INIT_AUDIO };
     utl::init(sdlFlags);
 
     {
-        AsteroidsApp asteroids{ "Asteroids", 960, 720,
-                                SDL_WINDOW_RESIZABLE,
-                                SDL_RENDERER_ACCELERATED |
-                                SDL_RENDERER_PRESENTVSYNC
+        const std::string title{ "Asteroids" };
+        constexpr int width{ 960 };
+        constexpr int height{ 720 };
+        constexpr uint32_t sdlWindowFlags { SDL_WINDOW_RESIZABLE };
+        constexpr uint32_t sdlRenderFlags { SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC };
+
+        {
+            AsteroidsApp asteroids{ title, width, height, sdlWindowFlags, sdlRenderFlags };
+            asteroids.run();
         };
-        asteroids.run();
     }
 
     utl::quit_sdl();
