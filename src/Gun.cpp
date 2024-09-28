@@ -1,6 +1,7 @@
 ﻿#include "Gun.hpp"
 
 #include "Colors.hpp"
+#include "flags.hpp"
 #include "PhysicsComponent.hpp"
 #include "PhysicsManager.hpp"
 #include "SDL_Interface.hpp"
@@ -11,7 +12,7 @@ void Gun::fire(PhysicsManager& physMan)
 {
     utl::Colour col{};
     utl::EntityFlag flag{};
-    switch (m_owner.type()) {
+    switch (utl::entityStringMap[m_owner.type()]) {
     case utl::EntityFlag::PLAYER:
         col = utl::customCols::bullet_col;
         flag = utl::EntityFlag::BULLET;

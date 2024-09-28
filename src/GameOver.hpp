@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <random>
+#include <string>
 #include <vector>
 
 #include "GameWorld.hpp"
@@ -25,9 +26,9 @@ public:
              std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
              int score);
 
-    utl::StageID handle_input(double, double,
+    std::string handle_input(double, double,
         std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
-    utl::StageID update(double t, double dt) override;
+    std::string update(double t, double dt) override;
     void render(double, double) override;
 
     GameWorld& gameworld() { return m_gameWorld; }

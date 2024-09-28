@@ -9,6 +9,7 @@
 #include "Colors.hpp"
 #include "Enemy.hpp"
 #include "Entity.hpp"
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
 #include "Player.hpp"
@@ -223,7 +224,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
 		PhysicsEntity& phys = *physEntities[i];
 		if (phys.toBeKilled()) {
-			switch (phys.type())
+			switch (utl::entityStringMap[phys.type()])
             {
 			case utl::EntityFlag::ASTEROID:
 				scoreMan.update_score(
@@ -256,9 +257,9 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
 void PhysicsManager::checkPlayerHit()
 {
     for (auto& ent : physEntities) {
-        if (ent->type() == utl::EntityFlag::ASTEROID
-            || ent->type() == utl::EntityFlag::ENEMY
-            || ent->type() == utl::EntityFlag::ENEMY_BULLET) {
+        if (ent->type() == utl::entityMap[utl::EntityFlag::ASTEROID]
+            || ent->type() == utl::entityMap[utl::EntityFlag::ENEMY]
+            || ent->type() == utl::entityMap[utl::EntityFlag::ENEMY_BULLET]) {
             if (utl::areColliding(m_player, *ent)) {
                 m_player.kill_it();
             }
@@ -276,12 +277,12 @@ bool PhysicsManager::wasPlayerKilled()
 void PhysicsManager::checkBulletsHit()
 {
 	for (auto& physEnt : physEntities) {
-		if (physEnt->type() == utl::EntityFlag::BULLET
+		if (physEnt->type() == utl::entityMap[utl::EntityFlag::BULLET]
                         && !physEnt->toBeKilled()) {
             Bullet& bul{ static_cast<Bullet&>(*physEnt) };
 			for (auto& target : physEntities) {
-				if (target->type() == utl::EntityFlag::ASTEROID
-					|| target->type() == utl::EntityFlag::ENEMY) {
+				if (target->type() == utl::entityMap[utl::EntityFlag::ASTEROID]
+					|| target->type() == utl::entityMap[utl::EntityFlag::ENEMY]) {
 					if (utl::PointInPolygon(bul.pos(), target->collider())) {
 						target->kill_it();
 						bul.kill_it();

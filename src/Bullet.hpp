@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "flags.hpp"
 #include "PhysicsEntity.hpp"
 #include "SDL_Interface.hpp"
 

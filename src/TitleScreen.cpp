@@ -7,6 +7,7 @@
 
 #include "Box.hpp"
 #include "Colors.hpp"
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "SDL_Interface.hpp"
 #include "Stage.hpp"
@@ -46,7 +47,7 @@ static std::vector<TextObject> makeInstructions( GameWorld& gw,
 
 TitleScreen::TitleScreen(const Box& screen, uint32_t windowID,
     utl::Renderer& renderer)
-    : Stage{ screen, windowID, renderer, utl::StageID::TITLE_SCREEN },
+    : Stage{ screen, windowID, renderer, utl::stageMap[utl::StageID::TITLE_SCREEN] },
       gameWorld{ screen, 0.0 },
       title_font{ utl::createFont(font_path, title_font_size)},
       instruction_font{ utl::createFont(font_path, instruction_font_size)},
@@ -87,13 +88,13 @@ static void reset_instructions(std::vector<TextObject>& instructions)
     }
 }
 
-utl::StageID TitleScreen::handle_input(double, double,
+std::string TitleScreen::handle_input(double, double,
     std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
     utl::process_input(gameWorld, windowID(), key_state);
 
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
-        return utl::StageID::QUIT;
+        return utl::stageMap[utl::StageID::QUIT];
 
     if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
         reset_title(title);
@@ -101,14 +102,14 @@ utl::StageID TitleScreen::handle_input(double, double,
     }
 
     if (key_state[utl::KeyFlag::K_ENTER])
-        return utl::StageID::PLAYING;
+        return utl::stageMap[utl::StageID::PLAYING];
 
-    return utl::StageID::TITLE_SCREEN;
+    return utl::stageMap[utl::StageID::TITLE_SCREEN];
 }
 
-utl::StageID TitleScreen::update(double, double)
+std::string TitleScreen::update(double, double)
 {
-    return utl::StageID::TITLE_SCREEN;
+    return utl::stageMap[utl::StageID::TITLE_SCREEN];
 }
 
 void TitleScreen::render(double, double)

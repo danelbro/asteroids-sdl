@@ -6,6 +6,7 @@
 
 #include "AIComponent.hpp"
 #include "Colors.hpp"
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
 #include "Ship.hpp"

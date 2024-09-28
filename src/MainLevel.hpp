@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <random>
+#include <string>
 
 #include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
@@ -24,17 +25,15 @@ public:
     MainLevel& operator=(const MainLevel&) = delete;
     ~MainLevel() = default;
 
-    utl::StageID handle_input(double t, double dt,
+    std::string handle_input(double t, double dt,
         std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
-    utl::StageID update(double t, double dt) override;
+    std::string update(double t, double dt) override;
     void render(double t, double dt) override;
 
     PhysicsManager& physMan() { return physicsManager; }
     ScoreManager& scoreMan() { return scoreManager; }
     GameWorld& gameworld() { return gameWorld; }
 private:
-    void init();
-
     utl::Font font;
     GameWorld gameWorld;
     std::mt19937 rng;

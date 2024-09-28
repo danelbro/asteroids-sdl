@@ -6,6 +6,7 @@
 #include "Box.hpp"
 #include "Colors.hpp"
 #include "Enemy.hpp"
+#include "flags.hpp"
 #include "ScoreManager.hpp"
 #include "SDL_Interface.hpp"
 #include "Stage.hpp"
@@ -25,7 +26,8 @@ static constexpr double fluidDensity{ 0.1 };
 
 MainLevel::MainLevel(const Box& new_screen, uint32_t windowID,
     utl::Renderer& new_renderer)
-    : Stage{ new_screen, windowID, new_renderer, utl::StageID::PLAYING },
+    : Stage{ new_screen, windowID, new_renderer,
+            utl::stageMap[utl::StageID::PLAYING] },
       font{ utl::createFont(font_path, font_size) },
       gameWorld{ new_screen, fluidDensity },
       rng{ utl::makeSeededRNG() },
@@ -40,15 +42,15 @@ MainLevel::MainLevel(const Box& new_screen, uint32_t windowID,
     utl::setRendererDrawColour(renderer(), utl::customCols::bg);
 }
 
-utl::StageID MainLevel::handle_input(double, double dt,
+std::string MainLevel::handle_input(double, double dt,
     std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
     utl::process_input(gameWorld, windowID(), key_state);
 
     if(key_state[utl::KeyFlag::QUIT])
-        return utl::StageID::QUIT;
+        return utl::stageMap[utl::StageID::QUIT];
     if (key_state[utl::KeyFlag::K_ESCAPE])
-        return utl::StageID::TITLE_SCREEN;
+        return utl::stageMap[utl::StageID::TITLE_SCREEN];
 
     if (player.isControllable()) {
         if (key_state[utl::KeyFlag::K_UP]) {
@@ -73,10 +75,10 @@ utl::StageID MainLevel::handle_input(double, double dt,
             player.hyperdrive.warp();
         }
     }
-    return utl::StageID::PLAYING;
+    return utl::stageMap[utl::StageID::PLAYING];
 }
 
-utl::StageID MainLevel::update(double t, double dt)
+std::string MainLevel::update(double t, double dt)
 {
     constexpr double enemyTime{ 5.0 }; // seconds
 
@@ -84,7 +86,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     asteroidsRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type() == utl::EntityFlag::ASTEROID) {
+        if (ent->type() == utl::entityMap[utl::EntityFlag::ASTEROID]) {
             asteroidsRemain = true;
             break;
         }
@@ -92,7 +94,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     enemiesRemain = false;
     for (auto& ent : physicsManager.physEntities) {
-        if (ent->type() == utl::EntityFlag::ENEMY) {
+        if (ent->type() == utl::entityMap[utl::EntityFlag::ENEMY]) {
             enemiesRemain = true;
             break;
         }
@@ -100,7 +102,7 @@ utl::StageID MainLevel::update(double t, double dt)
 
     if (!asteroidsRemain && !enemiesRemain) {
         for (auto& ent : physicsManager.physEntities) {
-            if (ent->type() == utl::EntityFlag::BULLET)
+            if (ent->type() == utl::entityMap[utl::EntityFlag::BULLET])
                 ent->kill_it();
         }
         levelElapsedTime = 0.0;
@@ -126,15 +128,15 @@ utl::StageID MainLevel::update(double t, double dt)
     scoreManager.refresh();
     if (player.lives() <= 0) {
         for (auto& physEnt : physicsManager.physEntities) {
-            if (physEnt->type() == utl::EntityFlag::ENEMY) {
+            if (physEnt->type() == utl::entityMap[utl::EntityFlag::ENEMY]) {
                 Enemy* eptr{ static_cast<Enemy*>(physEnt.get())};
                 eptr->playerKilled();
             }
         }
-        return utl::StageID::HIGH_SCORES;
+        return utl::stageMap[utl::StageID::GAME_OVER];
     }
 
-    return utl::StageID::PLAYING;
+    return utl::stageMap[utl::StageID::PLAYING];
 }
 
 void MainLevel::render(double, double)

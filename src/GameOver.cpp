@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Colors.hpp"
+#include "flags.hpp"
 #include "SDL_Interface.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsEntity.hpp"
@@ -21,7 +22,7 @@ static constexpr double padding{ 250.0 };
 GameOver::GameOver(const Box& screen, uint32_t windowID, utl::Renderer& rend,
                    std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
                    int score)
-: Stage{ screen, windowID, rend, utl::StageID::HIGH_SCORES },
+: Stage{ screen, windowID, rend, utl::stageMap[utl::StageID::GAME_OVER] },
 m_gameWorld{ screen, 0.1 },
 m_titleFont{ utl::createFont(fontPath, titleFont_size) },
 m_scoreFont{ utl::createFont(fontPath, scoreFont_size) },
@@ -38,8 +39,8 @@ m_ScoreText{
     m_physMan.physEntities.erase(m_physMan.physEntities.begin());
 
     for (auto& pE : physEntities) {
-        if (pE->type() != utl::EntityFlag::PLAYER)
-            m_physMan.physEntities.emplace_back(std::move(pE));
+        if (pE->type() != utl::entityMap[utl::EntityFlag::PLAYER])
+            m_physMan.physEntities.push_back(std::move(pE));
     }
 
     m_GameOverText.updateText("Game Over");
@@ -69,15 +70,15 @@ static void reset_score(TextObject& score)
         });
 }
 
-utl::StageID GameOver::handle_input(double, double,
+std::string GameOver::handle_input(double, double,
     std::array<bool, utl::KeyFlag::K_TOTAL> &key_state)
 {
     utl::process_input(m_gameWorld, windowID(), key_state);
 
     if(key_state[utl::KeyFlag::QUIT])
-        return utl::StageID::QUIT;
+        return utl::stageMap[utl::StageID::QUIT];
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::K_ENTER])
-        return utl::StageID::TITLE_SCREEN;
+        return utl::stageMap[utl::StageID::TITLE_SCREEN];
 
     if (key_state[utl::KeyFlag::WINDOW_CHANGE])
     {
@@ -89,10 +90,10 @@ utl::StageID GameOver::handle_input(double, double,
         }
     }
 
-    return utl::StageID::HIGH_SCORES;
+    return utl::stageMap[utl::StageID::GAME_OVER];
 }
 
-utl::StageID GameOver::update(double t, double dt)
+std::string GameOver::update(double t, double dt)
  {
     for (auto& physComp : m_physMan.physEntities) {
         physComp->physicsComponent.update(dt);
@@ -104,7 +105,7 @@ utl::StageID GameOver::update(double t, double dt)
     m_physMan.checkBulletsHit();
     m_physMan.clean_up(m_scoreMan);
 
-    return utl::StageID::HIGH_SCORES;
+    return utl::stageMap[utl::StageID::GAME_OVER];
 }
 
 void GameOver::render(double, double)

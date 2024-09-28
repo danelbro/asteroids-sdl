@@ -2,6 +2,7 @@
 
 #include "Colors.hpp"
 #include "Engine.hpp"
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "Gun.hpp"
 #include "PhysicsEntity.hpp"
@@ -14,7 +15,7 @@ Ship::Ship(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
            const double& power, const double& turnSpeed,
            const double& shotPower, const double& mass,
            const double& cooldown)
-    : PhysicsEntity{ new_type, new_gameWorld, pos, shape,
+    : PhysicsEntity{ utl::entityMap[new_type], new_gameWorld, pos, shape,
                      color, scale, mass },
       engine{ *this, power, turnSpeed },
       gun{ *this, shotPower, cooldown }

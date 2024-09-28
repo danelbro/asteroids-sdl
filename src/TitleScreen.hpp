@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <memory>
+#include <string>
 
 #include "Box.hpp"
 #include "GameWorld.hpp"
@@ -16,9 +17,9 @@ class TitleScreen : public Stage
 public:
     TitleScreen(const Box& screen, uint32_t windowID, utl::Renderer& renderer);
 
-    utl::StageID handle_input(double t, double dt,
+    std::string handle_input(double t, double dt,
         std::array<bool, utl::KeyFlag::K_TOTAL>& key_state) override;
-    utl::StageID update(double, double) override;
+    std::string update(double, double) override;
     void render(double, double) override;
 
     GameWorld& gameworld() { return gameWorld; }

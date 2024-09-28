@@ -6,6 +6,7 @@
 #include "SDL_Interface.hpp"
 
 #include "Colors.hpp"
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "Hyperdrive.hpp"
 #include "PhysicsComponent.hpp"

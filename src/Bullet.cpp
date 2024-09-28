@@ -4,6 +4,7 @@
 
 #include "SDL_Interface.hpp"
 
+#include "flags.hpp"
 #include "GameWorld.hpp"
 #include "PhysicsComponent.hpp"
 #include "PhysicsEntity.hpp"
@@ -16,7 +17,7 @@ Bullet::Bullet(GameWorld& new_gameWorld, const Vec2d& pos,
 			   const double& scale, const double& mass,
 			   const double& lifespan, const double& angle,
 			   const double& power, const utl::EntityFlag& flag)
-	: PhysicsEntity{ flag, new_gameWorld, pos, shape, color,
+	: PhysicsEntity{ utl::entityMap[flag], new_gameWorld, pos, shape, color,
                      scale, mass }, m_lifespan{ lifespan }, m_wayward{ true }
 {
     physicsComponent.setAngle(angle);

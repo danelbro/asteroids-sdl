@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine.hpp"
+#include "flags.hpp"
 #include "Gun.hpp"
 #include "PhysicsEntity.hpp"
 #include "SDL_Interface.hpp"
