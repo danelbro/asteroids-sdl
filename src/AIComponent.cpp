@@ -6,7 +6,7 @@
 #include "Vec2d.hpp"
 
 AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan)
-    : m_owner{ new_owner }, m_physMan(physMan)
+    : m_owner{ new_owner }, m_physMan{ physMan }
 {}
 
 static double findPlayerRayAngle(const Vec2d& current_pos, Player* plr)
@@ -41,5 +41,5 @@ void AIComponent::update(double t, double dt, Player* plr)
 void AIComponent::random_update(double, double dt)
 {
     m_owner.engine.turnLeft(dt);
-    m_owner.gun.fire(m_physMan);
+    // m_owner.gun.fire(m_physMan);
 }
