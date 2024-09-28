@@ -9,7 +9,7 @@
 
 #ifdef _WIN32
 int WinMain()
-#elif __linux__
+#else
 int main()
 #endif
 try
@@ -22,10 +22,12 @@ try
         constexpr int width{ 960 };
         constexpr int height{ 720 };
         constexpr uint32_t sdlWindowFlags { SDL_WINDOW_RESIZABLE };
-        constexpr uint32_t sdlRenderFlags { SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC };
+        constexpr uint32_t sdlRenderFlags { SDL_RENDERER_ACCELERATED
+                                            | SDL_RENDERER_PRESENTVSYNC };
 
         {
-            AsteroidsApp asteroids{ title, width, height, sdlWindowFlags, sdlRenderFlags };
+            AsteroidsApp asteroids{ title, width, height,
+                                    sdlWindowFlags, sdlRenderFlags };
             asteroids.run();
         };
     }

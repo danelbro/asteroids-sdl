@@ -24,11 +24,6 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
     m_stageMan.set_next_stage(utl::StageID::TITLE_SCREEN);
 }
 
-void AsteroidsApp::run()
-{
-    m_stageMan.run();
-}
-
 void AsteroidsApp::trigger_stage_change(utl::StageID next)
 {
     Box screen{ m_stageMan.get_current_stage()->screen() };
@@ -37,10 +32,12 @@ void AsteroidsApp::trigger_stage_change(utl::StageID next)
 
     switch (next){
     case utl::StageID::TITLE_SCREEN:
-        m_stageMan.add_stage(next, std::make_unique<TitleScreen>(screen, windowID, renderer));
+        m_stageMan.add_stage(next,
+            std::make_unique<TitleScreen>(screen, windowID, renderer));
         break;
     case utl::StageID::PLAYING:
-        m_stageMan.add_stage(next, std::make_unique<MainLevel>(screen, windowID, renderer));
+        m_stageMan.add_stage(next,
+            std::make_unique<MainLevel>(screen, windowID, renderer));
         break;
     case utl::StageID::HIGH_SCORES:
     {
@@ -51,7 +48,8 @@ void AsteroidsApp::trigger_stage_change(utl::StageID next)
 
         mlptr = static_cast<MainLevel*>(m_stageMan.get_current_stage());
 
-        m_stageMan.add_stage(next, std::make_unique<GameOver>(screen, windowID, renderer,
+        m_stageMan.add_stage(next,
+            std::make_unique<GameOver>(screen, windowID, renderer,
                 mlptr->physMan().physEntities, mlptr->scoreMan().score));
 
         break;
