@@ -6,10 +6,10 @@ project(asteroids-sdl
 
 option(ASTEROIDS-SDL_VENDORED "Use vendored libraries" ON)
 
-add_subdirectory(extern/utilityKnife)
+add_subdirectory(extern/utilityKnife build/utilityKnife)
 if(ASTEROIDS-SDL_VENDORED)
-  add_subdirectory(extern/utilityKnife/extern/SDL)
-  add_subdirectory(extern/utilityKnife/extern/SDL_ttf)
+    add_subdirectory(extern/utilityKnife/extern/SDL build/SDL)
+    add_subdirectory(extern/utilityKnife/extern/SDL_ttf build/SDL_ttf)
 else()
   find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
   find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
