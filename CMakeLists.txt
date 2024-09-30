@@ -16,7 +16,7 @@ else()
   find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL_ttf)
 endif()
 
-add_executable(${CMAKE_PROJECT_NAME}
+add_executable(asteroids
   src/AIComponent.hpp src/AIComponent.cpp
   src/Asteroid.hpp src/Asteroid.cpp
   src/AsteroidsApp.hpp src/AsteroidsApp.cpp
@@ -36,9 +36,9 @@ add_executable(${CMAKE_PROJECT_NAME}
   src/Ship.hpp src/Ship.cpp
   src/TitleScreen.hpp src/TitleScreen.cpp)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE utilityKnife::utilityKnife)
+target_link_libraries(asteroids PRIVATE utilityKnife::utilityKnife)
 if(TARGET SDL2::SDL2main)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2::SDL2main)
+  target_link_libraries(asteroids PRIVATE SDL2::SDL2main)
 endif()
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2::SDL2-static)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL_ttf::SDL_ttf)
+target_link_libraries(asteroids PRIVATE SDL2::SDL2-static)
+target_link_libraries(asteroids PRIVATE SDL_ttf::SDL_ttf)
