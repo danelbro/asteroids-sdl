@@ -1,0 +1,4 @@
+add_subdirectory(utilityKnife)
+
+add_library(asteroids_extern INTERFACE)
+target_link_libraries(asteroids_extern INTERFACE utilityKnife)

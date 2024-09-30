@@ -1,44 +1,8 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
+project(asteroids-sdl)
 
-project(asteroids-sdl
-  VERSION 0.5
-  LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(ASTEROIDS-SDL_VENDORED "Use vendored libraries" ON)
-
-add_subdirectory(extern/utilityKnife build/utilityKnife)
-if(ASTEROIDS-SDL_VENDORED)
-    add_subdirectory(extern/utilityKnife/extern/SDL build/SDL)
-    add_subdirectory(extern/utilityKnife/extern/SDL_ttf build/SDL_ttf)
-else()
-  find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
-  find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
-  find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL_ttf)
-endif()
-
-add_executable(asteroids
-  src/AIComponent.hpp src/AIComponent.cpp
-  src/Asteroid.hpp src/Asteroid.cpp
-  src/AsteroidsApp.hpp src/AsteroidsApp.cpp
-  src/asteroids.cpp
-  src/Bullet.hpp src/Bullet.cpp
-  src/Colors.hpp
-  src/Enemy.hpp src/Enemy.cpp
-  src/Engine.hpp src/Engine.cpp
-  src/flags.hpp src/flags.cpp
-  src/GameOver.hpp src/GameOver.cpp
-  src/Gun.hpp src/Gun.cpp
-  src/Hyperdrive.hpp src/Hyperdrive.cpp
-  src/MainLevel.hpp src/MainLevel.cpp
-  src/PhysicsManager.hpp src/PhysicsManager.cpp
-  src/Player.hpp src/Player.cpp
-  src/ScoreManager.hpp src/ScoreManager.cpp
-  src/Ship.hpp src/Ship.cpp
-  src/TitleScreen.hpp src/TitleScreen.cpp)
-
-target_link_libraries(asteroids PRIVATE utilityKnife::utilityKnife)
-if(TARGET SDL2::SDL2main)
-  target_link_libraries(asteroids PRIVATE SDL2::SDL2main)
-endif()
-target_link_libraries(asteroids PRIVATE SDL2::SDL2-static)
-target_link_libraries(asteroids PRIVATE SDL_ttf::SDL_ttf)
+add_subdirectory(extern)
+add_subdirectory(src)
