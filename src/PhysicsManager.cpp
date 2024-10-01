@@ -44,10 +44,14 @@ void PhysicsManager::make_bullet(const Vec2d& origin, const double& power,
                                                     angle, power, flag));
 }
 
-void PhysicsManager::make_bullet(const Bullet& oldBullet)
+void PhysicsManager::make_bullet(const PhysicsEntity& oldBullet)
 {
 	physEntities.emplace_back(
-		std::make_unique<Bullet>(oldBullet));
+		std::make_unique<Bullet>(m_gameWorld, oldBullet.getPos(),
+			oldBullet.shape(), oldBullet.color(), oldBullet.scale(),
+			oldBullet.physicsComponent.mass(), 1.0,
+			oldBullet.physicsComponent.angle(), 20000,
+			utl::EntityFlag::BULLET));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
 }
 
@@ -81,13 +85,16 @@ void PhysicsManager::make_asteroid(const double& scale, const Vec2d& pos)
 	physEntities.emplace_back(
         std::make_unique<Asteroid>(m_gameWorld, pos, shape,
                                    utl::customCols::asteroid_col, scale, mass,
-                                   impulse, angle, radius));
+                                   impulse, angle));
 }
 
-void PhysicsManager::make_asteroid(const Asteroid& ast)
+void PhysicsManager::make_asteroid(const PhysicsEntity& oldAsteroid)
 {
 	physEntities.emplace_back(
-		std::make_unique<Asteroid>(ast));
+		std::make_unique<Asteroid>(m_gameWorld, oldAsteroid.getPos(),
+			oldAsteroid.shape(), oldAsteroid.color(), oldAsteroid.scale(),
+			oldAsteroid.physicsComponent.mass(), oldAsteroid.physicsComponent.impulse(),
+			oldAsteroid.physicsComponent.angle()));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
 }
 
@@ -149,36 +156,39 @@ static const std::vector<Vec2d> enemyUFO
 	{ -20, -20 }
 };
 
+static constexpr double enemy_scale{ 1.0 };
+static constexpr double enemy_power{ 5000.0 };
+static constexpr double enemy_turnSpeed{ 300.0 };
+static constexpr double enemy_maxVel{ 150.0 };
+static constexpr double enemy_shotPower{ 20000.0 };
+static constexpr double enemy_mass{ 0.1 };
+static constexpr double enemy_cooldown{ 1.0 };
+static constexpr double enemy_distance{ 75.0 };
+
 void PhysicsManager::make_enemy()
 {
 	const std::vector<Vec2d> shape{ enemyPointy };
 
-	constexpr double scale{ 1.0 };
-	constexpr double power{ 5000.0 };
-	constexpr double turnSpeed{ 300.0 };
-    constexpr double maxVel{ 150.0 };
-	constexpr double shotPower{ 20000.0 };
-	constexpr double mass{ 0.1 };
-    constexpr double cooldown{ 1.0 };
-
-	constexpr double enemyDistance{ 75.0 };
-
 	Vec2d new_pos{ findRandomDistantPos(m_rng, m_player,
-                                        enemyDistance * scale,
+                                        enemy_distance * enemy_scale,
                                         m_gameWorld.screen.w,
                                         m_gameWorld.screen.h) };
 
 	physEntities.emplace_back(
 		std::make_unique<Enemy>(m_gameWorld, new_pos, shape,
-								utl::customCols::enemy_col, scale, power,
-								turnSpeed, maxVel, shotPower, mass, cooldown,
-								&m_player, *this));
+			utl::customCols::enemy_col, enemy_scale, enemy_power,
+			enemy_turnSpeed, enemy_maxVel, enemy_shotPower, enemy_mass,
+			enemy_cooldown, &m_player, *this, m_rng));
 }
 
-void PhysicsManager::make_enemy(const Enemy& oldEnemy)
+void PhysicsManager::make_enemy(const PhysicsEntity& oldEnemy)
 {
 	physEntities.emplace_back(
-		std::make_unique<Enemy>(oldEnemy));
+		std::make_unique<Enemy>(m_gameWorld, oldEnemy.getPos(),
+			oldEnemy.shape(), oldEnemy.color(), oldEnemy.scale(), enemy_power,
+			enemy_turnSpeed, enemy_maxVel, enemy_shotPower,
+			oldEnemy.physicsComponent.mass(), enemy_cooldown, nullptr, *this,
+			m_rng));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
 }
 

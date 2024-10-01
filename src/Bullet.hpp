@@ -19,6 +19,7 @@ public:
 
     void update(double t, double dt) override;
     bool& wayward() { return m_wayward; }
+    const double& lifespan() const { return m_lifespan; }
 
 private:
     double m_lifespan;

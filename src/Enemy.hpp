@@ -1,5 +1,6 @@
 #pragma once
 
+#include <random>
 #include <vector>
 
 #include "AIComponent.hpp"
@@ -18,7 +19,8 @@ public:
           const std::vector<Vec2d>& shape, const utl::Colour& colour,
           const double& scale, const double& power, const double& turnSpeed,
           const double& maxVel, const double& shotPower, const double& mass,
-          const double& cooldown, Player* plr, PhysicsManager& physMan);
+          const double& cooldown, Player* plr, PhysicsManager& physMan,
+          std::mt19937& rng);
 
     ~Enemy() = default;
     Enemy(const Enemy&) = default;

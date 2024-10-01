@@ -1,5 +1,6 @@
 ﻿#include "Enemy.hpp"
 
+#include <random>
 #include <vector>
 
 #include "SDL_Interface.hpp"
@@ -17,10 +18,11 @@ Enemy::Enemy(GameWorld& new_gameworld, const Vec2d& pos,
              const double& scale, const double& power,
              const double& turnSpeed, const double& maxVel,
              const double& shotPower, const double& mass,
-             const double& cooldown, Player* plr, PhysicsManager& physMan)
+             const double& cooldown, Player* plr, PhysicsManager& physMan,
+             std::mt19937& rng)
     : Ship{ utl::EntityFlag::ENEMY, new_gameworld, pos, shape, colour, scale,
             power, turnSpeed, shotPower, mass, cooldown },
-      m_maxVel{ maxVel }, m_aiComponent{ *this, physMan }, m_plr{ plr }
+      m_maxVel{ maxVel }, m_aiComponent{ *this, physMan, rng }, m_plr{ plr }
 {}
 
 void Enemy::update(double t, double dt)

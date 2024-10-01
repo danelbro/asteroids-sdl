@@ -27,16 +27,16 @@ public:
 	void make_bullet(const Vec2d& origin, const double& power,
 					 const double& angle, const utl::Colour& col,
 					 const utl::EntityFlag& flag);
-	void make_bullet(const Bullet& oldBullet);
+	void make_bullet(const PhysicsEntity& oldBullet);
 
 	void make_asteroid(const double& scale, const Vec2d& pos);
-	void make_asteroid(const Asteroid& oldAsteroid);
+	void make_asteroid(const PhysicsEntity& oldAsteroid);
 
 	void make_asteroids(int num, const double& scale, bool isNew,
                         const Vec2d& pos = { 0.0, 0.0 });
 
 	void make_enemy();
-	void make_enemy(const Enemy& oldEnemy);
+	void make_enemy(const PhysicsEntity& oldEnemy);
 
 	Player& make_player();
 

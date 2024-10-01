@@ -15,10 +15,9 @@
 Asteroid::Asteroid(GameWorld& new_gameWorld, const Vec2d& pos,
                    const std::vector<Vec2d>& shape, const utl::Colour& color,
                    const double& scale, const double& mass,
-                   const double& impulse, const double& angle,
-                   const double& new_radius)
+                   const double& impulse, const double& angle)
     : PhysicsEntity{ utl::entityMap[utl::EntityFlag::ASTEROID],
-        new_gameWorld, pos, shape, color, scale, mass }, radius{ new_radius }
+        new_gameWorld, pos, shape, color, scale, mass }
 {
     physicsComponent.setFrameImpulse(impulse / scale);
     physicsComponent.setAngle(angle);

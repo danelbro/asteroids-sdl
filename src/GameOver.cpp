@@ -10,6 +10,7 @@
 #include "GameWorld.hpp"
 #include "PhysicsEntity.hpp"
 #include "PhysicsManager.hpp"
+#include "Ship.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
 #include "utility.hpp"
@@ -39,8 +40,22 @@ m_ScoreText{
     m_physMan.physEntities.erase(m_physMan.physEntities.begin());
 
     for (auto& pE : physEntities) {
-        if (pE->type() != utl::entityMap[utl::EntityFlag::PLAYER])
-            m_physMan.physEntities.push_back(std::move(pE));
+        switch (utl::entityStringMap[pE->type()])
+        {
+        case utl::EntityFlag::PLAYER:
+            break;
+        case utl::EntityFlag::ASTEROID:
+            m_physMan.make_asteroid(*pE);
+            break;
+        case utl::EntityFlag::BULLET: case utl::EntityFlag::ENEMY_BULLET:
+            m_physMan.make_bullet(*pE);
+            break;
+        case utl::EntityFlag::ENEMY:
+            m_physMan.make_enemy(*pE);
+            break;
+        default:
+            break;
+        }
     }
 
     m_GameOverText.updateText("Game Over");

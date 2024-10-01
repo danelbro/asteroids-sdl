@@ -15,7 +15,5 @@ public:
     Asteroid(GameWorld& new_gameWorld, const Vec2d& pos,
              const std::vector<Vec2d>& shape, const utl::Colour& color,
              const double& scale, const double& mass, const double& impulse,
-             const double& angle, const double& new_radius);
-
-    double radius;
+             const double& angle);
 };
