@@ -1,5 +1,4 @@
 #! /bin/bash
 
-cmake --build build/ -j$((`nproc`+1));
-cd build/src/;
-mv asteroids ../../;
+cmake --build build/ -j$((`nproc`+1))
+cp -r data/ build/src/data
