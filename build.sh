@@ -1,5 +1,5 @@
 #! /bin/bash
 
-cmake --build build/;
+cmake --build build/ -j$((`nproc`+1));
 cd build/src/;
-mv asteroids-sdl ../../;
+mv asteroids ../../;
