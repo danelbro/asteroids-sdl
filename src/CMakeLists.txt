@@ -19,3 +19,10 @@ target_sources(${PROJECT_NAME} PRIVATE
   Ship.hpp Ship.cpp
   TitleScreen.hpp TitleScreen.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE asteroids_extern)
+target_link_libraries(${PROJECT_NAME} PRIVATE utilityKnife)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3_ttf::SDL3_ttf)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/data/)

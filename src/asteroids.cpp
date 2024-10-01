@@ -2,19 +2,17 @@
 
 #include <stdexcept>
 
-#include "SDL_Interface.hpp"
+#include <SDL3/SDL_main.h>
 
+#include "SDL_Interface.hpp"
 #include "AsteroidsApp.hpp"
 #include "utility.hpp"
 
-#ifdef _WIN32
-int WinMain()
-#else
-int main()
-#endif
+
+int main(int argc, char* argv[])
 try
 {
-    constexpr auto sdlFlags{ SDL_INIT_VIDEO | SDL_INIT_AUDIO };
+    constexpr auto sdlFlags{ SDL_INIT_VIDEO };
     utl::init(sdlFlags);
 
     {
@@ -22,12 +20,11 @@ try
         constexpr int width{ 960 };
         constexpr int height{ 720 };
         constexpr uint32_t sdlWindowFlags { SDL_WINDOW_RESIZABLE };
-        constexpr uint32_t sdlRenderFlags { SDL_RENDERER_ACCELERATED
-                                            | SDL_RENDERER_PRESENTVSYNC };
+        // FIXME: work out how to make the renderer vSync.
+        // constexpr uint32_t sdlRenderFlags { SDL_RENDERER_PRESENTVSYNC };
 
         {
-            AsteroidsApp asteroids{ title, width, height,
-                                    sdlWindowFlags, sdlRenderFlags };
+            AsteroidsApp asteroids{ title, width, height, sdlWindowFlags };
             asteroids.run();
         };
     }

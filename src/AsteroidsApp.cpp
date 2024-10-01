@@ -14,9 +14,8 @@
 #include "utility.hpp"
 
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
-                           int screenHeight, uint32_t windowFlags,
-                           uint32_t renderFlags)
-    : Application{title, screenWidth, screenHeight, windowFlags, renderFlags}
+                           int screenHeight, uint32_t windowFlags)
+    : Application{title, screenWidth, screenHeight, windowFlags}
 {
     m_stageMan.add_stage(utl::stageMap[utl::StageID::TITLE_SCREEN],
         std::make_unique<TitleScreen>(m_screen, m_windowID,

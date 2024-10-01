@@ -2,3 +2,5 @@ add_subdirectory(utilityKnife)
 
 add_library(asteroids_extern INTERFACE)
 target_link_libraries(asteroids_extern INTERFACE utilityKnife)
+target_link_libraries(asteroids_extern INTERFACE SDL3::SDL3)
+target_link_libraries(asteroids_extern INTERFACE SDL3_ttf::SDL3_ttf)
