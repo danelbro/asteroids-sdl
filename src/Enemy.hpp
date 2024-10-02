@@ -18,14 +18,15 @@ public:
     Enemy(GameWorld& new_gameWorld, const Vec2d& pos,
           const std::vector<Vec2d>& shape, const utl::Colour& colour,
           const double& scale, const double& power, const double& turnSpeed,
-          const double& maxVel, const double& shotPower, const double& mass,
-          const double& cooldown, Player* plr, PhysicsManager& physMan,
-          std::mt19937& rng);
+          const double& minVel, const double& maxVel, const double& shotPower,
+          const double& mass, const double& cooldown, Player* plr,
+          PhysicsManager& physMan, std::mt19937& rng);
 
     ~Enemy() = default;
     Enemy(const Enemy&) = default;
     Enemy& operator=(const Enemy&) = delete;
 
+    double minVel() const { return m_minVel; }
     double maxVel() const { return m_maxVel; }
 
     void update(double t, double dt) override;
@@ -33,6 +34,7 @@ public:
 
 private:
     double m_maxVel;
+    double m_minVel;
     AIComponent m_aiComponent;
     Player* m_plr;
 };

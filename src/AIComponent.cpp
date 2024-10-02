@@ -1,15 +1,36 @@
 ﻿#include "AIComponent.hpp"
 
+#include <cmath>
+#include <random>
+
 #include "Enemy.hpp"
-#include "GameWorld.hpp"
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
 #include "Vec2d.hpp"
 
+static double genRandAngle(std::mt19937& rng);
+
 AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan, std::mt19937& rng)
     : m_owner{ new_owner }, m_physMan{ physMan }, m_rng{ rng },
-    turnTime{ 0.5 }, sinceTurn{ 0.0 }
+      m_turnTimeLower{ 1.5 }, m_turnTimeUpper{ 3.0 },
+      m_turnTimeDist{ m_turnTimeLower, m_turnTimeUpper },
+      m_turnTime{ m_turnTimeDist(m_rng) }, m_timeSinceTurn{ 0.0 },
+      m_targetAngle{ genRandAngle(m_rng) }, m_enginePulse{ 1.0 },
+      m_timeSincePulse{ 0.0 }
 {}
+
+static double genMoveTime(std::uniform_real_distribution<double> dist,
+                          std::mt19937& rng)
+{
+    return dist(rng);
+}
+
+static double genRandAngle(std::mt19937& rng)
+{
+    std::uniform_real_distribution<double> angleDist{ 0.0, 360.0 };
+
+    return angleDist(rng);
+}
 
 static double findPlayerRayAngle(const Vec2d& current_pos, const Vec2d& plr_pos)
 {
@@ -17,48 +38,44 @@ static double findPlayerRayAngle(const Vec2d& current_pos, const Vec2d& plr_pos)
     return ray.angleDeg();
 }
 
-static Vec2d findRandomDistantPos(std::mt19937& rng,
-    Entity& distant, double distance, int w, int h)
+void AIComponent::update(double t, double dt, Player*)
 {
-    Vec2d new_pos{ };
-    bool isTooClose{ true };
-    do {
-        new_pos = utl::randomPos(rng, w, h);
+    const double& ourAngle{ m_owner.physicsComponent.angle() };
+    m_timeSinceTurn += dt;
+    m_timeSincePulse += dt;
 
-        Vec2d distanceToPlayer{ new_pos - distant.pos() };
-        if (distanceToPlayer.magnitude() > distance)
-            isTooClose = false;
-    } while (isTooClose);
-    return new_pos;
-}
+    bool isTooFast{ m_owner.physicsComponent.velocity().magnitude()
+                    > m_owner.maxVel()};
+    bool isTooSlow{ m_owner.physicsComponent.velocity().magnitude()
+                    < m_owner.minVel() };
 
-void AIComponent::update(double t, double dt, Player* plr)
-{
-    sinceTurn += dt;
+    if (isTooSlow) m_owner.engine.on();
 
-    if (sinceTurn > turnTime) {
-        sinceTurn = 0.0;
-        Vec2d plr_pos{};
-        if (!plr)
-            plr_pos = utl::randomPos(m_rng, m_owner.gameWorld.screen.w,
-                m_owner.gameWorld.screen.h);
-        else
-            plr_pos = plr->getPos();
+    if (m_targetAngle < ourAngle - 5.0)
+        m_owner.engine.turnLeft(dt);
+    else if (m_targetAngle > ourAngle + 5.0)
+        m_owner.engine.turnRight(dt);
 
-        double ourAngle{ m_owner.physicsComponent.angle() };
-        double angleToPlayer{ findPlayerRayAngle(m_owner.getPos(), plr_pos) };
+    if (m_timeSinceTurn > m_turnTime) {
+        m_timeSinceTurn = 0.0;
+        m_targetAngle = genRandAngle(m_rng);
+        m_turnTime = genMoveTime(m_turnTimeDist, m_rng);
 
-        if (ourAngle > angleToPlayer)
-            m_owner.engine.turnLeft(dt);
-        else
-            m_owner.engine.turnRight(dt);
+        // start a new engine pulse
+        m_timeSincePulse = 0.0;
     }
 
-    if (m_owner.physicsComponent.velocity().magnitude()
-        < (m_owner.physicsComponent.facing() * m_owner.maxVel()).magnitude())
+    if (m_timeSincePulse <= m_enginePulse) {
         m_owner.engine.on();
-    else
+    }
+    else if (m_timeSincePulse > m_enginePulse && !(isTooSlow))
         m_owner.engine.off();
+
+    if (isTooFast) m_owner.engine.off();
+
+    if (std::abs(m_owner.physicsComponent.velocity().angleDeg()
+                 - m_owner.physicsComponent.facing().angleDeg()) >= 90.0 )
+        m_owner.engine.on();
 
     m_owner.gun.fire(m_physMan);
 }

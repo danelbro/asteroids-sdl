@@ -16,6 +16,12 @@ private:
     Enemy& m_owner;
     PhysicsManager& m_physMan;
     std::mt19937& m_rng;
-    double turnTime;
-    double sinceTurn;
+    double m_turnTimeLower;
+    double m_turnTimeUpper;
+    std::uniform_real_distribution<double> m_turnTimeDist;
+    double m_turnTime;
+    double m_timeSinceTurn;
+    double m_targetAngle;
+    double m_enginePulse;
+    double m_timeSincePulse;
 };

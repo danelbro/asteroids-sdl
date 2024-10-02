@@ -159,6 +159,7 @@ static const std::vector<Vec2d> enemyUFO
 static constexpr double enemy_scale{ 1.0 };
 static constexpr double enemy_power{ 5000.0 };
 static constexpr double enemy_turnSpeed{ 300.0 };
+static constexpr double enemy_minVel{ 150.0 };
 static constexpr double enemy_maxVel{ 300.0 };
 static constexpr double enemy_shotPower{ 20000.0 };
 static constexpr double enemy_mass{ 0.1 };
@@ -177,8 +178,8 @@ void PhysicsManager::make_enemy()
 	physEntities.emplace_back(
 		std::make_unique<Enemy>(m_gameWorld, new_pos, shape,
 			utl::customCols::enemy_col, enemy_scale, enemy_power,
-			enemy_turnSpeed, enemy_maxVel, enemy_shotPower, enemy_mass,
-			enemy_cooldown, &m_player, *this, m_rng));
+            enemy_turnSpeed, enemy_minVel, enemy_maxVel, enemy_shotPower,
+            enemy_mass, enemy_cooldown, &m_player, *this, m_rng));
 }
 
 void PhysicsManager::make_enemy(const PhysicsEntity& oldEnemy)
@@ -186,7 +187,7 @@ void PhysicsManager::make_enemy(const PhysicsEntity& oldEnemy)
 	physEntities.emplace_back(
 		std::make_unique<Enemy>(m_gameWorld, oldEnemy.getPos(),
 			oldEnemy.shape(), oldEnemy.color(), oldEnemy.scale(), enemy_power,
-			enemy_turnSpeed, enemy_maxVel, enemy_shotPower,
+            enemy_turnSpeed, enemy_minVel, enemy_maxVel, enemy_shotPower,
 			oldEnemy.physicsComponent.mass(), enemy_cooldown, nullptr, *this,
 			m_rng));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
