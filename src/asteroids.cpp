@@ -20,8 +20,6 @@ try
         constexpr int width{ 960 };
         constexpr int height{ 720 };
         constexpr uint32_t sdlWindowFlags { SDL_WINDOW_RESIZABLE };
-        // FIXME: work out how to make the renderer vSync.
-        // constexpr uint32_t sdlRenderFlags { SDL_RENDERER_PRESENTVSYNC };
 
         {
             AsteroidsApp asteroids{ title, width, height, sdlWindowFlags };
