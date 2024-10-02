@@ -159,7 +159,7 @@ static const std::vector<Vec2d> enemyUFO
 static constexpr double enemy_scale{ 1.0 };
 static constexpr double enemy_power{ 5000.0 };
 static constexpr double enemy_turnSpeed{ 300.0 };
-static constexpr double enemy_maxVel{ 150.0 };
+static constexpr double enemy_maxVel{ 300.0 };
 static constexpr double enemy_shotPower{ 20000.0 };
 static constexpr double enemy_mass{ 0.1 };
 static constexpr double enemy_cooldown{ 1.0 };
@@ -199,27 +199,27 @@ static const std::vector<Vec2d> playerShape
 	{-20, 30}
 };
 
+static constexpr double playerScale{ 1.0 };
+static constexpr double playerEnginePower{ 5000.0 };
+static constexpr double playerTurnSpeed{ 300.0 };
+static constexpr double playerShotPower{ 20000.0 };
+static constexpr double playerMass{ 0.1 };
+static constexpr double playerWarpLength{ 1.0 };
+static constexpr int playerLives{ 3 };
+static constexpr double playerRespawnLength{ 2.0 };
+static constexpr double playerFlashLength{ 0.2 };
+static constexpr double playerGunCooldown{ 0.25 };
+
 Player& PhysicsManager::make_player()
 {
-	const Vec2d pos{ m_gameWorld.screen.w / 2.0, m_gameWorld.screen.h / 2.0 };
-	const std::vector<Vec2d> shape{ playerShape };
-	constexpr double scale{ 1.0 };
-	constexpr double power{ 5000.0 };
-	constexpr double turnSpeed{ 300.0 };
-	constexpr double shotPower{ 20000.0 };
-	constexpr double mass{ 0.1 };
-	constexpr double warpLength{ 1.0 };
-	constexpr int lives{ 3 };
-    constexpr double respawnLength{ 2.0 };
-    constexpr double flashLength{ 0.2 };
-    constexpr double cooldown{ 0.25 };
+	const Vec2d playerPos{ m_gameWorld.screen.w / 2.0, m_gameWorld.screen.h / 2.0 };
 
 	physEntities.emplace_back(
-		std::make_unique<Player>(m_gameWorld, pos, shape,
-								 utl::customCols::player_col, scale, power,
-								 turnSpeed, shotPower, mass, m_rng,
-								 warpLength, lives, respawnLength,
-								 flashLength, cooldown));
+		std::make_unique<Player>(m_gameWorld, playerPos, playerShape,
+								 utl::customCols::player_col, playerScale, playerEnginePower,
+								 playerTurnSpeed, playerShotPower, playerMass, m_rng,
+								 playerWarpLength, playerLives, playerRespawnLength,
+								 playerFlashLength, playerGunCooldown));
 
 	return static_cast<Player&>(*physEntities.back());
 }

@@ -110,8 +110,8 @@ std::string GameOver::handle_input(double, double,
 
 std::string GameOver::update(double t, double dt)
  {
-    for (auto& physComp : m_physMan.physEntities) {
-        physComp->physicsComponent.update(dt);
+    for (auto& physEnt : m_physMan.physEntities) {
+        physEnt->physicsComponent.update(dt);
     }
     for (auto& physEnt : m_physMan.physEntities) {
         physEnt->update(t, dt);

@@ -7,7 +7,8 @@
 #include "Vec2d.hpp"
 
 AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan, std::mt19937& rng)
-    : m_owner{ new_owner }, m_physMan{ physMan }, m_rng{ rng }
+    : m_owner{ new_owner }, m_physMan{ physMan }, m_rng{ rng },
+    turnTime{ 0.5 }, sinceTurn{ 0.0 }
 {}
 
 static double findPlayerRayAngle(const Vec2d& current_pos, const Vec2d& plr_pos)
@@ -33,25 +34,30 @@ static Vec2d findRandomDistantPos(std::mt19937& rng,
 
 void AIComponent::update(double t, double dt, Player* plr)
 {
-    Vec2d plr_pos{};
-    if (!plr)
-        plr_pos = utl::randomPos(m_rng, m_owner.gameWorld.screen.w,
-            m_owner.gameWorld.screen.h);
-    else
-        plr_pos = plr->getPos();
+    sinceTurn += dt;
 
-    double ourAngle{ m_owner.physicsComponent.angle() };
-    double angleToPlayer{ findPlayerRayAngle(m_owner.getPos(), plr_pos) };
+    if (sinceTurn > turnTime) {
+        sinceTurn = 0.0;
+        Vec2d plr_pos{};
+        if (!plr)
+            plr_pos = utl::randomPos(m_rng, m_owner.gameWorld.screen.w,
+                m_owner.gameWorld.screen.h);
+        else
+            plr_pos = plr->getPos();
 
-    if (static_cast<int>(ourAngle) == static_cast<int>(angleToPlayer)
-        && m_owner.physicsComponent.velocity().magnitude() < m_owner.maxVel())
+        double ourAngle{ m_owner.physicsComponent.angle() };
+        double angleToPlayer{ findPlayerRayAngle(m_owner.getPos(), plr_pos) };
+
+        if (ourAngle > angleToPlayer)
+            m_owner.engine.turnLeft(dt);
+        else
+            m_owner.engine.turnRight(dt);
+    }
+
+    if (m_owner.physicsComponent.velocity().magnitude()
+        < (m_owner.physicsComponent.facing() * m_owner.maxVel()).magnitude())
         m_owner.engine.on();
-    else if (ourAngle > angleToPlayer)
-        m_owner.engine.turnLeft(dt);
     else
-        m_owner.engine.turnRight(dt);
-
-    if (m_owner.physicsComponent.velocity().magnitude() >= m_owner.maxVel())
         m_owner.engine.off();
 
     m_owner.gun.fire(m_physMan);
