@@ -1,4 +1,3 @@
 #! /bin/bash
 
-cmake --build build/ -j$((`nproc`+1))
-cp -r data/ build/src/data
+cmake --build out/build/ -j$((`nproc`+1))
