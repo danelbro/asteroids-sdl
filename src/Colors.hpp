@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #include "SDL_Interface.hpp"
 
 namespace utl {
