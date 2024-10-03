@@ -22,12 +22,12 @@ Enemy::Enemy(GameWorld& new_gameworld, const Vec2d& pos,
     : Ship{ utl::EntityFlag::ENEMY, new_gameworld, pos, shape, colour, scale,
             power, turnSpeed, shotPower, mass, cooldown },
       m_minVel{ minVel }, m_maxVel{ maxVel },
-      m_aiComponent{ *this, physMan, rng }, m_plr{ plr }
+      m_aiComponent{ *this, physMan, rng }, m_plr{ plr }, m_isScreenClear{ false }
 {}
 
 void Enemy::update(double t, double dt)
 {
     gun.check_cooldown(dt);
-    m_aiComponent.update(t, dt, m_plr);
+    m_aiComponent.update(t, dt, m_plr, m_isScreenClear);
     update_shapes();
 }

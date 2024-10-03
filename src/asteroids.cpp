@@ -9,7 +9,7 @@
 #include "utility.hpp"
 
 
-int main(int argc, char* argv[])
+int main(int, char* [])
 try
 {
     constexpr auto sdlFlags{ SDL_INIT_VIDEO };

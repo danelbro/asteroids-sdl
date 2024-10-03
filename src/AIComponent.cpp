@@ -38,7 +38,7 @@ static double findPlayerRayAngle(const Vec2d& current_pos, const Vec2d& plr_pos)
     return ray.angleDeg();
 }
 
-void AIComponent::update(double t, double dt, Player*)
+void AIComponent::update(double, double dt, Player*, bool isScreenClear)
 {
     const double& ourAngle{ m_owner.physicsComponent.angle() };
     m_timeSinceTurn += dt;
@@ -51,10 +51,13 @@ void AIComponent::update(double t, double dt, Player*)
 
     if (isTooSlow) m_owner.engine.on();
 
-    if (m_targetAngle < ourAngle - 5.0)
+    constexpr double pad{ 5.0 };
+    if (m_targetAngle < ourAngle - pad)
         m_owner.engine.turnLeft(dt);
-    else if (m_targetAngle > ourAngle + 5.0)
+    else if (m_targetAngle > ourAngle + pad)
         m_owner.engine.turnRight(dt);
+    else if (!isScreenClear)
+        m_owner.gun.fire(m_physMan);
 
     if (m_timeSinceTurn > m_turnTime) {
         m_timeSinceTurn = 0.0;
@@ -73,9 +76,9 @@ void AIComponent::update(double t, double dt, Player*)
 
     if (isTooFast) m_owner.engine.off();
 
-    if (std::abs(m_owner.physicsComponent.velocity().angleDeg()
-                 - m_owner.physicsComponent.facing().angleDeg()) >= 90.0 )
-        m_owner.engine.on();
+    constexpr double changeDirectionAngle{ 90.0 };
 
-    m_owner.gun.fire(m_physMan);
+    if (std::abs(m_owner.physicsComponent.velocity().angleDeg()
+                 - m_owner.physicsComponent.facing().angleDeg()) >= changeDirectionAngle )
+        m_owner.engine.on();
 }

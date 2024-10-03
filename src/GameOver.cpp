@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Colors.hpp"
+#include "Enemy.hpp"
 #include "flags.hpp"
 #include "SDL_Interface.hpp"
 #include "GameWorld.hpp"
@@ -110,6 +111,23 @@ std::string GameOver::handle_input(double, double,
 
 std::string GameOver::update(double t, double dt)
  {
+    bool asteroidsRemain{ false };
+    for (auto& ent : m_physMan.physEntities) {
+        if (ent->type() == utl::entityMap[utl::EntityFlag::ASTEROID]) {
+            asteroidsRemain = true;
+            break;
+        }
+    }
+
+    if (!asteroidsRemain) {
+        for (auto& ent : m_physMan.physEntities) {
+            if (ent->type() == utl::entityMap[utl::EntityFlag::ENEMY]) {
+                Enemy* eptr{ static_cast<Enemy*>(ent.get()) };
+                eptr->clearedScreen();
+            }
+        }
+     }
+
     for (auto& physEnt : m_physMan.physEntities) {
         physEnt->physicsComponent.update(dt);
     }
@@ -117,8 +135,8 @@ std::string GameOver::update(double t, double dt)
         physEnt->update(t, dt);
     }
 
-    m_physMan.checkBulletsHit();
-    m_physMan.clean_up(m_scoreMan);
+    m_physMan.checkBulletsHit(true);
+    m_physMan.clean_up(m_scoreMan, true);
 
     return utl::stageMap[utl::StageID::GAME_OVER];
 }

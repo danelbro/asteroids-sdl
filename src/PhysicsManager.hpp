@@ -40,11 +40,11 @@ public:
 
 	Player& make_player();
 
-	void clean_up(ScoreManager& scoreMan);
+	void clean_up(ScoreManager& scoreMan, bool gameOver);
 
 	bool wasPlayerKilled();
     void checkPlayerHit();
-	void checkBulletsHit();
+	void checkBulletsHit(bool gameOver);
 
     Player& player() { return m_player; }
 

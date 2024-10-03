@@ -31,10 +31,12 @@ public:
 
     void update(double t, double dt) override;
     void playerKilled() { m_plr = nullptr; }
+    void clearedScreen() { m_isScreenClear = true; }
 
 private:
-    double m_maxVel;
     double m_minVel;
+    double m_maxVel;
     AIComponent m_aiComponent;
     Player* m_plr;
+    bool m_isScreenClear;
 };

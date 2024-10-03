@@ -120,11 +120,11 @@ std::string MainLevel::update(double t, double dt)
     for (auto& physEnt : physicsManager.physEntities)
         physEnt->update(t, dt);
 
-    physicsManager.checkBulletsHit();
+    physicsManager.checkBulletsHit(false);
     physicsManager.checkPlayerHit();
     if (player.lives() != scoreManager.lives)
         scoreManager.update_lives(-1);
-    physicsManager.clean_up(scoreManager);
+    physicsManager.clean_up(scoreManager, false);
     scoreManager.refresh();
     if (player.lives() <= 0) {
         for (auto& physEnt : physicsManager.physEntities) {

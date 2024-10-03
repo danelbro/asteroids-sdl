@@ -21,6 +21,15 @@
 #include "utility.hpp"
 #include "ValtrAlgorithm.hpp"
 
+static void copyPhysicsProperties(const PhysicsComponent& physIn, PhysicsComponent& physOut)
+{
+    physOut.setVelocity(physIn.velocity());
+    physOut.setAcceleration(physIn.acceleration());
+    physOut.setFacingAngle(physIn.facing());
+    physOut.setAngle(physIn.angle());
+    physOut.setFrameImpulse(physIn.impulse());
+}
+
 PhysicsManager::PhysicsManager(GameWorld& gameWorld, std::mt19937& rng)
 	: physEntities{ }, m_gameWorld{ gameWorld }, m_rng{ rng },
       m_player{ make_player() }
@@ -53,6 +62,7 @@ void PhysicsManager::make_bullet(const PhysicsEntity& oldBullet)
 			oldBullet.physicsComponent.angle(), 20000,
 			utl::EntityFlag::BULLET));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
+	copyPhysicsProperties(oldBullet.physicsComponent, physEntities.back()->physicsComponent);
 }
 
 void PhysicsManager::make_asteroid(const double& scale, const Vec2d& pos)
@@ -96,6 +106,7 @@ void PhysicsManager::make_asteroid(const PhysicsEntity& oldAsteroid)
 			oldAsteroid.physicsComponent.mass(), oldAsteroid.physicsComponent.impulse(),
 			oldAsteroid.physicsComponent.angle()));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
+	copyPhysicsProperties(oldAsteroid.physicsComponent, physEntities.back()->physicsComponent);
 }
 
 static Vec2d findRandomDistantPos(std::mt19937& rng,
@@ -191,6 +202,7 @@ void PhysicsManager::make_enemy(const PhysicsEntity& oldEnemy)
 			oldEnemy.physicsComponent.mass(), enemy_cooldown, nullptr, *this,
 			m_rng));
 	physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
+	copyPhysicsProperties(oldEnemy.physicsComponent, physEntities.back()->physicsComponent);
 }
 
 static const std::vector<Vec2d> playerShape
@@ -225,7 +237,7 @@ Player& PhysicsManager::make_player()
 	return static_cast<Player&>(*physEntities.back());
 }
 
-void PhysicsManager::clean_up(ScoreManager& scoreMan)
+void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
 {
 	constexpr int baseAsteroidScore = 300;
 	constexpr int baseEnemyScore = 500;
@@ -233,20 +245,27 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan)
     constexpr int newAsteroids = 2;
 
 	for (size_t i{ 0 }; i < physEntities.size(); i++) {
-		PhysicsEntity& phys = *physEntities[i];
+		PhysicsEntity& phys{ *physEntities[i] };
 		if (phys.toBeKilled()) {
 			switch (utl::entityStringMap[phys.type()])
             {
-			case utl::EntityFlag::ASTEROID:
-				scoreMan.update_score(
-					static_cast<int>(baseAsteroidScore / phys.scale()));
-				if (phys.scale() > 1.0)
+			case utl::EntityFlag::ASTEROID: {
+			    if (!gameOver) {
+			        scoreMan.update_score(
+			                static_cast<int>(baseAsteroidScore / phys.scale()));
+			    }
+				if (phys.scale() > 1.0) {
 					make_asteroids(newAsteroids, phys.scale() - 1.0,
                                    false, phys.pos());
+				}
 				break;
-			case utl::EntityFlag::ENEMY:
-				scoreMan.update_score(baseEnemyScore);
+			}
+			case utl::EntityFlag::ENEMY: {
+			    if (!gameOver) {
+			        scoreMan.update_score(baseEnemyScore);
+			    }
 				break;
+			}
 			case utl::EntityFlag::BULLET:
             {
                 Bullet& bulref = static_cast<Bullet&>(phys);
@@ -285,15 +304,16 @@ bool PhysicsManager::wasPlayerKilled()
     return false;
 }
 
-void PhysicsManager::checkBulletsHit()
+void PhysicsManager::checkBulletsHit(bool gameOver)
 {
 	for (auto& physEnt : physEntities) {
-		if (physEnt->type() == utl::entityMap[utl::EntityFlag::BULLET]
+		if ((physEnt->type() == utl::entityMap[utl::EntityFlag::BULLET]
+		    || (gameOver && physEnt->type() == utl::entityMap[utl::EntityFlag::ENEMY_BULLET]))
                         && !physEnt->toBeKilled()) {
             Bullet& bul{ static_cast<Bullet&>(*physEnt) };
 			for (auto& target : physEntities) {
 				if (target->type() == utl::entityMap[utl::EntityFlag::ASTEROID]
-					|| target->type() == utl::entityMap[utl::EntityFlag::ENEMY]) {
+					|| (!gameOver && target->type() == utl::entityMap[utl::EntityFlag::ENEMY])) {
 					if (utl::PointInPolygon(bul.pos(), target->collider())) {
 						target->kill_it();
 						bul.kill_it();
