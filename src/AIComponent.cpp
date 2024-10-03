@@ -32,11 +32,13 @@ static double genRandAngle(std::mt19937& rng)
     return angleDist(rng);
 }
 
+/*
 static double findPlayerRayAngle(const Vec2d& current_pos, const Vec2d& plr_pos)
 {
     Vec2d ray{ plr_pos - current_pos };
     return ray.angleDeg();
 }
+*/
 
 void AIComponent::update(double, double dt, Player*, bool isScreenClear)
 {
