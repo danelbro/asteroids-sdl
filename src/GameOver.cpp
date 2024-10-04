@@ -22,7 +22,7 @@ static constexpr int scoreFont_size{ 48 };
 static constexpr double padding{ 250.0 };
 
 GameOver::GameOver(const Box& screen, uint32_t windowID, utl::Renderer& rend,
-                   std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
+                   const std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
                    int score)
 : Stage{ screen, windowID, rend, utl::stageMap[utl::StageID::GAME_OVER] },
 m_gameWorld{ screen, 0.1 },

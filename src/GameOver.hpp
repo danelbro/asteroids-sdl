@@ -13,7 +13,6 @@
 #include "ScoreManager.hpp"
 #include "Stage.hpp"
 #include "TextObject.hpp"
-#include "utility.hpp"
 
 struct Box;
 
@@ -23,7 +22,7 @@ class GameOver : public Stage
 {
 public:
     GameOver(const Box& screen, uint32_t windowID, utl::Renderer& renderer,
-             std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
+             const std::vector<std::unique_ptr<PhysicsEntity>>& physEntities,
              int score);
 
     std::string handle_input(double, double,

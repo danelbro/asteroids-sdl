@@ -1,7 +1,6 @@
 #include "AsteroidsApp.hpp"
 
 #include <cstdint>
-#include <memory>
 #include <string>
 
 #include "Application.hpp"
