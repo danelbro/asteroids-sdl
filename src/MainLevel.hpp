@@ -2,7 +2,6 @@
 
 #include <array>
 #include <cstdint>
-#include <memory>
 #include <random>
 #include <string>
 
@@ -11,7 +10,6 @@
 #include "ScoreManager.hpp"
 #include "SDL_Interface.hpp"
 #include "Stage.hpp"
-#include "utility.hpp"
 
 struct Box;
 

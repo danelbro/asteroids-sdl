@@ -18,9 +18,8 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
 {
     m_renderer.setVSync(1);
 
-    m_stageMan.add_stage(utl::stageMap[utl::StageID::TITLE_SCREEN],
-        std::make_unique<TitleScreen>(m_screen, m_windowID,
-                                      m_renderer));
+    m_stageMan.add_stage<TitleScreen>(utl::stageMap[utl::StageID::TITLE_SCREEN],
+                                      m_screen, m_windowID, m_renderer);
     m_stageMan.set_current_stage(utl::stageMap[utl::StageID::TITLE_SCREEN]);
     m_stageMan.set_next_stage(utl::stageMap[utl::StageID::TITLE_SCREEN]);
 }
@@ -33,12 +32,10 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
 
     switch (utl::stageStringMap[next]){
     case utl::StageID::TITLE_SCREEN:
-        m_stageMan.add_stage(next,
-            std::make_unique<TitleScreen>(screen, windowID, renderer));
+        m_stageMan.add_stage<TitleScreen>(next, screen, windowID, renderer);
         break;
     case utl::StageID::PLAYING:
-        m_stageMan.add_stage(next,
-            std::make_unique<MainLevel>(screen, windowID, renderer));
+        m_stageMan.add_stage<MainLevel>(next, screen, windowID, renderer);
         break;
     case utl::StageID::GAME_OVER:
     {
@@ -49,14 +46,12 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
 
         mlptr = static_cast<MainLevel*>(m_stageMan.get_current_stage());
 
-        m_stageMan.add_stage(next,
-            std::make_unique<GameOver>(screen, windowID, renderer,
-                mlptr->physMan().physEntities, mlptr->scoreMan().score));
+        m_stageMan.add_stage<GameOver>(next, screen, windowID, renderer,
+                mlptr->physMan().physEntities, mlptr->scoreMan().score);
 
         break;
     }
     case utl::StageID::QUIT:
-        m_stageMan.add_stage(next, nullptr);
         break;
     default:
         throw std::runtime_error("bad stage!\n");
