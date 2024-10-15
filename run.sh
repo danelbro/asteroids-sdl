@@ -1,3 +1,3 @@
 #! /bin/bash
 
-./out/build/$1/src/asteroids
+./build/$1/src/asteroids
