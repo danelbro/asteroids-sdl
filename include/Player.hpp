@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include <random>
-#include <vector>
-
-#include "utl_SDLInterface.hpp"
-#include "utl_GameWorld.hpp"
-#include "utl_Vec2d.hpp"
-
 #include "Hyperdrive.hpp"
 #include "Ship.hpp"
+
+#include <random>
+#include <utl_GameWorld.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Vec2d.hpp>
+#include <vector>
 
 class Player : public Ship {
 public:

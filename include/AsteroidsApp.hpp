@@ -1,9 +1,8 @@
 #pragma once
 
-#include "utl_Application.hpp"
-
 #include <cstdint>
 #include <string>
+#include <utl_Application.hpp>
 
 class AsteroidsApp : public utl::Application {
 public:

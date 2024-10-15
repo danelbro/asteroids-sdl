@@ -2,15 +2,15 @@
 
 #include "PhysicsManager.hpp"
 #include "ScoreManager.hpp"
-#include "utl_Box.hpp"
-#include "utl_GameWorld.hpp"
-#include "utl_SDLInterface.hpp"
-#include "utl_Stage.hpp"
 
 #include <array>
 #include <cstdint>
 #include <random>
 #include <string>
+#include <utl_Box.hpp>
+#include <utl_GameWorld.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Stage.hpp>
 
 class Player;
 

@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "utl_Box.hpp"
-#include "utl_GameWorld.hpp"
-#include "utl_SDLInterface.hpp"
-#include "utl_Stage.hpp"
-#include "utl_TextObject.hpp"
-
 #include <array>
 #include <cstdint>
 #include <string>
+#include <utl_Box.hpp>
+#include <utl_GameWorld.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Stage.hpp>
+#include <utl_TextObject.hpp>
 
 class TitleScreen : public utl::Stage {
 public:

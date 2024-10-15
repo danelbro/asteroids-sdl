@@ -2,18 +2,18 @@
 
 #include "PhysicsManager.hpp"
 #include "ScoreManager.hpp"
-#include "utl_GameWorld.hpp"
-#include "utl_Box.hpp"
-#include "utl_PhysicsEntity.hpp"
-#include "utl_SDLInterface.hpp"
-#include "utl_Stage.hpp"
-#include "utl_TextObject.hpp"
 
 #include <array>
 #include <cstdint>
 #include <memory>
 #include <random>
 #include <string>
+#include <utl_Box.hpp>
+#include <utl_GameWorld.hpp>
+#include <utl_PhysicsEntity.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Stage.hpp>
+#include <utl_TextObject.hpp>
 #include <vector>
 
 class GameOver : public utl::Stage {

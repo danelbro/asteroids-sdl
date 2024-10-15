@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utl_SDLInterface.hpp"
+#include <utl_SDLInterface.hpp>
 
 namespace customCols {
 const utl::Colour bg{0x10, 0x13, 0x26, 0xff};            // midnight

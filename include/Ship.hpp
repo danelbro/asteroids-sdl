@@ -3,11 +3,11 @@
 #include "Engine.hpp"
 #include "Gun.hpp"
 #include "flags.hpp"
-#include "utl_GameWorld.hpp"
-#include "utl_PhysicsEntity.hpp"
-#include "utl_SDLInterface.hpp"
-#include "utl_Vec2d.hpp"
 
+#include <utl_GameWorld.hpp>
+#include <utl_PhysicsEntity.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Vec2d.hpp>
 #include <vector>
 
 class Ship : public utl::VecGraphPhysEnt {

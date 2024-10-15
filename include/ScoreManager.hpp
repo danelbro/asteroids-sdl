@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#include "utl_GameWorld.hpp"
-#include "utl_SDLInterface.hpp"
-#include "utl_TextObject.hpp"
-
+#include <utl_GameWorld.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_TextObject.hpp>
 #include <vector>
 
 class ScoreManager {
