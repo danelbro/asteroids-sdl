@@ -3,18 +3,17 @@
 #include <random>
 #include <vector>
 
-#include "SDL_Interface.hpp"
+#include "utl_SDLInterface.hpp"
+#include "utl_GameWorld.hpp"
+#include "utl_Vec2d.hpp"
 
 #include "Hyperdrive.hpp"
 #include "Ship.hpp"
 
-struct GameWorld;
-struct Vec2d;
-
 class Player : public Ship {
 public:
-    Player(GameWorld& new_gameWorld, const Vec2d& pos,
-           const std::vector<Vec2d>& shape, const utl::Colour& color,
+    Player(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
+           const std::vector<utl::Vec2d>& shape, const utl::Colour& color,
            const double& scale, const double& power, const double& turnSpeed,
            const double& shotPower, const double& mass, std::mt19937& rng,
            const double& warpTimer, int lives, const double& respawnLength,

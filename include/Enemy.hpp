@@ -1,22 +1,21 @@
 #pragma once
 
-#include <random>
-#include <vector>
-
 #include "AIComponent.hpp"
 #include "Ship.hpp"
-#include "SDL_Interface.hpp"
+#include "utl_GameWorld.hpp"
+#include "utl_SDLInterface.hpp"
+#include "utl_Vec2d.hpp"
 
-struct GameWorld;
-struct Vec2d;
+#include <random>
+#include <vector>
 
 class PhysicsManager;
 class Player;
 
 class Enemy : public Ship {
 public:
-    Enemy(GameWorld& new_gameWorld, const Vec2d& pos,
-          const std::vector<Vec2d>& shape, const utl::Colour& colour,
+    Enemy(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
+          const std::vector<utl::Vec2d>& shape, const utl::Colour& colour,
           const double& scale, const double& power, const double& turnSpeed,
           const double& minVel, const double& maxVel, const double& shotPower,
           const double& mass, const double& cooldown, Player* plr,

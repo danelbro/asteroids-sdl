@@ -1,9 +1,9 @@
 #pragma once
 
-#include <random>
-
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
+
+#include <random>
 
 class Enemy;
 
@@ -12,6 +12,7 @@ public:
     AIComponent(Enemy& owner, PhysicsManager& physMan, std::mt19937& rng);
 
     void update(double t, double dt, Player* plr, bool isScreenClear);
+
 private:
     Enemy& m_owner;
     PhysicsManager& m_physMan;
