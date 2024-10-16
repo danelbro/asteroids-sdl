@@ -1,24 +1,24 @@
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE
-  ../include/AIComponent.hpp AIComponent.cpp
-  ../include/Asteroid.hpp Asteroid.cpp
-  ../include/AsteroidsApp.hpp AsteroidsApp.cpp
-  asteroids.cpp
-  ../include/Bullet.hpp Bullet.cpp
-  ../include/Colors.hpp
-  ../include/Enemy.hpp Enemy.cpp
-  ../include/Engine.hpp Engine.cpp
-  ../include/flags.hpp flags.cpp
-  ../include/GameOver.hpp GameOver.cpp
-  ../include/Gun.hpp Gun.cpp
-  ../include/Hyperdrive.hpp Hyperdrive.cpp
-  ../include/MainLevel.hpp MainLevel.cpp
-  ../include/PhysicsManager.hpp PhysicsManager.cpp
-  ../include/Player.hpp Player.cpp
-  ../include/ScoreManager.hpp ScoreManager.cpp
-  ../include/Ship.hpp Ship.cpp
-  ../include/TitleScreen.hpp TitleScreen.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE ../include)
+  "../include/AIComponent.hpp" "AIComponent.cpp"
+  "../include/Asteroid.hpp" "Asteroid.cpp"
+  "../include/AsteroidsApp.hpp" "AsteroidsApp.cpp"
+  "asteroids.cpp"
+  "../include/Bullet.hpp" "Bullet.cpp"
+  "../include/Colors.hpp"
+  "../include/Enemy.hpp" "Enemy.cpp"
+  "../include/Engine.hpp" "Engine.cpp"
+  "../include/flags.hpp" "flags.cpp"
+  "../include/GameOver.hpp" "GameOver.cpp"
+  "../include/Gun.hpp" "Gun.cpp"
+  "../include/Hyperdrive.hpp" "Hyperdrive.cpp"
+  "../include/MainLevel.hpp" "MainLevel.cpp"
+  "../include/PhysicsManager.hpp" "PhysicsManager.cpp"
+  "../include/Player.hpp" "Player.cpp"
+  "../include/ScoreManager.hpp" "ScoreManager.cpp"
+  "../include/Ship.hpp" "Ship.cpp"
+  "../include/TitleScreen.hpp" "TitleScreen.cpp")
+target_include_directories(${PROJECT_NAME} PUBLIC "../include")
 target_link_libraries(${PROJECT_NAME} PRIVATE asteroids_extern)
 target_link_libraries(${PROJECT_NAME} PRIVATE utilityKnife)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
