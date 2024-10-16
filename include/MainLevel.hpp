@@ -34,14 +34,26 @@ public:
     utl::GameWorld& gameworld() { return gameWorld; }
 
 private:
+    void check_targets_cleared();
+    void tick_enemy_timer(const double& dt);
+    void spawn_enemy(const double& enemyTime);
+    void progress_level();
+    void update_physics(const double& dt);
+    void update_entities(const double& t, const double& dt);
+    void update_scoreboard_lives();
+    std::string check_game_over();
+
+    void render_entities();
+    void render_text();
+
     utl::Font font;
     utl::GameWorld gameWorld;
     std::mt19937 rng;
     PhysicsManager physicsManager;
     Player& player;
     ScoreManager scoreManager;
-    bool asteroidsRemain;
+    bool areAsteroidsRemaining;
     int numOfAsteroids;
-    bool enemiesRemain;
-    double levelElapsedTime;
+    bool areEnemiesRemaining;
+    double enemyTimer;
 };

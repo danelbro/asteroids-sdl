@@ -265,7 +265,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
 
 // checks whether the player got hit and whether they're out of lives.
 // return true if out of lives
-void PhysicsManager::checkPlayerHit()
+void PhysicsManager::check_player_hit()
 {
     for (auto& ent : physEntities) {
         if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ASTEROID]
@@ -285,7 +285,7 @@ bool PhysicsManager::wasPlayerKilled()
     return false;
 }
 
-void PhysicsManager::checkBulletsHit(bool gameOver)
+void PhysicsManager::check_bullet_hits(bool gameOver)
 {
     for (auto& physEnt : physEntities) {
         if ((physEnt->type() == ENTITY_MAP[ENTITY_FLAG::BULLET]

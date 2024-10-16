@@ -8,6 +8,7 @@
 #include "flags.hpp"
 
 #include <array>
+#include <memory>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_PhysicsEntity.hpp>
@@ -15,6 +16,7 @@
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
 #include <utl_utility.hpp>
+#include <vector>
 
 static constexpr int startingAsteroids{3};
 static constexpr double asteroidScale{3.0};
@@ -36,8 +38,8 @@ MainLevel::MainLevel(utl::Box& new_screen, uint32_t windowID,
                    font,
                    new_renderer,
                    player.lives()},
-      asteroidsRemain{false}, numOfAsteroids{startingAsteroids},
-      enemiesRemain{false}, levelElapsedTime{0.0}
+      areAsteroidsRemaining{false}, numOfAsteroids{startingAsteroids},
+      areEnemiesRemaining{false}, enemyTimer{0.0}
 {
     utl::setRendererDrawColour(renderer(), customCols::bg);
 }
@@ -81,81 +83,136 @@ MainLevel::handle_input(double, double dt,
     return STAGE_MAP[STAGE_ID::PLAYING];
 }
 
-std::string MainLevel::update(double t, double dt)
+static bool do_entities_remain_of_type(
+    ENTITY_FLAG entityType,
+    const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
 {
-    constexpr double enemyTimeSecs{5.0};
-
-    if (!enemiesRemain) {
-        levelElapsedTime += dt;
-    }
-
-    asteroidsRemain = false;
-    for (auto& ent : physicsManager.physEntities) {
-        if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ASTEROID]) {
-            asteroidsRemain = true;
-            break;
+    for (auto& ent : physEntities) {
+        if (ent->type() == ENTITY_MAP[entityType]) {
+            return true;
         }
     }
 
-    enemiesRemain = false;
-    for (auto& ent : physicsManager.physEntities) {
-        if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
-            enemiesRemain = true;
-            break;
+    return false;
+}
+
+static void kill_entities_of_type(
+    ENTITY_FLAG entityType,
+    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+{
+    for (auto& physEnt : physEntities) {
+        if (physEnt->type() == ENTITY_MAP[entityType]) {
+            physEnt->kill_it();
         }
     }
+}
 
-    if (!asteroidsRemain && !enemiesRemain) {
-        for (auto& ent : physicsManager.physEntities) {
-            if (ent->type() == ENTITY_MAP[ENTITY_FLAG::BULLET]) {
-                ent->kill_it();
-            }
-        }
-        levelElapsedTime = 0.0;
+void MainLevel::check_targets_cleared()
+{
+    areAsteroidsRemaining = do_entities_remain_of_type(
+        ENTITY_FLAG::ASTEROID, physicsManager.physEntities);
+
+    areEnemiesRemaining = do_entities_remain_of_type(
+        ENTITY_FLAG::ENEMY, physicsManager.physEntities);
+}
+
+void MainLevel::tick_enemy_timer(const double& dt)
+{
+    if (!areEnemiesRemaining) {
+        enemyTimer += dt;
+    }
+}
+
+void MainLevel::progress_level()
+{
+    if (!areAsteroidsRemaining && !areEnemiesRemaining) {
+        kill_entities_of_type(ENTITY_FLAG::BULLET, physicsManager.physEntities);
+        enemyTimer = 0.0;
         physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
     }
+}
 
-    if (asteroidsRemain && !enemiesRemain && levelElapsedTime >= enemyTimeSecs) {
-        levelElapsedTime = 0.0;
+void MainLevel::spawn_enemy(const double& enemyTime)
+{
+    if (areAsteroidsRemaining && !areEnemiesRemaining
+        && enemyTimer >= enemyTime) {
+        enemyTimer = 0.0;
         physicsManager.make_enemy();
     }
+}
 
+void MainLevel::update_physics(const double& dt)
+{
     for (auto& physEnt : physicsManager.physEntities) {
         physEnt->physicsComponent.update(dt);
     }
+}
 
+void MainLevel::update_entities(const double& t, const double& dt)
+{
     for (auto& physEnt : physicsManager.physEntities) {
         physEnt->update(t, dt);
     }
+}
 
-    physicsManager.checkBulletsHit(false);
-    physicsManager.checkPlayerHit();
+void MainLevel::update_scoreboard_lives()
+{
     if (player.lives() != scoreManager.lives) {
         scoreManager.update_lives(-1);
     }
-    physicsManager.clean_up(scoreManager, false);
-    scoreManager.refresh();
+}
+
+std::string MainLevel::check_game_over()
+{
     if (player.lives() <= 0) {
         for (auto& physEnt : physicsManager.physEntities) {
             if (physEnt->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
-                Enemy* eptr{static_cast<Enemy*>(physEnt.get())};
-                eptr->playerKilled();
+                Enemy* enemyPtr{static_cast<Enemy*>(physEnt.get())};
+                enemyPtr->playerKilled();
             }
         }
         return STAGE_MAP[STAGE_ID::GAME_OVER];
     }
-
     return STAGE_MAP[STAGE_ID::PLAYING];
 }
 
-void MainLevel::render(double, double)
+std::string MainLevel::update(double t, double dt)
 {
-    utl::clearScreen(renderer());
+    constexpr double enemyTimeSecs{5.0};
+
+    check_targets_cleared();
+    tick_enemy_timer(dt);
+    spawn_enemy(enemyTimeSecs);
+    progress_level();
+
+    update_physics(dt);
+    update_entities(t, dt);
+
+    physicsManager.check_bullet_hits(false);
+    physicsManager.check_player_hit();
+    update_scoreboard_lives();
+    physicsManager.clean_up(scoreManager, false);
+    scoreManager.refresh();
+    return check_game_over();
+}
+
+void MainLevel::render_entities()
+{
     for (auto& physEntity : physicsManager.physEntities) {
         physEntity->render(renderer());
     }
+}
+
+void MainLevel::render_text()
+{
     for (auto& textObject : scoreManager.textObjects) {
         textObject.render(renderer());
     }
+}
+
+void MainLevel::render(double, double) {
+    utl::clearScreen(renderer());
+    render_entities();
+    render_text();
     utl::presentRenderer(renderer());
 }

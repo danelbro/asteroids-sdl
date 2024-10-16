@@ -131,7 +131,7 @@ std::string GameOver::update(double t, double dt)
         physEnt->update(t, dt);
     }
 
-    m_physMan.checkBulletsHit(true);
+    m_physMan.check_bullet_hits(true);
     m_physMan.clean_up(m_scoreMan, true);
 
     return STAGE_MAP[STAGE_ID::GAME_OVER];

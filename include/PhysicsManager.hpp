@@ -38,8 +38,8 @@ public:
     void clean_up(ScoreManager& scoreMan, bool gameOver);
 
     bool wasPlayerKilled();
-    void checkPlayerHit();
-    void checkBulletsHit(bool gameOver);
+    void check_player_hit();
+    void check_bullet_hits(bool gameOver);
 
     Player& player() { return m_player; }
 
