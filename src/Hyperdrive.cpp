@@ -1,20 +1,20 @@
 ﻿#include "Hyperdrive.hpp"
 
-#include <random>
-
-#include "GameWorld.hpp"
-#include "PhysicsComponent.hpp"
 #include "Player.hpp"
-#include "utility.hpp"
+
+#include <random>
+#include <utl_PhysicsComponent.hpp>
 
 Hyperdrive::Hyperdrive(Player& owner, double warpLength, std::mt19937& rng)
-    : m_isWarping{ false }, m_warpLength{warpLength}, m_warpTimer{ 0.0 },
-      m_owner{ owner }, m_rng{ rng }
+    : m_isWarping{false}, m_warpLength{warpLength}, m_warpTimer{0.0},
+      m_owner{owner}, m_rng{rng}
 {}
 
 void Hyperdrive::warp()
 {
-    if (m_isWarping) return;
+    if (m_isWarping) {
+        return;
+    }
 
     m_warpTimer = 0.0;
     m_isWarping = true;
@@ -26,22 +26,28 @@ void Hyperdrive::warp()
     m_owner.physicsComponent.setFrameImpulse(0);
     m_owner.physicsComponent.setVelocity({0, 0});
 
-    m_owner.pos() = utl::randomPos(m_rng,
-                                   m_owner.gameWorld.screen.w,
-                                   m_owner.gameWorld.screen.h);
+    m_owner.set_pos(
+        utl::randomPos(m_rng, m_owner.screen().w, m_owner.screen().h));
 }
 
 void Hyperdrive::check_warp(double dt)
 {
-    if (!m_isWarping) return;
+    if (!m_isWarping) {
+        return;
+    }
 
     m_warpTimer += dt;
-    if (m_warpTimer >= m_warpLength) stop_warp();
+
+    if (m_warpTimer >= m_warpLength) {
+        stop_warp();
+    }
 }
 
 void Hyperdrive::stop_warp()
 {
-    if (!m_isWarping) return;
+    if (!m_isWarping) {
+        return;
+    }
 
     m_isWarping = false;
     m_owner.setVulnerable(true);

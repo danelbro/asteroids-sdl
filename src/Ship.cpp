@@ -1,22 +1,27 @@
 ﻿#include "Ship.hpp"
 
-#include "Colors.hpp"
 #include "Engine.hpp"
-#include "flags.hpp"
-#include "GameWorld.hpp"
 #include "Gun.hpp"
-#include "PhysicsEntity.hpp"
-#include "Vec2d.hpp"
-#include "utility.hpp"
+#include "flags.hpp"
 
-Ship::Ship(const utl::EntityFlag& new_type, GameWorld& new_gameWorld,
-           const Vec2d& pos, const std::vector<Vec2d>& shape,
-           const utl::Colour& color, const double& scale,
-           const double& power, const double& turnSpeed,
-           const double& shotPower, const double& mass,
+#include <utl_GameWorld.hpp>
+#include <utl_PhysicsEntity.hpp>
+#include <utl_Vec2d.hpp>
+#include <utl_utility.hpp>
+
+Ship::Ship(const ENTITY_FLAG& new_type, utl::GameWorld& new_gameWorld,
+           const utl::Vec2d& pos, const std::vector<utl::Vec2d>& shape,
+           const utl::Colour& color, const double& scale, const double& power,
+           const double& turnSpeed, const double& shotPower, const double& mass,
            const double& cooldown)
-    : PhysicsEntity{ utl::entityMap[new_type], new_gameWorld, pos, shape,
-                     color, scale, mass },
-      engine{ *this, power, turnSpeed },
-      gun{ *this, shotPower, cooldown }
+    : utl::VecGraphPhysEnt{ENTITY_MAP[new_type],
+                           new_gameWorld,
+                           pos,
+                           shape,
+                           color,
+                           scale,
+                           mass,
+                           false,
+                           true},
+      engine{*this, power, turnSpeed}, gun{*this, shotPower, cooldown}
 {}

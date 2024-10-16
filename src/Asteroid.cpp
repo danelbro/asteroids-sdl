@@ -1,25 +1,30 @@
 ﻿#include "Asteroid.hpp"
 
+#include "flags.hpp"
+
+#include <utl_GameWorld.hpp>
+#include <utl_PhysicsComponent.hpp>
+#include <utl_PhysicsEntity.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Vec2d.hpp>
+#include <utl_utility.hpp>
 #include <vector>
 
-#include "SDL_Interface.hpp"
-
-#include "Colors.hpp"
-#include "flags.hpp"
-#include "GameWorld.hpp"
-#include "PhysicsEntity.hpp"
-#include "PhysicsComponent.hpp"
-#include "Vec2d.hpp"
-#include "utility.hpp"
-
-Asteroid::Asteroid(GameWorld& new_gameWorld, const Vec2d& pos,
-                   const std::vector<Vec2d>& shape, const utl::Colour& color,
-                   const double& scale, const double& mass,
-                   const double& impulse, const double& angle)
-    : PhysicsEntity{ utl::entityMap[utl::EntityFlag::ASTEROID],
-        new_gameWorld, pos, shape, color, scale, mass }
+Asteroid::Asteroid(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
+                   const std::vector<utl::Vec2d>& shape,
+                   const utl::Colour& color, const double& scale,
+                   const double& mass, const double& impulse,
+                   const double& angle, bool fill, bool wrap)
+    : utl::VecGraphPhysEnt{ENTITY_MAP[ENTITY_FLAG::ASTEROID],
+                           new_gameWorld,
+                           pos,
+                           shape,
+                           color,
+                           scale,
+                           mass,
+                           fill,
+                           wrap}
 {
     physicsComponent.setFrameImpulse(impulse / scale);
     physicsComponent.setAngle(angle);
-    // fill = true;
 }

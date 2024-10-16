@@ -1,37 +1,40 @@
 ﻿#include "Player.hpp"
 
+#include "Hyperdrive.hpp"
+#include "Ship.hpp"
+#include "flags.hpp"
+
 #include <random>
+#include <utl_GameWorld.hpp>
+#include <utl_PhysicsComponent.hpp>
+#include <utl_SDLInterface.hpp>
+#include <utl_Vec2d.hpp>
+#include <utl_utility.hpp>
 #include <vector>
 
-#include "SDL_Interface.hpp"
-
-#include "Colors.hpp"
-#include "flags.hpp"
-#include "GameWorld.hpp"
-#include "Hyperdrive.hpp"
-#include "PhysicsComponent.hpp"
-#include "Ship.hpp"
-#include "Vec2d.hpp"
-#include "utility.hpp"
-
-Player::Player(GameWorld& new_gameWorld, const Vec2d& pos,
-               const std::vector<Vec2d>& shape, const utl::Colour& color,
+Player::Player(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
+               const std::vector<utl::Vec2d>& shape, const utl::Colour& color,
                const double& scale, const double& power,
                const double& turnSpeed, const double& shotPower,
-               const double& mass, std::mt19937& rng,
-               const double& warpLength, int lives,
-               const double& respawnLength, const double& flashLength,
-               const double& cooldown)
-    : Ship{utl::EntityFlag::PLAYER, new_gameWorld, pos, shape, color, scale,
-           power, turnSpeed, shotPower, mass, cooldown},
-      hyperdrive{ *this, warpLength, rng }, m_isControllable{ true },
-      m_isVulnerable{ true }, m_lives{ lives },
-      m_respawnLength{ respawnLength }, m_respawnTimer{ 0.0 },
-      m_isRespawning{ false }, m_flashTimer{ 0.0 },
-      m_flashLength{ flashLength }
-{
-    // fill = true;
-}
+               const double& mass, std::mt19937& rng, const double& warpLength,
+               int lives, const double& respawnLength,
+               const double& flashLength, const double& cooldown)
+    : Ship{ENTITY_FLAG::PLAYER,
+           new_gameWorld,
+           pos,
+           shape,
+           color,
+           scale,
+           power,
+           turnSpeed,
+           shotPower,
+           mass,
+           cooldown},
+      hyperdrive{*this, warpLength, rng}, m_isControllable{true},
+      m_isVulnerable{true}, m_lives{lives}, m_respawnLength{respawnLength},
+      m_respawnTimer{0.0}, m_isRespawning{false}, m_flashTimer{0.0},
+      m_flashLength{flashLength}
+{}
 
 void Player::update(double, double dt)
 {
@@ -61,7 +64,7 @@ void Player::respawn()
     physicsComponent.setAcceleration({0, 0});
     physicsComponent.setFrameImpulse(0);
     physicsComponent.setVelocity({0, 0});
-    m_pos = { gameWorld.screen.w / 2.0, gameWorld.screen.h / 2.0 };
+    m_pos = {m_gameWorld.screen.w / 2.0, m_gameWorld.screen.h / 2.0};
 }
 
 void Player::check_respawn(double dt)

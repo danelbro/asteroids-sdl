@@ -2,34 +2,28 @@
 
 #include <string>
 
-namespace utl {
-    std::unordered_map<EntityFlag, std::string> entityMap{
-            {EntityFlag::PLAYER, "PLAYER"},
-            {EntityFlag::ASTEROID, "ASTEROID"},
-            {EntityFlag::ENEMY, "ENEMY"},
-            {EntityFlag::BULLET, "ENEMY_BULLET"},
-            {EntityFlag::TEXT, "TEXT"}
-    };
+std::unordered_map<ENTITY_FLAG, std::string> ENTITY_MAP{
+    {ENTITY_FLAG::PLAYER, "PLAYER"},
+    {ENTITY_FLAG::ASTEROID, "ASTEROID"},
+    {ENTITY_FLAG::ENEMY, "ENEMY"},
+    {ENTITY_FLAG::BULLET, "ENEMY_BULLET"},
+    {ENTITY_FLAG::TEXT, "TEXT"}};
 
-    std::unordered_map<std::string, EntityFlag> entityStringMap{
-        {"PLAYER", EntityFlag::PLAYER},
-        {"ASTEROID", EntityFlag::ASTEROID},
-        {"ENEMY", EntityFlag::ENEMY},
-        {"ENEMY_BULLET", EntityFlag::BULLET},
-        {"TEXT", EntityFlag::TEXT}
-    };
+std::unordered_map<std::string, ENTITY_FLAG> ENTITY_STRING_MAP{
+    {"PLAYER", ENTITY_FLAG::PLAYER},
+    {"ASTEROID", ENTITY_FLAG::ASTEROID},
+    {"ENEMY", ENTITY_FLAG::ENEMY},
+    {"ENEMY_BULLET", ENTITY_FLAG::BULLET},
+    {"TEXT", ENTITY_FLAG::TEXT}};
 
-    std::unordered_map<StageID, std::string> stageMap{
-        {StageID::TITLE_SCREEN, "TITLE_SCREEN"},
-        {StageID::PLAYING, "PLAYING"},
-        {StageID::GAME_OVER, "GAME_OVER"},
-        {StageID::QUIT, "QUIT"}
-    };
+std::unordered_map<STAGE_ID, std::string> STAGE_MAP{
+    {STAGE_ID::TITLE_SCREEN, "TITLE_SCREEN"},
+    {STAGE_ID::PLAYING, "PLAYING"},
+    {STAGE_ID::GAME_OVER, "GAME_OVER"},
+    {STAGE_ID::QUIT, "QUIT"}};
 
-    std::unordered_map<std::string, StageID> stageStringMap{
-        {"TITLE_SCREEN", StageID::TITLE_SCREEN},
-        {"PLAYING", StageID::PLAYING},
-        {"GAME_OVER", StageID::GAME_OVER},
-        {"QUIT", StageID::QUIT}
-    };
-} // namespace utl
+std::unordered_map<std::string, STAGE_ID> STAGE_STRING_MAP{
+    {"TITLE_SCREEN", STAGE_ID::TITLE_SCREEN},
+    {"PLAYING", STAGE_ID::PLAYING},
+    {"GAME_OVER", STAGE_ID::GAME_OVER},
+    {"QUIT", STAGE_ID::QUIT}};
