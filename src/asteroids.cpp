@@ -7,7 +7,7 @@
 #include <utl_SDLInterface.hpp>
 #include <utl_utility.hpp>
 
-int main()
+int main(int, char**)
 try {
     constexpr auto sdlFlags{SDL_INIT_VIDEO};
     utl::init(sdlFlags);
