@@ -1,15 +1,15 @@
 #include "AsteroidsApp.hpp"
 
-#include <cstdint>
-#include <string>
-
-#include "Application.hpp"
-#include "Box.hpp"
-#include "flags.hpp"
-#include "StageManager.hpp"
-#include "TitleScreen.hpp"
 #include "GameOver.hpp"
 #include "MainLevel.hpp"
+#include "TitleScreen.hpp"
+#include "flags.hpp"
+
+#include <cstdint>
+#include <string>
+#include <utl_Application.hpp>
+#include <utl_Box.hpp>
+#include <utl_StageManager.hpp>
 
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                            int screenHeight, uint32_t windowFlags)
@@ -17,40 +17,44 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
 {
     m_renderer.setVSync(1);
 
-    m_stageMan.add_stage<TitleScreen>(utl::stageMap[utl::StageID::TITLE_SCREEN],
-                                      m_screen, m_windowID, m_renderer);
-    m_stageMan.set_current_stage(utl::stageMap[utl::StageID::TITLE_SCREEN]);
-    m_stageMan.set_next_stage(utl::stageMap[utl::StageID::TITLE_SCREEN]);
+    m_stageManager.add_stage<TitleScreen>(STAGE_MAP[STAGE_ID::TITLE_SCREEN],
+                                          m_screenSpace, m_windowID,
+                                          m_renderer);
+    m_stageManager.set_current_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
+    m_stageManager.set_next_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
 }
 
 void AsteroidsApp::trigger_stage_change(const std::string& next)
 {
-    Box screen{ m_stageMan.get_current_stage()->screen() };
-    uint32_t windowID{ m_stageMan.get_current_stage()->windowID() };
-    utl::Renderer& renderer{ m_stageMan.get_current_stage()->renderer() };
+    utl::Box screen{m_stageManager.get_current_stage()->screen()};
+    uint32_t windowID{m_stageManager.get_current_stage()->windowID()};
+    utl::Renderer& renderer{m_stageManager.get_current_stage()->renderer()};
 
-    switch (utl::stageStringMap[next]){
-    case utl::StageID::TITLE_SCREEN:
-        m_stageMan.add_stage<TitleScreen>(next, screen, windowID, renderer);
+    switch (STAGE_STRING_MAP[next]) {
+    case STAGE_ID::TITLE_SCREEN:
+        m_stageManager.add_stage<TitleScreen>(next, screen, windowID, renderer);
         break;
-    case utl::StageID::PLAYING:
-        m_stageMan.add_stage<MainLevel>(next, screen, windowID, renderer);
+    case STAGE_ID::PLAYING:
+        m_stageManager.add_stage<MainLevel>(next, screen, windowID, renderer);
         break;
-    case utl::StageID::GAME_OVER:
+    case STAGE_ID::GAME_OVER:
     {
-        MainLevel* mlptr{ nullptr };
+        MainLevel* mlptr{nullptr};
 
-        if (m_stageMan.get_current() != utl::stageMap[utl::StageID::PLAYING])
-            throw std::runtime_error("Trying to enter game over screen without playing!\n");
+        if (m_stageManager.get_current() != STAGE_MAP[STAGE_ID::PLAYING]) {
+            throw std::runtime_error(
+                "Trying to enter game over screen without playing!\n");
+        }
 
-        mlptr = static_cast<MainLevel*>(m_stageMan.get_current_stage());
+        mlptr = static_cast<MainLevel*>(m_stageManager.get_current_stage());
 
-        m_stageMan.add_stage<GameOver>(next, screen, windowID, renderer,
-                mlptr->physMan().physEntities, mlptr->scoreMan().score);
+        m_stageManager.add_stage<GameOver>(next, screen, windowID, renderer,
+                                           mlptr->physMan().physEntities,
+                                           mlptr->scoreMan().score);
 
         break;
     }
-    case utl::StageID::QUIT:
+    case STAGE_ID::QUIT:
         break;
     default:
         throw std::runtime_error("bad stage!\n");

@@ -1,7 +1,8 @@
 ﻿#include "Engine.hpp"
 
 #include "Ship.hpp"
-#include "PhysicsComponent.hpp"
+
+#include <utl_PhysicsComponent.hpp>
 
 Engine::Engine(Ship& newOwner, double newPower, double newTurnSpeed)
     : owner(newOwner), power(newPower), turnSpeed(newTurnSpeed)

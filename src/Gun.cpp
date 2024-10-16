@@ -1,44 +1,49 @@
 ﻿#include "Gun.hpp"
 
 #include "Colors.hpp"
-#include "flags.hpp"
-#include "PhysicsComponent.hpp"
 #include "PhysicsManager.hpp"
-#include "SDL_Interface.hpp"
 #include "Ship.hpp"
-#include "utility.hpp"
+#include "flags.hpp"
+
+#include <utl_PhysicsComponent.hpp>
+#include <utl_SDLInterface.hpp>
 
 void Gun::fire(PhysicsManager& physMan)
 {
     utl::Colour col{};
-    utl::EntityFlag flag{};
-    switch (utl::entityStringMap[m_owner.type()]) {
-    case utl::EntityFlag::PLAYER:
-        col = utl::customCols::bullet_col;
-        flag = utl::EntityFlag::BULLET;
+    ENTITY_FLAG flag{};
+
+    switch (ENTITY_STRING_MAP[m_owner.type()]) {
+    case ENTITY_FLAG::PLAYER:
+        col = customCols::bullet_col;
+        flag = ENTITY_FLAG::BULLET;
         break;
-    case utl::EntityFlag::ENEMY:
-        col = utl::customCols::enemy_col;
-        flag = utl::EntityFlag::ENEMY_BULLET;
+    case ENTITY_FLAG::ENEMY:
+        col = customCols::enemy_col;
+        flag = ENTITY_FLAG::ENEMY_BULLET;
         break;
     default:
         break;
     }
 
-    if (!m_fired)
+    if (!m_fired) {
         physMan.make_bullet(m_owner.nose(), m_shotPower,
-                            m_owner.physicsComponent.angle(),
-                            col, flag);
+                            m_owner.physicsComponent.facing(), col, flag);
+    }
 
     m_fired = true;
 }
 
 void Gun::check_cooldown(double dt)
 {
-    if (!m_fired) return;
+    if (!m_fired) {
+        return;
+    }
 
     m_cooldownTimer += dt;
-    if (m_cooldownTimer < m_cooldown) return;
+    if (m_cooldownTimer < m_cooldown) {
+        return;
+    }
 
     reset();
 }
