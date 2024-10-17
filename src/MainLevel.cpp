@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 #include <utl_Box.hpp>
-#include <utl_PhysicsEntity.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>

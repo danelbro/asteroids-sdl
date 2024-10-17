@@ -3,7 +3,7 @@
 #include "Player.hpp"
 
 #include <random>
-#include <utl_PhysicsComponent.hpp>
+#include <utl_VecGraphPhysComp.hpp>
 
 Hyperdrive::Hyperdrive(Player& owner, double warpLength, std::mt19937& rng)
     : m_isWarping{false}, m_warpLength{warpLength}, m_warpTimer{0.0},

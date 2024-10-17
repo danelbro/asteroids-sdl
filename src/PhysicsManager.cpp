@@ -12,8 +12,8 @@
 #include <random>
 #include <utl_Entity.hpp>
 #include <utl_GameWorld.hpp>
-#include <utl_PhysicsEntity.hpp>
-#include <utl_PhysicsComponent.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
+#include <utl_VecGraphPhysComp.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_ValtrAlgorithm.hpp>
 #include <utl_Vec2d.hpp>
@@ -49,7 +49,7 @@ void PhysicsManager::make_bullet(const utl::Vec2d& origin, const double& power,
 
     physEntities.push_back(
         std::make_unique<Bullet>(m_gameWorld, origin, shape, col, scale, mass,
-                                 lifespan, angle, power, flag, true, false));
+                                 lifespan, angle, power, flag, true, true));
 }
 
 void PhysicsManager::make_bullet(const utl::VecGraphPhysEnt& oldBullet)
@@ -58,7 +58,7 @@ void PhysicsManager::make_bullet(const utl::VecGraphPhysEnt& oldBullet)
         m_gameWorld, oldBullet.pos(), oldBullet.shape(), oldBullet.color(),
         oldBullet.scale(), oldBullet.physicsComponent.mass(), 1.0,
         oldBullet.physicsComponent.facing(), 20'000, ENTITY_FLAG::BULLET, true,
-        false));
+        true));
     physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
     copyPhysicsProperties(oldBullet.physicsComponent,
                           physEntities.back()->physicsComponent);
@@ -91,7 +91,7 @@ void PhysicsManager::make_asteroid(const double& scale, const utl::Vec2d& pos)
 
     physEntities.emplace_back(std::make_unique<Asteroid>(
         m_gameWorld, pos, shape, customCols::asteroid_col, scale, mass, impulse,
-        angle, false, true));
+        angle, true, false));
 }
 
 void PhysicsManager::make_asteroid(const utl::VecGraphPhysEnt& oldAsteroid)
@@ -101,7 +101,7 @@ void PhysicsManager::make_asteroid(const utl::VecGraphPhysEnt& oldAsteroid)
         oldAsteroid.color(), oldAsteroid.scale(),
         oldAsteroid.physicsComponent.mass(),
         oldAsteroid.physicsComponent.impulse(),
-        oldAsteroid.physicsComponent.facing(), false, true));
+        oldAsteroid.physicsComponent.facing(), true, false));
     physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
     copyPhysicsProperties(oldAsteroid.physicsComponent,
                           physEntities.back()->physicsComponent);
@@ -311,9 +311,9 @@ void PhysicsManager::check_bullet_hits(bool gameOver)
 
 bool PhysicsManager::do_entities_remain_of_type(
     ENTITY_FLAG entityType,
-    const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+    const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities)
 {
-    for (auto& ent : physEntities) {
+    for (auto& ent : entities) {
         if (ent->type() == ENTITY_MAP[entityType]) {
             return true;
         }
@@ -324,9 +324,9 @@ bool PhysicsManager::do_entities_remain_of_type(
 
 void PhysicsManager::kill_entities_of_type(
     ENTITY_FLAG entityType,
-    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities)
 {
-    for (auto& physEnt : physEntities) {
+    for (auto& physEnt : entities) {
         if (physEnt->type() == ENTITY_MAP[entityType]) {
             physEnt->kill_it();
         }

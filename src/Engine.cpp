@@ -2,7 +2,7 @@
 
 #include "Ship.hpp"
 
-#include <utl_PhysicsComponent.hpp>
+#include <utl_VecGraphPhysComp.hpp>
 
 Engine::Engine(Ship& newOwner, double newPower, double newTurnSpeed)
     : owner(newOwner), power(newPower), turnSpeed(newTurnSpeed)

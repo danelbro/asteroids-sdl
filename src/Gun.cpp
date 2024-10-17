@@ -5,7 +5,7 @@
 #include "Ship.hpp"
 #include "flags.hpp"
 
-#include <utl_PhysicsComponent.hpp>
+#include <utl_VecGraphPhysComp.hpp>
 #include <utl_SDLInterface.hpp>
 
 void Gun::fire(PhysicsManager& physMan)

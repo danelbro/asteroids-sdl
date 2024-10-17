@@ -7,7 +7,7 @@
 #include <memory>
 #include <random>
 #include <utl_GameWorld.hpp>
-#include <utl_PhysicsEntity.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
 #include <vector>
@@ -43,11 +43,11 @@ public:
 
     bool do_entities_remain_of_type(
         ENTITY_FLAG entityType,
-        const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities);
+        const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities);
 
     void kill_entities_of_type(
         ENTITY_FLAG entityType,
-        std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities);
+        std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities);
 
     Player& player() { return m_player; }
 
