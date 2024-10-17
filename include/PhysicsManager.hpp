@@ -37,9 +37,17 @@ public:
 
     void clean_up(ScoreManager& scoreMan, bool gameOver);
 
-    bool wasPlayerKilled();
+    bool was_player_killed();
     void check_player_hit();
     void check_bullet_hits(bool gameOver);
+
+    bool do_entities_remain_of_type(
+        ENTITY_FLAG entityType,
+        const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities);
+
+    void kill_entities_of_type(
+        ENTITY_FLAG entityType,
+        std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities);
 
     Player& player() { return m_player; }
 

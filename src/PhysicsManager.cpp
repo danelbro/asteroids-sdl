@@ -7,12 +7,12 @@
 #include "Player.hpp"
 #include "ScoreManager.hpp"
 #include "flags.hpp"
-#include "utl_PhysicsEntity.hpp"
 
 #include <memory>
 #include <random>
 #include <utl_Entity.hpp>
 #include <utl_GameWorld.hpp>
+#include <utl_PhysicsEntity.hpp>
 #include <utl_PhysicsComponent.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_ValtrAlgorithm.hpp>
@@ -144,16 +144,16 @@ static const std::vector<utl::Vec2d> enemyPointy{
     {15, -10},  // top right
     // {-15, -10}, {15, -10}, // cross bar
     {20, 30},  // bottom right
-    // {0, 15},   // bottom
+    {0, 15},   // bottom
     // {0, -30}, {0, 15}, // dorsal line
     {-20, 30},  // bottom right
     {-15, -10}  // top left
 };
 
 // more ufo shaped
-static const std::vector<utl::Vec2d> enemyUFO{
-    {20, -20}, {40, 0},   {45, 0},  {-45, 0}, {45, 0},
-    {40, 20},  {-40, 20}, {-45, 0}, {-40, 0}, {-20, -20}};
+//static const std::vector<utl::Vec2d> enemyUFO{
+//    {20, -20}, {40, 0},   {45, 0},  {-45, 0}, {45, 0},
+//    {40, 20},  {-40, 20}, {-45, 0}, {-40, 0}, {-20, -20}};
 
 static constexpr double enemy_scale{1.0};
 static constexpr double enemy_power{5000.0};
@@ -278,7 +278,7 @@ void PhysicsManager::check_player_hit()
     }
 }
 
-bool PhysicsManager::wasPlayerKilled()
+bool PhysicsManager::was_player_killed()
 {
     if (m_player.toBeKilled()) return true;
 
@@ -305,6 +305,30 @@ void PhysicsManager::check_bullet_hits(bool gameOver)
                     }
                 }
             }
+        }
+    }
+}
+
+bool PhysicsManager::do_entities_remain_of_type(
+    ENTITY_FLAG entityType,
+    const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+{
+    for (auto& ent : physEntities) {
+        if (ent->type() == ENTITY_MAP[entityType]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void PhysicsManager::kill_entities_of_type(
+    ENTITY_FLAG entityType,
+    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+{
+    for (auto& physEnt : physEntities) {
+        if (physEnt->type() == ENTITY_MAP[entityType]) {
+            physEnt->kill_it();
         }
     }
 }

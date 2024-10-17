@@ -87,36 +87,12 @@ MainLevel::handle_input(double, double dt,
     return STAGE_MAP[STAGE_ID::PLAYING];
 }
 
-static bool do_entities_remain_of_type(
-    ENTITY_FLAG entityType,
-    const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
-{
-    for (auto& ent : physEntities) {
-        if (ent->type() == ENTITY_MAP[entityType]) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-static void kill_entities_of_type(
-    ENTITY_FLAG entityType,
-    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
-{
-    for (auto& physEnt : physEntities) {
-        if (physEnt->type() == ENTITY_MAP[entityType]) {
-            physEnt->kill_it();
-        }
-    }
-}
-
 void MainLevel::check_targets_cleared()
 {
-    areAsteroidsRemaining = do_entities_remain_of_type(
+    areAsteroidsRemaining = physicsManager.do_entities_remain_of_type(
         ENTITY_FLAG::ASTEROID, physicsManager.physEntities);
 
-    areEnemiesRemaining = do_entities_remain_of_type(
+    areEnemiesRemaining = physicsManager.do_entities_remain_of_type(
         ENTITY_FLAG::ENEMY, physicsManager.physEntities);
 }
 
@@ -130,7 +106,8 @@ void MainLevel::tick_enemy_timer(const double& dt)
 void MainLevel::progress_level()
 {
     if (!areAsteroidsRemaining && !areEnemiesRemaining) {
-        kill_entities_of_type(ENTITY_FLAG::BULLET, physicsManager.physEntities);
+        physicsManager.kill_entities_of_type(
+                ENTITY_FLAG::BULLET, physicsManager.physEntities);
         enemyTimer = 0.0;
         physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
     }

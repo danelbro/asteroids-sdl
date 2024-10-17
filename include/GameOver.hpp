@@ -32,6 +32,9 @@ public:
     utl::GameWorld& gameworld() { return m_gameWorld; }
 
 private:
+    void check_asteroids_cleared();
+    void stop_enemy_firing();
+
     utl::GameWorld m_gameWorld;
     utl::Font m_titleFont;
     utl::Font m_scoreFont;
@@ -41,4 +44,5 @@ private:
     int m_score;
     utl::TextObject m_GameOverText;
     utl::TextObject m_ScoreText;
+    bool asteroidsRemain;
 };

@@ -112,31 +112,48 @@ GameOver::handle_input(double, double,
     return STAGE_MAP[STAGE_ID::GAME_OVER];
 }
 
-std::string GameOver::update(double t, double dt)
+void GameOver::check_asteroids_cleared()
 {
-    bool asteroidsRemain{false};
-    for (auto& ent : m_physMan.physEntities) {
-        if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ASTEROID]) {
-            asteroidsRemain = true;
-            break;
-        }
-    }
+    asteroidsRemain = m_physMan.do_entities_remain_of_type(
+            ENTITY_FLAG::ASTEROID, m_physMan.physEntities);
+}
 
+void GameOver::stop_enemy_firing()
+{
     if (!asteroidsRemain) {
-        for (auto& ent : m_physMan.physEntities) {
+       for (auto& ent : m_physMan.physEntities) {
             if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
                 Enemy* eptr{static_cast<Enemy*>(ent.get())};
                 eptr->clearedScreen();
             }
         }
     }
+}
 
-    for (auto& physEnt : m_physMan.physEntities) {
-        physEnt->physicsComponent.update(dt);
+static void update_physics(const double& dt,
+        std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+{
+    for (auto& physEnt : physEntities) {
+            physEnt->physicsComponent.update(dt);
     }
-    for (auto& physEnt : m_physMan.physEntities) {
+}
+
+static void update_entities(const double& t, const double& dt,
+            std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+{
+    for (auto& physEnt : physEntities) {
         physEnt->update(t, dt);
     }
+
+}
+
+std::string GameOver::update(double t, double dt)
+{
+    check_asteroids_cleared();
+    stop_enemy_firing();
+
+    update_physics(dt, m_physMan.physEntities);
+    update_entities(t, dt, m_physMan.physEntities);
 
     m_physMan.check_bullet_hits(true);
     m_physMan.clean_up(m_scoreMan, true);
@@ -144,14 +161,19 @@ std::string GameOver::update(double t, double dt)
     return STAGE_MAP[STAGE_ID::GAME_OVER];
 }
 
+static void render_entities(std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
+        utl::Renderer& renderer)
+{
+    for (auto& physEntity : physEntities) {
+        physEntity->render(renderer);
+    }
+}
+
 void GameOver::render(double, double)
 {
-    utl::Renderer& rend{renderer()};
-    utl::clearScreen(rend);
-    for (auto& physEntity : m_physMan.physEntities) {
-        physEntity->render(rend);
-    }
-    m_GameOverText.render(rend);
-    m_ScoreText.render(rend);
-    utl::presentRenderer(rend);
+    utl::clearScreen(renderer());
+    render_entities(m_physMan.physEntities, renderer());
+    m_GameOverText.render(renderer());
+    m_ScoreText.render(renderer());
+    utl::presentRenderer(renderer());
 }
