@@ -16,6 +16,7 @@ obj/
 .project
 .cproject
 /.settings/
+.clang-format
 /x64/
 /build/
 /out/
