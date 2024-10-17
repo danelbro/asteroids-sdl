@@ -108,6 +108,8 @@ void MainLevel::progress_level()
     if (!areAsteroidsRemaining && !areEnemiesRemaining) {
         physicsManager.kill_entities_of_type(
                 ENTITY_FLAG::BULLET, physicsManager.physEntities);
+        physicsManager.kill_entities_of_type(
+                ENTITY_FLAG::ENEMY_BULLET, physicsManager.physEntities);
         enemyTimer = 0.0;
         physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
     }
