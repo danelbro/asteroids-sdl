@@ -16,8 +16,7 @@ class Player;
 
 class MainLevel : public utl::Stage {
 public:
-    MainLevel(utl::Box& screen, uint32_t windowID,
-              utl::Renderer& renderer);
+    MainLevel(utl::Box& screen, uint32_t windowID, utl::Renderer& renderer);
 
     MainLevel(const MainLevel&) = delete;
     MainLevel& operator=(const MainLevel&) = delete;

@@ -7,9 +7,9 @@
 #include <memory>
 #include <random>
 #include <utl_GameWorld.hpp>
-#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <vector>
 
 class Player;

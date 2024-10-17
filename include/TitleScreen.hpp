@@ -11,8 +11,7 @@
 
 class TitleScreen : public utl::Stage {
 public:
-    TitleScreen(utl::Box& screen, uint32_t windowID,
-                utl::Renderer& renderer);
+    TitleScreen(utl::Box& screen, uint32_t windowID, utl::Renderer& renderer);
 
     std::string
     handle_input(double t, double dt,

@@ -37,8 +37,7 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
     case STAGE_ID::PLAYING:
         m_stageManager.add_stage<MainLevel>(next, screen, windowID, renderer);
         break;
-    case STAGE_ID::GAME_OVER:
-    {
+    case STAGE_ID::GAME_OVER: {
         MainLevel* mlptr{nullptr};
 
         if (m_stageManager.get_current() != STAGE_MAP[STAGE_ID::PLAYING]) {

@@ -11,10 +11,10 @@
 #include <memory>
 #include <string>
 #include <utl_Box.hpp>
-#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_utility.hpp>
 #include <vector>
 
@@ -106,10 +106,10 @@ void MainLevel::tick_enemy_timer(const double& dt)
 void MainLevel::progress_level()
 {
     if (!areAsteroidsRemaining && !areEnemiesRemaining) {
-        physicsManager.kill_entities_of_type(
-                ENTITY_FLAG::BULLET, physicsManager.physEntities);
-        physicsManager.kill_entities_of_type(
-                ENTITY_FLAG::ENEMY_BULLET, physicsManager.physEntities);
+        physicsManager.kill_entities_of_type(ENTITY_FLAG::BULLET,
+                                             physicsManager.physEntities);
+        physicsManager.kill_entities_of_type(ENTITY_FLAG::ENEMY_BULLET,
+                                             physicsManager.physEntities);
         enemyTimer = 0.0;
         physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
     }
@@ -193,7 +193,8 @@ void MainLevel::render_text()
     }
 }
 
-void MainLevel::render(double, double) {
+void MainLevel::render(double, double)
+{
     utl::clearScreen(renderer());
     render_entities();
     render_text();

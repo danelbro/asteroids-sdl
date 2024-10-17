@@ -96,7 +96,8 @@ TitleScreen::handle_input(double, double,
         reset_instructions(instructions);
     }
 
-    if (key_state[utl::KeyFlag::K_ENTER]) return STAGE_MAP[STAGE_ID::PLAYING];
+    if (key_state[utl::KeyFlag::K_ENTER])
+        return STAGE_MAP[STAGE_ID::PLAYING];
 
     return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
 }

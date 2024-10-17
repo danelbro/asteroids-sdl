@@ -9,10 +9,10 @@
 #include <memory>
 #include <string>
 #include <utl_GameWorld.hpp>
-#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_utility.hpp>
 
 static const std::string fontPath{"data/Play-Regular.ttf"};
@@ -115,13 +115,13 @@ GameOver::handle_input(double, double,
 void GameOver::check_asteroids_cleared()
 {
     asteroidsRemain = m_physMan.do_entities_remain_of_type(
-            ENTITY_FLAG::ASTEROID, m_physMan.physEntities);
+        ENTITY_FLAG::ASTEROID, m_physMan.physEntities);
 }
 
 void GameOver::stop_enemy_firing()
 {
     if (!asteroidsRemain) {
-       for (auto& ent : m_physMan.physEntities) {
+        for (auto& ent : m_physMan.physEntities) {
             if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
                 Enemy* eptr{static_cast<Enemy*>(ent.get())};
                 eptr->clearedScreen();
@@ -130,21 +130,22 @@ void GameOver::stop_enemy_firing()
     }
 }
 
-static void update_physics(const double& dt,
-        std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+static void
+update_physics(const double& dt,
+               std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
 {
     for (auto& physEnt : physEntities) {
-            physEnt->physicsComponent.update(dt);
+        physEnt->physicsComponent.update(dt);
     }
 }
 
-static void update_entities(const double& t, const double& dt,
-            std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
+static void update_entities(
+    const double& t, const double& dt,
+    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities)
 {
     for (auto& physEnt : physEntities) {
         physEnt->update(t, dt);
     }
-
 }
 
 std::string GameOver::update(double t, double dt)
@@ -161,8 +162,9 @@ std::string GameOver::update(double t, double dt)
     return STAGE_MAP[STAGE_ID::GAME_OVER];
 }
 
-static void render_entities(std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
-        utl::Renderer& renderer)
+static void render_entities(
+    std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
+    utl::Renderer& renderer)
 {
     for (auto& physEntity : physEntities) {
         physEntity->render(renderer);

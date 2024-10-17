@@ -13,8 +13,8 @@ ScoreManager::ScoreManager(utl::GameWorld& gw, const utl::Vec2d& pos,
     : score{0}, lives{playerLives}, textObjects{}, m_renderer{renderer}
 
 {
-    textObjects.push_back(
-        utl::TextObject{gw.screen, pos, font, customCols::text_col, m_renderer});
+    textObjects.push_back(utl::TextObject{gw.screen, pos, font,
+                                          customCols::text_col, m_renderer});
     textObjects[0].updateText("Score: ");
 
     textObjects.push_back(
@@ -45,7 +45,8 @@ ScoreManager::ScoreManager(utl::GameWorld& gw, const utl::Vec2d& pos,
 void ScoreManager::update_score(int add_this)
 {
     score += add_this;
-    if (score < 0) score = 0;
+    if (score < 0)
+        score = 0;
     changed = true;
 }
 

@@ -6,9 +6,9 @@
 
 #include <random>
 #include <utl_GameWorld.hpp>
-#include <utl_VecGraphPhysComp.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
+#include <utl_VecGraphPhysComp.hpp>
 #include <utl_utility.hpp>
 #include <vector>
 
@@ -47,14 +47,17 @@ void Player::update(double, double dt)
 
 void Player::kill_it()
 {
-    if (!m_isVulnerable) return;
+    if (!m_isVulnerable)
+        return;
 
-    if (--m_lives > 0) respawn();
+    if (--m_lives > 0)
+        respawn();
 }
 
 void Player::respawn()
 {
-    if (m_isRespawning) return;
+    if (m_isRespawning)
+        return;
 
     m_respawnTimer = 0.0;
     m_flashTimer = 0.0;
@@ -69,7 +72,8 @@ void Player::respawn()
 
 void Player::check_respawn(double dt)
 {
-    if (!m_isRespawning) return;
+    if (!m_isRespawning)
+        return;
     m_respawnTimer += dt;
 
     if (m_respawnTimer >= m_respawnLength) {
@@ -81,7 +85,8 @@ void Player::check_respawn(double dt)
 
 void Player::check_flash(double dt)
 {
-    if (!m_isRespawning) return;
+    if (!m_isRespawning)
+        return;
 
     m_flashTimer += dt;
     if (m_flashTimer >= m_flashLength) {

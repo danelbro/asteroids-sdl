@@ -12,11 +12,11 @@
 #include <random>
 #include <utl_Entity.hpp>
 #include <utl_GameWorld.hpp>
-#include <utl_VecGraphPhysEnt.hpp>
-#include <utl_VecGraphPhysComp.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_ValtrAlgorithm.hpp>
 #include <utl_Vec2d.hpp>
+#include <utl_VecGraphPhysComp.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_VectorDraw.hpp>
 #include <utl_utility.hpp>
 #include <vector>
@@ -116,7 +116,8 @@ static utl::Vec2d findRandomDistantPos(std::mt19937& rng, utl::Entity& distant,
         new_pos = utl::randomPos(rng, w, h);
 
         utl::Vec2d distanceToPlayer{new_pos - distant.pos()};
-        if (distanceToPlayer.magnitude() > distance) isTooClose = false;
+        if (distanceToPlayer.magnitude() > distance)
+            isTooClose = false;
     } while (isTooClose);
     return new_pos;
 }
@@ -151,7 +152,7 @@ static const std::vector<utl::Vec2d> enemyPointy{
 };
 
 // more ufo shaped
-//static const std::vector<utl::Vec2d> enemyUFO{
+// static const std::vector<utl::Vec2d> enemyUFO{
 //    {20, -20}, {40, 0},   {45, 0},  {-45, 0}, {45, 0},
 //    {40, 20},  {-40, 20}, {-45, 0}, {-40, 0}, {-20, -20}};
 
@@ -229,8 +230,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
         utl::VecGraphPhysEnt& phys{*physEntities[i]};
         if (phys.toBeKilled()) {
             switch (ENTITY_STRING_MAP[phys.type()]) {
-            case ENTITY_FLAG::ASTEROID:
-            {
+            case ENTITY_FLAG::ASTEROID: {
                 if (!gameOver) {
                     scoreMan.update_score(
                         static_cast<int>(baseAsteroidScore / phys.scale()));
@@ -241,17 +241,16 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
                 }
                 break;
             }
-            case ENTITY_FLAG::ENEMY:
-            {
+            case ENTITY_FLAG::ENEMY: {
                 if (!gameOver) {
                     scoreMan.update_score(baseEnemyScore);
                 }
                 break;
             }
-            case ENTITY_FLAG::BULLET:
-            {
+            case ENTITY_FLAG::BULLET: {
                 Bullet& bulref = static_cast<Bullet&>(phys);
-                if (bulref.wayward()) scoreMan.update_score(penalty);
+                if (bulref.wayward())
+                    scoreMan.update_score(penalty);
                 break;
             }
             default:
@@ -280,7 +279,8 @@ void PhysicsManager::check_player_hit()
 
 bool PhysicsManager::was_player_killed()
 {
-    if (m_player.toBeKilled()) return true;
+    if (m_player.toBeKilled())
+        return true;
 
     return false;
 }

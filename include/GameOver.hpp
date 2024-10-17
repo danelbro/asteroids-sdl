@@ -10,10 +10,10 @@
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_GameWorld.hpp>
-#include <utl_VecGraphPhysEnt.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
+#include <utl_VecGraphPhysEnt.hpp>
 #include <vector>
 
 class GameOver : public utl::Stage {
