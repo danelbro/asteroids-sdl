@@ -26,7 +26,7 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
 
 void AsteroidsApp::trigger_stage_change(const std::string& next)
 {
-    utl::Box screen{m_stageManager.get_current_stage()->screen()};
+    utl::Box& screen{m_stageManager.get_current_stage()->screen()};
     uint32_t windowID{m_stageManager.get_current_stage()->windowID()};
     utl::Renderer& renderer{m_stageManager.get_current_stage()->renderer()};
 

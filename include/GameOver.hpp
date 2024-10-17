@@ -19,7 +19,7 @@
 class GameOver : public utl::Stage {
 public:
     GameOver(
-        const utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
+        utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
         const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
         int score);
 

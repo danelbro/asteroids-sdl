@@ -21,7 +21,7 @@ static constexpr int scoreFont_size{48};
 static constexpr double padding{250.0};
 
 GameOver::GameOver(
-    const utl::Box& screen, uint32_t windowID, utl::Renderer& rend,
+    utl::Box& screen, uint32_t windowID, utl::Renderer& rend,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
     : Stage{screen, windowID, rend, STAGE_MAP[STAGE_ID::GAME_OVER]},
@@ -33,7 +33,8 @@ GameOver::GameOver(
       m_GameOverText{
           m_gameWorld.screen, {}, m_titleFont, customCols::text_col, rend},
       m_ScoreText{
-          m_gameWorld.screen, {}, m_scoreFont, customCols::text_col, rend}
+          m_gameWorld.screen, {}, m_scoreFont, customCols::text_col, rend},
+      asteroidsRemain{false}
 {
     // remove Player from m_physMan
     m_physMan.physEntities.erase(m_physMan.physEntities.begin());
@@ -55,6 +56,8 @@ GameOver::GameOver(
         default:
             break;
         }
+
+        check_asteroids_cleared();
     }
 
     m_GameOverText.updateText("Game Over");
@@ -84,7 +87,11 @@ std::string
 GameOver::handle_input(double, double,
                        std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
-    utl::process_input(m_gameWorld.screen, windowID(), key_state);
+    utl::process_input(screen(), windowID(), key_state);
+
+    if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
+        m_gameWorld.screen = screen();
+    }
 
     if (key_state[utl::KeyFlag::QUIT]) {
         return STAGE_MAP[STAGE_ID::QUIT];

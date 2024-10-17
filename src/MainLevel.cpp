@@ -48,7 +48,11 @@ std::string
 MainLevel::handle_input(double, double dt,
                         std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
-    utl::process_input(gameWorld.screen, windowID(), key_state);
+    utl::process_input(screen(), windowID(), key_state);
+
+    if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
+        gameWorld.screen = screen();
+    }
 
     if (key_state[utl::KeyFlag::QUIT]) {
         return STAGE_MAP[STAGE_ID::QUIT];

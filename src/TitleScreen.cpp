@@ -43,7 +43,7 @@ static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,
     return instructions;
 }
 
-TitleScreen::TitleScreen(const utl::Box& screen, uint32_t windowID,
+TitleScreen::TitleScreen(utl::Box& screen, uint32_t windowID,
                          utl::Renderer& renderer)
     : Stage{screen, windowID, renderer, STAGE_MAP[STAGE_ID::TITLE_SCREEN]},
       gameWorld{screen, 0.0},
@@ -85,12 +85,13 @@ std::string
 TitleScreen::handle_input(double, double,
                           std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
 {
-    utl::process_input(gameWorld.screen, windowID(), key_state);
+    utl::process_input(screen(), windowID(), key_state);
 
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
         return STAGE_MAP[STAGE_ID::QUIT];
 
     if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
+        gameWorld.screen = screen();
         reset_title(title);
         reset_instructions(instructions);
     }
