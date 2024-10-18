@@ -11,6 +11,7 @@ enum class ENTITY_FLAG
     BULLET,
     ENEMY_BULLET,
     TEXT,
+    SCOREBOARD,
     E_TYPE_TOTAL
 };
 
