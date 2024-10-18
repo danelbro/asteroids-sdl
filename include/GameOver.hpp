@@ -31,6 +31,9 @@ public:
 
     utl::GameWorld& gameworld() { return m_gameWorld; }
 
+    PhysicsManager& physMan() { return m_physMan; }
+    ScoreManager& scoreMan() { return m_scoreMan; }
+
 private:
     void check_asteroids_cleared();
     void stop_enemy_firing();
