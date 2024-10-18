@@ -36,22 +36,28 @@ GameOver::GameOver(
           m_gameWorld.screen, {}, m_scoreFont, customCols::text_col, rend},
       asteroidsRemain{false}
 {
-    // remove Player from m_physMan
-    m_physMan.physEntities.erase(m_physMan.physEntities.begin());
+    for (size_t i{0}; i < m_physMan.physEntities.size(); i++) {
+        if (ENTITY_STRING_MAP[m_physMan.physEntities[i]->type()]
+            == ENTITY_FLAG::PLAYER) {
+            m_physMan.physEntities.erase(m_physMan.physEntities.begin()
+                                         + static_cast<unsigned>(i));
+        }
+    }
 
-    for (auto& physEnt : physEntities) {
-        switch (ENTITY_STRING_MAP[physEnt->type()]) {
+    // for (auto& physEnt : physEntities) {
+    for (size_t i{0}; i < physEntities.size(); i++) {
+        switch (ENTITY_STRING_MAP[physEntities[i]->type()]) {
         case ENTITY_FLAG::PLAYER:
             break;
         case ENTITY_FLAG::ASTEROID:
-            m_physMan.make_asteroid(*physEnt);
+            m_physMan.make_asteroid(*physEntities[i]);
             break;
         case ENTITY_FLAG::BULLET:
         case ENTITY_FLAG::ENEMY_BULLET:
-            m_physMan.make_bullet(*physEnt);
+            m_physMan.make_bullet(*physEntities[i]);
             break;
         case ENTITY_FLAG::ENEMY:
-            m_physMan.make_enemy(*physEnt);
+            m_physMan.make_enemy(*physEntities[i]);
             break;
         default:
             break;
@@ -61,13 +67,13 @@ GameOver::GameOver(
     }
 
     m_GameOverText.updateText("Game Over");
-    double titleXPos = screen.w / 2.0 - m_GameOverText.size().x / 2.0;
-    double titleYPos = screen.h / 3.0;
+    double titleXPos{screen.w / 2.0 - m_GameOverText.size().x / 2.0};
+    double titleYPos{screen.h / 3.0};
     m_GameOverText.setPos({titleXPos, titleYPos});
 
     m_ScoreText.updateText("Score: " + std::to_string(m_score));
-    double scoreXPos = screen.w / 2.0 - m_ScoreText.size().x / 2.0;
-    double scoreYPos = screen.h - padding - m_ScoreText.size().y;
+    double scoreXPos{screen.w / 2.0 - m_ScoreText.size().x / 2.0};
+    double scoreYPos{screen.h - padding - m_ScoreText.size().y};
     m_ScoreText.setPos({scoreXPos, scoreYPos});
 }
 
@@ -85,28 +91,25 @@ static void reset_score(utl::TextObject& score)
 
 std::string
 GameOver::handle_input(double, double,
-                       std::array<bool, utl::KeyFlag::K_TOTAL>& key_state)
+                       std::array<bool, utl::KeyFlag::K_TOTAL>& keyState)
 {
-    utl::process_input(screen(), windowID(), key_state);
+    utl::process_input(screen(), windowID(), keyState);
 
-    if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
+    if (keyState[utl::KeyFlag::WINDOW_CHANGE]) {
         m_gameWorld.screen = screen();
-    }
-
-    if (key_state[utl::KeyFlag::QUIT]) {
-        return STAGE_MAP[STAGE_ID::QUIT];
-    }
-    if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::K_ENTER]) {
-        return STAGE_MAP[STAGE_ID::HIGH_SCORES];
-    }
-
-    if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
         reset_title(m_GameOverText);
         reset_score(m_ScoreText);
 
         for (auto& physEnt : m_physMan.physEntities) {
             physEnt->updateScreen(m_gameWorld.screen);
         }
+    }
+
+    if (keyState[utl::KeyFlag::QUIT]) {
+        return STAGE_MAP[STAGE_ID::QUIT];
+    }
+    if (keyState[utl::KeyFlag::K_ESCAPE] || keyState[utl::KeyFlag::K_ENTER]) {
+        return STAGE_MAP[STAGE_ID::HIGH_SCORES];
     }
 
     return STAGE_MAP[STAGE_ID::GAME_OVER];
