@@ -1,6 +1,7 @@
 #include "AsteroidsApp.hpp"
 
 #include "GameOver.hpp"
+#include "HighScores.hpp"
 #include "MainLevel.hpp"
 #include "TitleScreen.hpp"
 #include "flags.hpp"
@@ -51,6 +52,21 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
                                            mlptr->physMan().physEntities,
                                            mlptr->scoreMan().score);
 
+        break;
+    }
+    case STAGE_ID::HIGH_SCORES: {
+        GameOver* goptr{nullptr};
+
+        if (m_stageManager.get_current() != STAGE_MAP[STAGE_ID::GAME_OVER]) {
+            throw std::runtime_error(
+                "Trying to enter highscores screen before game over!\n");
+        }
+
+        goptr = static_cast<GameOver*>(m_stageManager.get_current_stage());
+
+        m_stageManager.add_stage<HighScores>(next, screen, windowID, renderer,
+                                             goptr->physMan().physEntities,
+                                             goptr->scoreMan().score);
         break;
     }
     case STAGE_ID::QUIT:

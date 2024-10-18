@@ -97,7 +97,7 @@ GameOver::handle_input(double, double,
         return STAGE_MAP[STAGE_ID::QUIT];
     }
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::K_ENTER]) {
-        return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
+        return STAGE_MAP[STAGE_ID::HIGH_SCORES];
     }
 
     if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {

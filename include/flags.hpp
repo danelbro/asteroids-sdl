@@ -23,6 +23,7 @@ enum class STAGE_ID
     TITLE_SCREEN,
     PLAYING,
     GAME_OVER,
+    HIGH_SCORES,
     STAGES_TOTAL,
     QUIT
 };

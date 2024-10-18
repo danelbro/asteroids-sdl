@@ -11,6 +11,7 @@ target_sources(${PROJECT_NAME} PRIVATE
   "../include/flags.hpp" "flags.cpp"
   "../include/GameOver.hpp" "GameOver.cpp"
   "../include/Gun.hpp" "Gun.cpp"
+  "../include/HighScores.hpp" "HighScores.cpp"
   "../include/Hyperdrive.hpp" "Hyperdrive.cpp"
   "../include/MainLevel.hpp" "MainLevel.cpp"
   "../include/PhysicsManager.hpp" "PhysicsManager.cpp"
