@@ -4,11 +4,14 @@
 #include "Enemy.hpp"
 #include "flags.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <fstream>
+#include <functional>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utl_Box.hpp>
@@ -182,9 +185,8 @@ void HighScores::check_asteroids_cleared()
         ENTITY_FLAG::ASTEROID, m_physMan.physEntities);
 }
 
-void HighScores::read_high_scores(
-    std::vector<std::string>& highScores,
-    const std::string& path)
+void HighScores::read_high_scores(std::vector<std::string>& highScores,
+                                  const std::string& path)
 {
     std::ifstream highScoresFile{path};
     if (!highScoresFile.good()) {
