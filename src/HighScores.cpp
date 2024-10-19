@@ -195,20 +195,54 @@ void HighScores::read_high_scores(
         highScores.clear();
     }
 
-    for (size_t i{0}; i < HIGH_SCORES_MAX; i++) {
-        std::string score{};
-        std::getline(highScoresFile, score);
+    for (std::string score{}; std::getline(highScoresFile, score);) {
         highScores.emplace_back(score);
     }
 }
 
-void HighScores::calculate_high_scores(
-    const int&, std::vector<std::string>&)
-{}
+void HighScores::calculate_high_scores(const int& newScore,
+                                       std::vector<std::string>& highScores)
+{
+    constexpr char SEPERATOR{')'};
 
-void HighScores::write_high_scores(
-    const std::vector<std::string>& highScores,
-    const std::string& path)
+    if (highScores.empty()) {
+        std::string line{};
+        std::stringstream lineStream{line};
+        lineStream << "1" << SEPERATOR << " " << newScore;
+        highScores.emplace_back(line);
+        return;
+    }
+
+    std::vector<int> scores;
+    scores.reserve(HIGH_SCORES_MAX + 1);
+
+    int listPosition{};
+    char seperator{};
+    int score{};
+
+    for (const auto& line : highScores) {
+        std::stringstream lineStream{line};
+        lineStream >> listPosition >> seperator >> score;
+        scores.emplace_back(score);
+    }
+    scores.emplace_back(newScore);
+
+    std::ranges::sort(scores, std::ranges::greater());
+
+    while (highScores.size() > HIGH_SCORES_MAX) {
+        highScores.pop_back();
+    }
+
+    for (size_t i{0}; i < highScores.size(); i++) {
+        std::string line{};
+        std::stringstream lineStream{line};
+        lineStream << i + 1 << SEPERATOR << " " << scores[i];
+        highScores.emplace_back(line);
+    }
+}
+
+void HighScores::write_high_scores(const std::vector<std::string>& highScores,
+                                   const std::string& path)
 {
     std::ofstream highScoresFile{path};
     if (!highScoresFile.good())
