@@ -5,8 +5,11 @@
 #include "flags.hpp"
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
+#include <fstream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_SDLInterface.hpp>
@@ -21,6 +24,7 @@ static constexpr int titleFont_size{64};
 static constexpr int scoreFont_size{36};
 static constexpr double padding{250.0};
 static const std::string highScoresPath{"data/highScores"};
+static constexpr size_t HIGH_SCORES_MAX{5};
 
 HighScores::HighScores(
     utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
@@ -67,6 +71,7 @@ HighScores::HighScores(
     m_highScoreTitle.setPos({titleXPos, titleYPos});
 
     std::vector<std::string> highScores{};
+    highScores.reserve(HIGH_SCORES_MAX);
     read_high_scores(highScores, highScoresPath);
     calculate_high_scores(score, highScores);
     write_high_scores(highScores, highScoresPath);
@@ -177,9 +182,39 @@ void HighScores::check_asteroids_cleared()
         ENTITY_FLAG::ASTEROID, m_physMan.physEntities);
 }
 
-void HighScores::read_high_scores(std::vector<std::string>&, const std::string&)
+void HighScores::read_high_scores(
+    std::vector<std::string>& highScores,
+    const std::string& path)
+{
+    std::ifstream highScoresFile{path};
+    if (!highScoresFile.good()) {
+        throw std::runtime_error("Couldn't open highscores file\n");
+    }
+
+    if (!highScores.empty()) {
+        highScores.clear();
+    }
+
+    for (size_t i{0}; i < HIGH_SCORES_MAX; i++) {
+        std::string score{};
+        std::getline(highScoresFile, score);
+        highScores.emplace_back(score);
+    }
+}
+
+void HighScores::calculate_high_scores(
+    const int&, std::vector<std::string>&)
 {}
-void HighScores::calculate_high_scores(const int&, std::vector<std::string>&) {}
-void HighScores::write_high_scores(const std::vector<std::string>&,
-                                   const std::string&)
-{}
+
+void HighScores::write_high_scores(
+    const std::vector<std::string>& highScores,
+    const std::string& path)
+{
+    std::ofstream highScoresFile{path};
+    if (!highScoresFile.good())
+        throw std::runtime_error("Couldn't open highscores file\n");
+
+    for (const auto& highScore : highScores) {
+        highScoresFile << highScore << '\n';
+    }
+}
