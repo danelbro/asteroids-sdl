@@ -16,7 +16,6 @@
 #include <utl_TextObject.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
 #include <utl_utility.hpp>
-#include <vector>
 
 static constexpr int startingAsteroids{3};
 static constexpr double asteroidScale{3.0};
