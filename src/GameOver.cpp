@@ -75,6 +75,8 @@ GameOver::GameOver(
     double scoreXPos{screen.w / 2.0 - m_ScoreText.size().x / 2.0};
     double scoreYPos{screen.h - padding - m_ScoreText.size().y};
     m_ScoreText.setPos({scoreXPos, scoreYPos});
+
+    m_scoreMan.score = m_score;
 }
 
 static void reset_title(utl::TextObject& title)
