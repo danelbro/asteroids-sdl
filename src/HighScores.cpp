@@ -178,6 +178,7 @@ void HighScores::render(double, double)
     utl::clearScreen(renderer());
     render_entities(m_physMan.physEntities, renderer());
     m_highScoreTitle.render(renderer());
+    m_scoreBoard.render(renderer());
     utl::presentRenderer(renderer());
 }
 
