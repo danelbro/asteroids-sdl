@@ -25,7 +25,8 @@
 static const std::string fontPath{"data/Play-Regular.ttf"};
 static constexpr int titleFont_size{64};
 static constexpr int scoreFont_size{36};
-static constexpr double padding{250.0};
+static constexpr double internPadding{50.0};
+static constexpr double externPadding{250.0};
 static const std::string highScoresPath{"data/highScores"};
 static constexpr size_t HIGH_SCORES_MAX{5};
 
@@ -42,7 +43,8 @@ HighScores::HighScores(
       m_highScoreTitle{
           m_gameWorld.screen, {}, titleFont, customCols::text_col, renderer},
       asteroidsRemain{false},
-      m_scoreBoard{screen, {}, scoreFont, customCols::text_col, renderer}
+      m_scoreBoard{screen,  {}, internPadding, scoreFont, customCols::text_col,
+                   renderer}
 {
     for (size_t i{0}; i < m_physMan.physEntities.size(); i++) {
         if (ENTITY_STRING_MAP[m_physMan.physEntities[i]->type()]
