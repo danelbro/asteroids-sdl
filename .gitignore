@@ -21,3 +21,4 @@ obj/
 /build/
 /out/
 CMakeSettings.json
+/data/highScores

@@ -82,8 +82,8 @@ HighScores::HighScores(
     write_high_scores(highScores, highScoresPath);
 
     m_scoreBoard.set_text(highScores);
-    const double scoreBoardXPos{};
-    const double scoreBoardYPos{};
+    const double scoreBoardXPos{screen.w / 2.0 - m_scoreBoard.size().x / 2.0};
+    const double scoreBoardYPos{250.0};
     m_scoreBoard.set_pos(scoreBoardXPos, scoreBoardYPos);
 
     check_asteroids_cleared();
@@ -192,7 +192,8 @@ void HighScores::read_high_scores(std::vector<std::string>& highScores,
 {
     std::ifstream highScoresFile{path};
     if (!highScoresFile.good()) {
-        throw std::runtime_error("Couldn't open highscores file\n");
+        highScores.clear();
+        return; // assuming there are no high scores yet
     }
 
     if (!highScores.empty()) {
@@ -210,10 +211,9 @@ void HighScores::calculate_high_scores(const int& newScore,
     constexpr char SEPERATOR{')'};
 
     if (highScores.empty()) {
-        std::string line{};
-        std::stringstream lineStream{line};
+        std::ostringstream lineStream{};
         lineStream << "1" << SEPERATOR << " " << newScore;
-        highScores.emplace_back(line);
+        highScores.emplace_back(lineStream.str());
         return;
     }
 
@@ -225,7 +225,7 @@ void HighScores::calculate_high_scores(const int& newScore,
     int score{};
 
     for (const auto& line : highScores) {
-        std::stringstream lineStream{line};
+        std::istringstream lineStream{line};
         lineStream >> listPosition >> seperator >> score;
         scores.emplace_back(score);
     }
@@ -238,10 +238,9 @@ void HighScores::calculate_high_scores(const int& newScore,
     }
 
     for (size_t i{0}; i < highScores.size(); i++) {
-        std::string line{};
-        std::stringstream lineStream{line};
-        lineStream << i + 1 << SEPERATOR << " " << scores[i];
-        highScores.emplace_back(line);
+        std::ostringstream lineStream{};
+        lineStream << std::to_string(i + 1) << SEPERATOR << " " << scores[i];
+        highScores.emplace_back(lineStream.str());
     }
 }
 
@@ -250,7 +249,7 @@ void HighScores::write_high_scores(const std::vector<std::string>& highScores,
 {
     std::ofstream highScoresFile{path};
     if (!highScoresFile.good())
-        throw std::runtime_error("Couldn't open highscores file\n");
+        throw std::runtime_error("Couldn't open highscores file for writing\n");
 
     for (const auto& highScore : highScores) {
         highScoresFile << highScore << '\n';
