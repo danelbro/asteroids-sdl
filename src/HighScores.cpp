@@ -26,7 +26,7 @@ static const std::string fontPath{"data/Play-Regular.ttf"};
 static constexpr int titleFont_size{64};
 static constexpr int scoreFont_size{36};
 static constexpr double internPadding{50.0};
-static constexpr double externPadding{250.0};
+static constexpr double externPadding{25.0};
 static const std::string highScoresPath{"data/highScores"};
 static constexpr size_t HIGH_SCORES_MAX{5};
 
@@ -253,7 +253,7 @@ static void reset_text_positions(utl::TextObject& title,
                                  utl::ScoreBoard& scores)
 {
     const double titleXPos{title.screen().w / 2.0 - title.size().x / 2.0};
-    const double titleYPos{title.screen().h / 3.0};
+    const double titleYPos{title.screen().h / 4.0};
     title.setPos({titleXPos, titleYPos});
 
     const double scoreBoardXPos{scores.screen().w / 2.0
