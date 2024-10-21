@@ -45,9 +45,13 @@ HighScores::HighScores(
       m_scoreMan{renderer}, m_score{score},
       m_highScoreTitle{
           m_gameWorld.screen, {}, titleFont, customCols::text_col, renderer},
-      asteroidsRemain{false},
-      m_scoreBoard{screen,  {}, internPadding, scoreFont, customCols::text_col,
-                   renderer}
+      asteroidsRemain{false}, m_scoreBoard{screen,
+                                           {},
+                                           internPadding,
+                                           scoreFont,
+                                           customCols::text_col,
+                                           customCols::player_col,
+                                           renderer}
 {
     for (size_t i{0}; i < m_physMan.physEntities.size(); i++) {
         if (ENTITY_STRING_MAP[m_physMan.physEntities[i]->type()]
@@ -73,14 +77,20 @@ HighScores::HighScores(
             break;
         }
     }
-    m_highScoreTitle.updateText("High Scores");
 
     std::vector<std::string> highScores{};
     highScores.reserve(HIGH_SCORES_MAX);
     read_high_scores(highScores, highScoresPath);
-    calculate_high_scores(score, highScores);
-    write_high_scores(highScores, highScoresPath);
-    m_scoreBoard.set_text(highScores);
+    NewHighScore newHighScore{calculate_high_scores(score, highScores)};
+    if (newHighScore.isNewHighScore) {
+        m_highScoreTitle.updateText("New High Score!");
+        write_high_scores(highScores, highScoresPath);
+        m_scoreBoard.set_text(highScores, newHighScore.newHighScorePos);
+    } else {
+        m_highScoreTitle.updateText("High Scores");
+        write_high_scores(highScores, highScoresPath);
+        m_scoreBoard.set_text(highScores);
+    }
 
     reset_text_positions(m_highScoreTitle, m_scoreBoard);
 
@@ -196,8 +206,9 @@ void HighScores::read_high_scores(std::vector<std::string>& highScores,
     }
 }
 
-void HighScores::calculate_high_scores(const int& newScore,
-                                       std::vector<std::string>& highScores)
+NewHighScore
+HighScores::calculate_high_scores(const int& newScore,
+                                  std::vector<std::string>& highScores)
 {
     constexpr char SEPERATOR{')'};
 
@@ -205,7 +216,7 @@ void HighScores::calculate_high_scores(const int& newScore,
         std::ostringstream lineStream{};
         lineStream << "1" << SEPERATOR << " " << newScore;
         highScores.emplace_back(lineStream.str());
-        return;
+        return {true, 1};  // definitely a new high score
     }
 
     std::vector<int> scores{};
@@ -220,16 +231,33 @@ void HighScores::calculate_high_scores(const int& newScore,
         lineStream >> listPosition >> seperator >> score;
         scores.emplace_back(score);
     }
-    scores.emplace_back(newScore);
+
+    std::ranges::sort(scores, std::ranges::greater());
+    NewHighScore newHighScore{false, -1};
+    if (scores.size() >= HIGH_SCORES_MAX) {
+        for (size_t i{0}; i < scores.size(); i++) {
+            if (newScore > scores[i]) {
+                newHighScore.isNewHighScore = true;
+                newHighScore.newHighScorePos = static_cast<int>(i);
+                scores.insert(scores.begin() + static_cast<unsigned>(i),
+                              newScore);
+                while (scores.size() > HIGH_SCORES_MAX) {
+                    scores.pop_back();
+                }
+                break;
+            }
+        }
+    } else {
+        scores.emplace_back(newScore);
+        std::ranges::sort(scores, std::ranges::greater());
+
+        auto pos{std::distance(scores.begin(), std::ranges::find(scores, newScore))};
+        newHighScore.isNewHighScore = true;
+        newHighScore.newHighScorePos = static_cast<int>(pos);
+    }
 
     highScores.clear();
     highScores.reserve(HIGH_SCORES_MAX);
-
-    std::ranges::sort(scores, std::ranges::greater());
-
-    while (scores.size() > HIGH_SCORES_MAX) {
-        scores.pop_back();
-    }
 
     for (size_t i{0}; i < scores.size(); i++) {
         std::ostringstream lineStream{};
@@ -237,6 +265,8 @@ void HighScores::calculate_high_scores(const int& newScore,
                    << std::to_string(scores[i]);
         highScores.emplace_back(lineStream.str());
     }
+
+    return newHighScore;
 }
 
 void HighScores::write_high_scores(const std::vector<std::string>& highScores,

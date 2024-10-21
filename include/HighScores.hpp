@@ -17,6 +17,14 @@
 #include <utl_VecGraphPhysEnt.hpp>
 #include <vector>
 
+struct NewHighScore {
+    NewHighScore(bool isNewHS, int newPos)
+        : isNewHighScore{isNewHS}, newHighScorePos{newPos}
+    {}
+    bool isNewHighScore;
+    int newHighScorePos;
+};
+
 class HighScores : public utl::Stage {
 public:
     HighScores(
@@ -35,7 +43,7 @@ public:
 
     void read_high_scores(std::vector<std::string>& highScores,
                           const std::string& path);
-    void
+    NewHighScore
     calculate_high_scores(const int& score,
                           std::vector<std::string>& highScores);
     void write_high_scores(
@@ -54,3 +62,4 @@ private:
     bool asteroidsRemain;
     utl::ScoreBoard m_scoreBoard;
 };
+
