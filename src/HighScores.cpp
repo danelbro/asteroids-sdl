@@ -183,14 +183,11 @@ void HighScores::check_asteroids_cleared()
 void HighScores::read_high_scores(std::vector<std::string>& highScores,
                                   const std::string& path)
 {
+    highScores.clear();
+
     std::ifstream highScoresFile{path};
     if (!highScoresFile.good()) {
-        highScores.clear();
         return;  // assuming there are no high scores yet
-    }
-
-    if (!highScores.empty()) {
-        highScores.clear();
     }
 
     for (std::string score{}; std::getline(highScoresFile, score);) {
