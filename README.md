@@ -9,14 +9,14 @@ A clone of Asteroids using C++ and SDL.
 You need: 
 * git
 * CMake (3.27+)
-* GCC 10.1+ (must support C++20 for \<numbers>)
+* GCC 10.1+ (must support C++20 for \<numbers> and std::ranges)
 
 ```
 git clone --recursive https://github.com/danelbro/asteroids-sdl.git asteroids
 cd asteroids
-./config.sh
-./build.sh
-./run.sh
+./config.sh [Debug/Release]
+./build.sh [Debug/Release]
+./run.sh [Debug/Release]
 ```
 
 ### Windows ###
@@ -29,7 +29,7 @@ Otherwise:
 git clone --recursive https://github.com/danelbro/asteroids-sdl.git asteroids
 ```
 
-If you use Visual Studio with CMake support, you should then be able to open the folder to build and run it.
+If you use Visual Studio with CMake support, you should then be able to open the folder to build and run it. You'll need at least Visual Studio 2019 16.10.
 
 I recommend the following CMake options (these are baked into the .config.sh script):
 
