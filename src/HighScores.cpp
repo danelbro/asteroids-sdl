@@ -30,6 +30,9 @@ static constexpr double externPadding{250.0};
 static const std::string highScoresPath{"data/highScores"};
 static constexpr size_t HIGH_SCORES_MAX{5};
 
+static void reset_text_positions(utl::TextObject& title,
+                                 utl::ScoreBoard& scores);
+
 HighScores::HighScores(
     utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
@@ -71,28 +74,17 @@ HighScores::HighScores(
         }
     }
     m_highScoreTitle.updateText("High Scores");
-    const double titleXPos{screen.w / 2.0 - m_highScoreTitle.size().x / 2.0};
-    const double titleYPos{screen.h / 3.0};
-    m_highScoreTitle.setPos({titleXPos, titleYPos});
 
     std::vector<std::string> highScores{};
     highScores.reserve(HIGH_SCORES_MAX);
     read_high_scores(highScores, highScoresPath);
     calculate_high_scores(score, highScores);
     write_high_scores(highScores, highScoresPath);
-
     m_scoreBoard.set_text(highScores);
-    const double scoreBoardXPos{screen.w / 2.0 - m_scoreBoard.size().x / 2.0};
-    const double scoreBoardYPos{250.0};
-    m_scoreBoard.set_pos(scoreBoardXPos, scoreBoardYPos);
+
+    reset_text_positions(m_highScoreTitle, m_scoreBoard);
 
     check_asteroids_cleared();
-}
-
-static void reset_title(utl::TextObject& title)
-{
-    title.setPos({title.screen().w / 2.0 - title.size().x / 2.0,
-                  title.screen().h / 3.0});
 }
 
 std::string
@@ -103,7 +95,7 @@ HighScores::handle_input(double, double,
 
     if (keyState[utl::KeyFlag::WINDOW_CHANGE]) {
         m_gameWorld.screen = screen();
-        reset_title(m_highScoreTitle);
+        reset_text_positions(m_highScoreTitle, m_scoreBoard);
 
         for (auto& physEnt : m_physMan.physEntities) {
             physEnt->updateScreen(m_gameWorld.screen);
@@ -194,7 +186,7 @@ void HighScores::read_high_scores(std::vector<std::string>& highScores,
     std::ifstream highScoresFile{path};
     if (!highScoresFile.good()) {
         highScores.clear();
-        return; // assuming there are no high scores yet
+        return;  // assuming there are no high scores yet
     }
 
     if (!highScores.empty()) {
@@ -255,4 +247,17 @@ void HighScores::write_high_scores(const std::vector<std::string>& highScores,
     for (const auto& highScore : highScores) {
         highScoresFile << highScore << '\n';
     }
+}
+
+static void reset_text_positions(utl::TextObject& title,
+                                 utl::ScoreBoard& scores)
+{
+    const double titleXPos{title.screen().w / 2.0 - title.size().x / 2.0};
+    const double titleYPos{title.screen().h / 3.0};
+    title.setPos({titleXPos, titleYPos});
+
+    const double scoreBoardXPos{scores.screen().w / 2.0
+                                - scores.size().x / 2.0};
+    const double scoreBoardYPos{title.pos().y + title.size().y + externPadding};
+    scores.set_pos({scoreBoardXPos, scoreBoardYPos});
 }
