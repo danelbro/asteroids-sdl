@@ -249,7 +249,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
             }
             case ENTITY_FLAG::BULLET: {
                 Bullet& bulref = static_cast<Bullet&>(phys);
-                if (bulref.wayward())
+                if (bulref.wayward() && scoreMan.lives > 0)
                     scoreMan.update_score(penalty);
                 break;
             }
