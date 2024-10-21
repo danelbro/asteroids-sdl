@@ -20,6 +20,10 @@ static constexpr int titleFont_size{72};
 static constexpr int scoreFont_size{48};
 static constexpr double padding{250.0};
 
+static void reset_text_positions(utl::TextObject& title, utl::TextObject& score);
+static void reset_title(utl::TextObject& title);
+static void reset_score(utl::TextObject& score);
+
 GameOver::GameOver(
     utl::Box& screen, uint32_t windowID, utl::Renderer& rend,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
@@ -67,28 +71,30 @@ GameOver::GameOver(
     }
 
     m_GameOverText.updateText("Game Over");
-    double titleXPos{screen.w / 2.0 - m_GameOverText.size().x / 2.0};
-    double titleYPos{screen.h / 3.0};
-    m_GameOverText.setPos({titleXPos, titleYPos});
-
     m_ScoreText.updateText("Score: " + std::to_string(m_score));
-    double scoreXPos{screen.w / 2.0 - m_ScoreText.size().x / 2.0};
-    double scoreYPos{screen.h - padding - m_ScoreText.size().y};
-    m_ScoreText.setPos({scoreXPos, scoreYPos});
+    reset_text_positions(m_GameOverText, m_ScoreText);
 
     m_scoreMan.score = m_score;
 }
 
+static void reset_text_positions(utl::TextObject& title, utl::TextObject& score)
+{
+    reset_title(title);
+    reset_score(score);
+}
+
 static void reset_title(utl::TextObject& title)
 {
-    title.setPos({title.screen().w / 2.0 - title.size().x / 2.0,
-                  title.screen().h / 3.0});
+    const double titleXPos{title.screen().w / 2.0 - title.size().x / 2.0};
+    const double titleYPos{title.screen().h / 3.0};
+    title.setPos({titleXPos, titleYPos});
 }
 
 static void reset_score(utl::TextObject& score)
 {
-    score.setPos({score.screen().w / 2.0 - score.size().x / 2.0,
-                  score.screen().h - padding - score.size().y});
+    const double scoreXPos{score.screen().w / 2.0 - score.size().x / 2.0};
+    const double scoreYPos{score.screen().h - padding - score.size().y};
+    score.setPos({scoreXPos, scoreYPos});
 }
 
 std::string
@@ -99,12 +105,11 @@ GameOver::handle_input(double, double,
 
     if (keyState[utl::KeyFlag::WINDOW_CHANGE]) {
         m_gameWorld.screen = screen();
-        reset_title(m_GameOverText);
-        reset_score(m_ScoreText);
-
         for (auto& physEnt : m_physMan.physEntities) {
             physEnt->updateScreen(m_gameWorld.screen);
         }
+
+        reset_text_positions(m_GameOverText, m_ScoreText);
     }
 
     if (keyState[utl::KeyFlag::QUIT]) {
