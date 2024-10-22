@@ -78,5 +78,5 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
         throw std::runtime_error("bad stage!\n");
     }
 
-    LOG("Added stage " << next << '\n');
+    LOG("Going to " << next << " stage\n");
 }

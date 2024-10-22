@@ -7,6 +7,7 @@
 #include <cmath>
 #include <random>
 #include <utl_Vec2d.hpp>
+#include <utl_utility.hpp>
 
 static double genRandAngle(std::mt19937& rng);
 
@@ -17,7 +18,9 @@ AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan,
       m_turnTime{m_turnTimeDist(m_rng)}, m_timeSinceTurn{0.0},
       m_targetAngle{genRandAngle(m_rng)}, m_enginePulse{1.0},
       m_timeSincePulse{0.0}
-{}
+{
+    LOG("Constructed AIComponent\n");
+}
 
 static double genMoveTime(std::uniform_real_distribution<double> dist,
                           std::mt19937& rng)

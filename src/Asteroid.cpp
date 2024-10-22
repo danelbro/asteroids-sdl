@@ -27,4 +27,5 @@ Asteroid::Asteroid(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
 {
     physicsComponent.setFrameImpulse(impulse / scale);
     physicsComponent.setAngle(angle);
+    LOG("Constructed Asteroid\n");
 }

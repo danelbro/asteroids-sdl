@@ -8,6 +8,7 @@
 #include <random>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
+#include <utl_utility.hpp>
 #include <utl_Vec2d.hpp>
 #include <vector>
 
@@ -31,7 +32,9 @@ Enemy::Enemy(utl::GameWorld& new_gameworld, const utl::Vec2d& pos,
            cooldown},
       m_minVel{minVel}, m_maxVel{maxVel}, m_aiComponent{*this, physMan, rng},
       m_plr{plr}, m_isScreenClear{false}
-{}
+{
+    LOG("Constructed Enemy\n");
+}
 
 void Enemy::update(double t, double dt)
 {
