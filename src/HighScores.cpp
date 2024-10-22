@@ -31,7 +31,8 @@ HighScores::HighScores(
     utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
-    : utl::Stage{screen, windowID, renderer, STAGE_MAP[STAGE_ID::HIGH_SCORES]},
+    : utl::Stage{screen, windowID, renderer,
+                 STAGE_MAP.at(STAGE_ID::HIGH_SCORES)},
       m_gameWorld{screen, constants::fluidDensity},
       titleFont{utl::createFont(constants::fontPath,
                                 constants::highScoresTitleFontSize)},
@@ -50,7 +51,7 @@ HighScores::HighScores(
                                            renderer}
 {
     for (size_t i{0}; i < m_physMan.physEntities.size(); i++) {
-        if (ENTITY_STRING_MAP[m_physMan.physEntities[i]->type()]
+        if (ENTITY_STRING_MAP.at(m_physMan.physEntities[i]->type())
             == ENTITY_FLAG::PLAYER) {
             m_physMan.physEntities.erase(m_physMan.physEntities.begin()
                                          + static_cast<unsigned>(i));
@@ -58,7 +59,7 @@ HighScores::HighScores(
     }
 
     for (auto& physEnt : physEntities) {
-        switch (ENTITY_STRING_MAP[physEnt->type()]) {
+        switch (ENTITY_STRING_MAP.at(physEnt->type())) {
         case ENTITY_FLAG::ASTEROID:
             m_physMan.make_asteroid(*physEnt);
             break;
@@ -109,20 +110,20 @@ HighScores::handle_input(double, double,
     }
 
     if (keyState[utl::KeyFlag::QUIT]) {
-        return STAGE_MAP[STAGE_ID::QUIT];
+        return STAGE_MAP.at(STAGE_ID::QUIT);
     }
     if (keyState[utl::KeyFlag::K_ENTER] || keyState[utl::KeyFlag::K_ESCAPE]) {
-        return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
+        return STAGE_MAP.at(STAGE_ID::TITLE_SCREEN);
     }
 
-    return STAGE_MAP[STAGE_ID::HIGH_SCORES];
+    return STAGE_MAP.at(STAGE_ID::HIGH_SCORES);
 }
 
 void HighScores::stop_enemy_firing()
 {
     if (!asteroidsRemain) {
         for (auto& ent : m_physMan.physEntities) {
-            if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
+            if (ent->type() == ENTITY_MAP.at(ENTITY_FLAG::ENEMY)) {
                 Enemy* eptr{static_cast<Enemy*>(ent.get())};
                 eptr->clearedScreen();
             }
@@ -159,7 +160,7 @@ std::string HighScores::update(double t, double dt)
     m_physMan.check_bullet_hits(true);
     m_physMan.clean_up(m_scoreMan, true);
 
-    return STAGE_MAP[STAGE_ID::HIGH_SCORES];
+    return STAGE_MAP.at(STAGE_ID::HIGH_SCORES);
 }
 
 static void render_entities(

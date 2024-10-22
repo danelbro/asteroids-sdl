@@ -11,10 +11,7 @@
 #include <utl_Application.hpp>
 #include <utl_Box.hpp>
 #include <utl_StageManager.hpp>
-
-#ifndef NDEBUG
 #include <utl_utility.hpp>
-#endif
 
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                            int screenHeight, uint32_t windowFlags)
@@ -22,11 +19,11 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
 {
     m_renderer.setVSync(1);
 
-    m_stageManager.add_stage<TitleScreen>(STAGE_MAP[STAGE_ID::TITLE_SCREEN],
+    m_stageManager.add_stage<TitleScreen>(STAGE_MAP.at(STAGE_ID::TITLE_SCREEN),
                                           m_screenSpace, m_windowID,
                                           m_renderer);
-    m_stageManager.set_current_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
-    m_stageManager.set_next_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
+    m_stageManager.set_current_stage(STAGE_MAP.at(STAGE_ID::TITLE_SCREEN));
+    m_stageManager.set_next_stage(STAGE_MAP.at(STAGE_ID::TITLE_SCREEN));
 
     LOG("Constructed AsteroidsApp\n");
 }
@@ -37,7 +34,7 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
     uint32_t windowID{m_stageManager.get_current_stage()->windowID()};
     utl::Renderer& renderer{m_stageManager.get_current_stage()->renderer()};
 
-    switch (STAGE_STRING_MAP[next]) {
+    switch (STAGE_STRING_MAP.at(next)) {
     case STAGE_ID::TITLE_SCREEN:
         m_stageManager.add_stage<TitleScreen>(next, screen, windowID, renderer);
         break;
@@ -47,7 +44,7 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
     case STAGE_ID::GAME_OVER: {
         MainLevel* mlptr{nullptr};
 
-        if (m_stageManager.get_current() != STAGE_MAP[STAGE_ID::PLAYING]) {
+        if (m_stageManager.get_current() != STAGE_MAP.at(STAGE_ID::PLAYING)) {
             throw std::runtime_error(
                 "Trying to enter game over screen without playing!\n");
         }
@@ -63,7 +60,7 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
     case STAGE_ID::HIGH_SCORES: {
         GameOver* goptr{nullptr};
 
-        if (m_stageManager.get_current() != STAGE_MAP[STAGE_ID::GAME_OVER]) {
+        if (m_stageManager.get_current() != STAGE_MAP.at(STAGE_ID::GAME_OVER)) {
             throw std::runtime_error(
                 "Trying to enter highscores screen before game over!\n");
         }

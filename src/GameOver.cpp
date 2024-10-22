@@ -26,7 +26,7 @@ GameOver::GameOver(
     utl::Box& screen, uint32_t windowID, utl::Renderer& rend,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
-    : Stage{screen, windowID, rend, STAGE_MAP[STAGE_ID::GAME_OVER]},
+    : Stage{screen, windowID, rend, STAGE_MAP.at(STAGE_ID::GAME_OVER)},
       m_gameWorld{screen, constants::fluidDensity},
       m_titleFont{utl::createFont(constants::fontPath,
                                   constants::gameOverTitleFontSize)},
@@ -41,7 +41,7 @@ GameOver::GameOver(
       asteroidsRemain{false}
 {
     for (size_t i{0}; i < m_physMan.physEntities.size(); i++) {
-        if (ENTITY_STRING_MAP[m_physMan.physEntities[i]->type()]
+        if (ENTITY_STRING_MAP.at(m_physMan.physEntities[i]->type())
             == ENTITY_FLAG::PLAYER) {
             m_physMan.physEntities.erase(m_physMan.physEntities.begin()
                                          + static_cast<unsigned>(i));
@@ -50,7 +50,7 @@ GameOver::GameOver(
 
     // for (auto& physEnt : physEntities) {
     for (size_t i{0}; i < physEntities.size(); i++) {
-        switch (ENTITY_STRING_MAP[physEntities[i]->type()]) {
+        switch (ENTITY_STRING_MAP.at(physEntities[i]->type())) {
         case ENTITY_FLAG::PLAYER:
             break;
         case ENTITY_FLAG::ASTEROID:
@@ -114,13 +114,13 @@ GameOver::handle_input(double, double,
     }
 
     if (keyState[utl::KeyFlag::QUIT]) {
-        return STAGE_MAP[STAGE_ID::QUIT];
+        return STAGE_MAP.at(STAGE_ID::QUIT);
     }
     if (keyState[utl::KeyFlag::K_ESCAPE] || keyState[utl::KeyFlag::K_ENTER]) {
-        return STAGE_MAP[STAGE_ID::HIGH_SCORES];
+        return STAGE_MAP.at(STAGE_ID::HIGH_SCORES);
     }
 
-    return STAGE_MAP[STAGE_ID::GAME_OVER];
+    return STAGE_MAP.at(STAGE_ID::GAME_OVER);
 }
 
 void GameOver::check_asteroids_cleared()
@@ -133,7 +133,7 @@ void GameOver::stop_enemy_firing()
 {
     if (!asteroidsRemain) {
         for (auto& ent : m_physMan.physEntities) {
-            if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
+            if (ent->type() == ENTITY_MAP.at(ENTITY_FLAG::ENEMY)) {
                 Enemy* eptr{static_cast<Enemy*>(ent.get())};
                 eptr->clearedScreen();
             }
@@ -170,7 +170,7 @@ std::string GameOver::update(double t, double dt)
     m_physMan.check_bullet_hits(true);
     m_physMan.clean_up(m_scoreMan, true);
 
-    return STAGE_MAP[STAGE_ID::GAME_OVER];
+    return STAGE_MAP.at(STAGE_ID::GAME_OVER);
 }
 
 static void render_entities(

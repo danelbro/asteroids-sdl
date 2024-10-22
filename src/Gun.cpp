@@ -13,7 +13,7 @@ void Gun::fire(PhysicsManager& physMan)
     utl::Colour col{};
     ENTITY_FLAG flag{};
 
-    switch (ENTITY_STRING_MAP[m_owner.type()]) {
+    switch (ENTITY_STRING_MAP.at(m_owner.type())) {
     case ENTITY_FLAG::PLAYER:
         col = customCols::bullet_col;
         flag = ENTITY_FLAG::BULLET;

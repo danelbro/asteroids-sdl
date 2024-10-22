@@ -15,7 +15,7 @@ Bullet::Bullet(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
                const double& scale, const double& mass, const double& lifespan,
                const double& angle, const double& power,
                const ENTITY_FLAG& flag, bool wrap, bool fill)
-    : utl::VecGraphPhysEnt{ENTITY_MAP[flag],
+    : utl::VecGraphPhysEnt{ENTITY_MAP.at(flag),
                            new_gameWorld,
                            pos,
                            shape,

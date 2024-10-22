@@ -12,11 +12,8 @@
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
-#include <vector>
-
-#ifndef NDEBUG
 #include <utl_utility.hpp>
-#endif
+#include <vector>
 
 static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,
                                                      utl::Font& font,
@@ -45,7 +42,7 @@ static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,
 
 TitleScreen::TitleScreen(utl::Box& screen, uint32_t windowID,
                          utl::Renderer& renderer)
-    : Stage{screen, windowID, renderer, STAGE_MAP[STAGE_ID::TITLE_SCREEN]},
+    : Stage{screen, windowID, renderer, STAGE_MAP.at(STAGE_ID::TITLE_SCREEN)},
       gameWorld{screen, 0.0},
       title_font{utl::createFont(constants::fontPath,
                                  constants::titleScreenTitleFontSize)},
@@ -90,7 +87,7 @@ TitleScreen::handle_input(double, double,
     utl::process_input(screen(), windowID(), key_state);
 
     if (key_state[utl::KeyFlag::K_ESCAPE] || key_state[utl::KeyFlag::QUIT])
-        return STAGE_MAP[STAGE_ID::QUIT];
+        return STAGE_MAP.at(STAGE_ID::QUIT);
 
     if (key_state[utl::KeyFlag::WINDOW_CHANGE]) {
         gameWorld.screen = screen();
@@ -99,14 +96,14 @@ TitleScreen::handle_input(double, double,
     }
 
     if (key_state[utl::KeyFlag::K_ENTER])
-        return STAGE_MAP[STAGE_ID::PLAYING];
+        return STAGE_MAP.at(STAGE_ID::PLAYING);
 
-    return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
+    return STAGE_MAP.at(STAGE_ID::TITLE_SCREEN);
 }
 
 std::string TitleScreen::update(double, double)
 {
-    return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
+    return STAGE_MAP.at(STAGE_ID::TITLE_SCREEN);
 }
 
 void TitleScreen::render(double, double)

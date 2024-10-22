@@ -186,7 +186,7 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
     for (size_t i{0}; i < physEntities.size(); i++) {
         utl::VecGraphPhysEnt& phys{*physEntities[i]};
         if (phys.toBeKilled()) {
-            switch (ENTITY_STRING_MAP[phys.type()]) {
+            switch (ENTITY_STRING_MAP.at(phys.type())) {
             case ENTITY_FLAG::ASTEROID: {
                 if (!gameOver) {
                     scoreMan.update_score(
@@ -224,9 +224,9 @@ void PhysicsManager::clean_up(ScoreManager& scoreMan, bool gameOver)
 void PhysicsManager::check_player_hit()
 {
     for (auto& ent : physEntities) {
-        if (ent->type() == ENTITY_MAP[ENTITY_FLAG::ASTEROID]
-            || ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]
-            || ent->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY_BULLET]) {
+        if (ent->type() == ENTITY_MAP.at(ENTITY_FLAG::ASTEROID)
+            || ent->type() == ENTITY_MAP.at(ENTITY_FLAG::ENEMY)
+            || ent->type() == ENTITY_MAP.at(ENTITY_FLAG::ENEMY_BULLET)) {
             if (utl::areColliding(m_player, *ent)) {
                 m_player.kill_it();
             }
@@ -245,15 +245,17 @@ bool PhysicsManager::was_player_killed()
 void PhysicsManager::check_bullet_hits(bool gameOver)
 {
     for (auto& physEnt : physEntities) {
-        if ((physEnt->type() == ENTITY_MAP[ENTITY_FLAG::BULLET]
+        if ((physEnt->type() == ENTITY_MAP.at(ENTITY_FLAG::BULLET)
              || (gameOver
-                 && physEnt->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY_BULLET]))
+                 && physEnt->type()
+                        == ENTITY_MAP.at(ENTITY_FLAG::ENEMY_BULLET)))
             && !physEnt->toBeKilled()) {
             Bullet& bul{static_cast<Bullet&>(*physEnt)};
             for (auto& target : physEntities) {
-                if (target->type() == ENTITY_MAP[ENTITY_FLAG::ASTEROID]
+                if (target->type() == ENTITY_MAP.at(ENTITY_FLAG::ASTEROID)
                     || (!gameOver
-                        && target->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY])) {
+                        && target->type()
+                               == ENTITY_MAP.at(ENTITY_FLAG::ENEMY))) {
                     if (utl::isPointInPolygon(bul.pos(), target->collider())) {
                         target->kill_it();
                         bul.kill_it();
@@ -271,7 +273,7 @@ bool PhysicsManager::do_entities_remain_of_type(
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities)
 {
     for (auto& ent : entities) {
-        if (ent->type() == ENTITY_MAP[entityType]) {
+        if (ent->type() == ENTITY_MAP.at(entityType)) {
             return true;
         }
     }
@@ -284,7 +286,7 @@ void PhysicsManager::kill_entities_of_type(
     std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& entities)
 {
     for (auto& physEnt : entities) {
-        if (physEnt->type() == ENTITY_MAP[entityType]) {
+        if (physEnt->type() == ENTITY_MAP.at(entityType)) {
             physEnt->kill_it();
         }
     }

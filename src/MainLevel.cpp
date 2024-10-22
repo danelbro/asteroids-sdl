@@ -22,18 +22,20 @@
 MainLevel::MainLevel(utl::Box& new_screen, uint32_t windowID,
                      utl::Renderer& new_renderer)
     : utl::Stage{new_screen, windowID, new_renderer,
-                 STAGE_MAP[STAGE_ID::PLAYING]},
-      font{utl::createFont(constants::fontPath, constants::mainLevelScoreboardFontSize)},
+                 STAGE_MAP.at(STAGE_ID::PLAYING)},
+      font{utl::createFont(constants::fontPath,
+                           constants::mainLevelScoreboardFontSize)},
       gameWorld{new_screen, constants::fluidDensity}, rng{utl::makeSeededRNG()},
       physicsManager{gameWorld, rng}, player{physicsManager.player()},
       scoreManager{gameWorld,
-                   {constants::mainLevelScoreboardXPos, constants::mainLevelscoreboardYPos},
+                   {constants::mainLevelScoreboardXPos,
+                    constants::mainLevelscoreboardYPos},
                    font,
                    new_renderer,
                    player.lives()},
       areAsteroidsRemaining{false},
-      numOfAsteroids{constants::initialNumOfAsteroids}, areEnemiesRemaining{false},
-      enemyTimer{0.0}
+      numOfAsteroids{constants::initialNumOfAsteroids},
+      areEnemiesRemaining{false}, enemyTimer{0.0}
 {
     utl::setRendererDrawColour(renderer(), customCols::bg);
 }
@@ -49,11 +51,11 @@ MainLevel::handle_input(double, double dt,
     }
 
     if (key_state[utl::KeyFlag::QUIT]) {
-        return STAGE_MAP[STAGE_ID::QUIT];
+        return STAGE_MAP.at(STAGE_ID::QUIT);
     }
 
     if (key_state[utl::KeyFlag::K_ESCAPE]) {
-        return STAGE_MAP[STAGE_ID::TITLE_SCREEN];
+        return STAGE_MAP.at(STAGE_ID::TITLE_SCREEN);
     }
 
     if (player.isControllable()) {
@@ -78,7 +80,7 @@ MainLevel::handle_input(double, double dt,
             player.hyperdrive.warp();
         }
     }
-    return STAGE_MAP[STAGE_ID::PLAYING];
+    return STAGE_MAP.at(STAGE_ID::PLAYING);
 }
 
 void MainLevel::check_targets_cleared()
@@ -144,14 +146,14 @@ std::string MainLevel::check_game_over()
 {
     if (player.lives() <= 0) {
         for (auto& physEnt : physicsManager.physEntities) {
-            if (physEnt->type() == ENTITY_MAP[ENTITY_FLAG::ENEMY]) {
+            if (physEnt->type() == ENTITY_MAP.at(ENTITY_FLAG::ENEMY)) {
                 Enemy* enemyPtr{static_cast<Enemy*>(physEnt.get())};
                 enemyPtr->playerKilled();
             }
         }
-        return STAGE_MAP[STAGE_ID::GAME_OVER];
+        return STAGE_MAP.at(STAGE_ID::GAME_OVER);
     }
-    return STAGE_MAP[STAGE_ID::PLAYING];
+    return STAGE_MAP.at(STAGE_ID::PLAYING);
 }
 
 std::string MainLevel::update(double t, double dt)

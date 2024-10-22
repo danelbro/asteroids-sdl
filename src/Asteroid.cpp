@@ -15,7 +15,7 @@ Asteroid::Asteroid(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
                    const utl::Colour& color, const double& scale,
                    const double& mass, const double& impulse,
                    const double& angle, bool wrap, bool fill)
-    : utl::VecGraphPhysEnt{ENTITY_MAP[ENTITY_FLAG::ASTEROID],
+    : utl::VecGraphPhysEnt{ENTITY_MAP.at(ENTITY_FLAG::ASTEROID),
                            new_gameWorld,
                            pos,
                            shape,

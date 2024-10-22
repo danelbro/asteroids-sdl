@@ -15,9 +15,9 @@ enum class ENTITY_FLAG
     E_TYPE_TOTAL
 };
 
-extern std::unordered_map<ENTITY_FLAG, std::string> ENTITY_MAP;
+const extern std::unordered_map<ENTITY_FLAG, std::string> ENTITY_MAP;
 
-extern std::unordered_map<std::string, ENTITY_FLAG> ENTITY_STRING_MAP;
+const extern std::unordered_map<std::string, ENTITY_FLAG> ENTITY_STRING_MAP;
 
 enum class STAGE_ID
 {
@@ -29,6 +29,6 @@ enum class STAGE_ID
     QUIT
 };
 
-extern std::unordered_map<STAGE_ID, std::string> STAGE_MAP;
+const extern std::unordered_map<STAGE_ID, std::string> STAGE_MAP;
 
-extern std::unordered_map<std::string, STAGE_ID> STAGE_STRING_MAP;
+const extern std::unordered_map<std::string, STAGE_ID> STAGE_STRING_MAP;
