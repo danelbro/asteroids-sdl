@@ -213,7 +213,7 @@ HighScores::calculate_high_scores(const int& newScore,
         std::ostringstream lineStream{};
         lineStream << "1" << SEPERATOR << " " << newScore;
         highScores.emplace_back(lineStream.str());
-        return {true, 1};  // definitely a new high score
+        return {true, 0};  // definitely a new high score
     }
 
     std::vector<int> scores{};
