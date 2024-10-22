@@ -1,22 +1,22 @@
 ﻿#include "TitleScreen.hpp"
 
 #include "Colors.hpp"
+#include "constants.hpp"
 #include "flags.hpp"
 
 #include <array>
+#include <filesystem>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
-#include <utl_utility.hpp>
 #include <vector>
 
-static constexpr int title_font_size{72};
-static constexpr int instruction_font_size{36};
-static constexpr double padding{150.0};
-static const std::string font_path{"data/Play-Regular.ttf"};
+#ifndef NDEBUG
+#include <utl_utility.hpp>
+#endif
 
 static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,
                                                      utl::Font& font,
@@ -35,7 +35,7 @@ static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,
             utl::TextObject{screen, {}, font, color, rend});
         instructions[i].updateText(insText[i]);
         double xpos{(screen.w / 2.0) - (instructions[i].size().x / 2.0)};
-        double ypos{screen.h - padding
+        double ypos{screen.h - constants::titleScreenPadding
                     - (instructions[i].size().y * (insText.size() - i))};
         instructions[i].setPos({xpos, ypos});
     }
@@ -47,8 +47,10 @@ TitleScreen::TitleScreen(utl::Box& screen, uint32_t windowID,
                          utl::Renderer& renderer)
     : Stage{screen, windowID, renderer, STAGE_MAP[STAGE_ID::TITLE_SCREEN]},
       gameWorld{screen, 0.0},
-      title_font{utl::createFont(font_path, title_font_size)},
-      instruction_font{utl::createFont(font_path, instruction_font_size)},
+      title_font{utl::createFont(constants::fontPath,
+                                 constants::titleScreenTitleFontSize)},
+      instruction_font{utl::createFont(
+          constants::fontPath, constants::titleScreenInstructionFontSize)},
       title{gameWorld.screen, {}, title_font, customCols::text_col, renderer},
       instructions{makeInstructions(gameWorld.screen, instruction_font,
                                     customCols::text_col, renderer)}
@@ -76,7 +78,7 @@ static void reset_instructions(std::vector<utl::TextObject>& instructions)
         instructions[i].setPos(
             {(instructions[i].screen().w / 2.0)
                  - (instructions[i].size().x / 2.0),
-             instructions[i].screen().h - padding
+             instructions[i].screen().h - constants::titleScreenPadding
                  - (instructions[i].size().y * (instructions.size() - i))});
     }
 }

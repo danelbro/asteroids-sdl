@@ -6,6 +6,7 @@
 #include "Enemy.hpp"
 #include "Player.hpp"
 #include "ScoreManager.hpp"
+#include "constants.hpp"
 #include "flags.hpp"
 
 #include <memory>
@@ -41,15 +42,10 @@ void PhysicsManager::make_bullet(const utl::Vec2d& origin, const double& power,
                                  const double& angle, const utl::Colour& col,
                                  const ENTITY_FLAG& flag)
 {
-    constexpr double mass{0.003};
-    constexpr double scale{1.0};
-    constexpr double lifespan{1.0};  // seconds
-
-    const std::vector<utl::Vec2d> shape{{1, -3}, {-1, -3}, {-2, 3}, {2, 3}};
-
-    physEntities.push_back(
-        std::make_unique<Bullet>(m_gameWorld, origin, shape, col, scale, mass,
-                                 lifespan, angle, power, flag, true, true));
+    physEntities.push_back(std::make_unique<Bullet>(
+        m_gameWorld, origin, constants::bulletShape, col,
+        constants::bulletScale, constants::bulletMass,
+        constants::bulletLifespan, angle, power, flag, true, true));
 }
 
 void PhysicsManager::make_bullet(const utl::VecGraphPhysEnt& oldBullet)
@@ -66,32 +62,28 @@ void PhysicsManager::make_bullet(const utl::VecGraphPhysEnt& oldBullet)
 
 void PhysicsManager::make_asteroid(const double& scale, const utl::Vec2d& pos)
 {
-    const double mass{1.0};
-
-    constexpr double radiusMin = 25.0;
-    constexpr double radiusMax = 30.0;
-    std::uniform_real_distribution<double> radiusDist{radiusMin, radiusMax};
+    std::uniform_real_distribution<double> radiusDist{
+        constants::asteroidRadiusMin, constants::asteroidRadiusMax};
     double radius{radiusDist(m_rng)};
 
-    constexpr double impulseMin{750'000.0};
-    constexpr double impulseMax{1'500'000.0};
-    std::uniform_real_distribution<double> impulseDist{impulseMin, impulseMax};
+    std::uniform_real_distribution<double> impulseDist{
+        constants::asteroidImpulseMin, constants::asteroidImpulseMax};
     double impulse{impulseDist(m_rng)};
 
     std::uniform_real_distribution<double> angleDist{0.0, 360.0};
     double angle{angleDist(m_rng)};
 
-    std::uniform_int_distribution<int> vertexDist{8, 10};
+    std::uniform_int_distribution<int> vertexDist{
+        constants::minAsteroidVertices, constants::maxAsteroidVertices};
     int vertexes{vertexDist(m_rng)};
 
     std::vector<utl::Vec2d> shape{};
     shape.reserve(static_cast<size_t>(vertexes));
-
     shape = utl::genRandConvexPolygon(vertexes, radius, m_rng);
 
     physEntities.emplace_back(std::make_unique<Asteroid>(
-        m_gameWorld, pos, shape, customCols::asteroid_col, scale, mass, impulse,
-        angle, true, false));
+        m_gameWorld, pos, shape, customCols::asteroid_col, scale,
+        constants::asteroidMass, impulse, angle, true, false));
 }
 
 void PhysicsManager::make_asteroid(const utl::VecGraphPhysEnt& oldAsteroid)
@@ -139,71 +131,34 @@ void PhysicsManager::make_asteroids(int num, const double& scale, bool isNew,
     }
 }
 
-// shaped mostly like the player
-static const std::vector<utl::Vec2d> enemyPointy{
-    {0, -30},   // top
-    {15, -10},  // top right
-    // {-15, -10}, {15, -10}, // cross bar
-    {20, 30},  // bottom right
-    {0, 15},   // bottom
-    // {0, -30}, {0, 15}, // dorsal line
-    {-20, 30},  // bottom right
-    {-15, -10}  // top left
-};
-
-// more ufo shaped
-// static const std::vector<utl::Vec2d> enemyUFO{
-//    {20, -20}, {40, 0},   {45, 0},  {-45, 0}, {45, 0},
-//    {40, 20},  {-40, 20}, {-45, 0}, {-40, 0}, {-20, -20}};
-
-static constexpr double enemy_scale{1.0};
-static constexpr double enemy_power{5000.0};
-static constexpr double enemy_turnSpeed{300.0};
-static constexpr double enemy_minVel{150.0};
-static constexpr double enemy_maxVel{300.0};
-static constexpr double enemy_shotPower{20000.0};
-static constexpr double enemy_mass{0.1};
-static constexpr double enemy_cooldown{1.0};
-static constexpr double enemy_distance{75.0};
-
 void PhysicsManager::make_enemy()
 {
-    const std::vector<utl::Vec2d> shape{enemyPointy};
+    const std::vector<utl::Vec2d> shape{constants::enemyShape};
 
-    utl::Vec2d new_pos{
-        findRandomDistantPos(m_rng, m_player, enemy_distance * enemy_scale,
-                             m_gameWorld.screen.w, m_gameWorld.screen.h)};
+    utl::Vec2d new_pos{findRandomDistantPos(
+        m_rng, m_player, constants::enemyDistance * constants::enemyScale,
+        m_gameWorld.screen.w, m_gameWorld.screen.h)};
 
     physEntities.emplace_back(std::make_unique<Enemy>(
-        m_gameWorld, new_pos, shape, customCols::enemy_col, enemy_scale,
-        enemy_power, enemy_turnSpeed, enemy_minVel, enemy_maxVel,
-        enemy_shotPower, enemy_mass, enemy_cooldown, &m_player, *this, m_rng));
+        m_gameWorld, new_pos, shape, customCols::enemy_col,
+        constants::enemyScale, constants::enemyPower, constants::enemyTurnSpeed,
+        constants::enemyMinVel, constants::enemyMaxVel,
+        constants::enemyShotPower, constants::enemyMass,
+        constants::enemyCooldown, &m_player, *this, m_rng));
 }
 
 void PhysicsManager::make_enemy(const utl::VecGraphPhysEnt& oldEnemy)
 {
     physEntities.emplace_back(std::make_unique<Enemy>(
         m_gameWorld, oldEnemy.pos(), oldEnemy.shape(), oldEnemy.color(),
-        oldEnemy.scale(), enemy_power, enemy_turnSpeed, enemy_minVel,
-        enemy_maxVel, enemy_shotPower, oldEnemy.physicsComponent.mass(),
-        enemy_cooldown, nullptr, *this, m_rng));
+        oldEnemy.scale(), constants::enemyPower, constants::enemyTurnSpeed,
+        constants::enemyMinVel, constants::enemyMaxVel,
+        constants::enemyShotPower, oldEnemy.physicsComponent.mass(),
+        constants::enemyCooldown, nullptr, *this, m_rng));
     physEntities.back()->physicsComponent.setOwner(physEntities.back().get());
     copyPhysicsProperties(oldEnemy.physicsComponent,
                           physEntities.back()->physicsComponent);
 }
-
-static const std::vector<utl::Vec2d> playerShape{{0, -30}, {20, 30}, {-20, 30}};
-
-static constexpr double playerScale{1.0};
-static constexpr double playerEnginePower{5000.0};
-static constexpr double playerTurnSpeed{300.0};
-static constexpr double playerShotPower{20000.0};
-static constexpr double playerMass{0.1};
-static constexpr double playerWarpLength{1.0};
-static constexpr int playerLives{3};
-static constexpr double playerRespawnLength{2.0};
-static constexpr double playerFlashLength{0.2};
-static constexpr double playerGunCooldown{0.25};
 
 Player& PhysicsManager::make_player()
 {
@@ -211,10 +166,12 @@ Player& PhysicsManager::make_player()
                                m_gameWorld.screen.h / 2.0};
 
     physEntities.emplace_back(std::make_unique<Player>(
-        m_gameWorld, playerPos, playerShape, customCols::player_col,
-        playerScale, playerEnginePower, playerTurnSpeed, playerShotPower,
-        playerMass, m_rng, playerWarpLength, playerLives, playerRespawnLength,
-        playerFlashLength, playerGunCooldown));
+        m_gameWorld, playerPos, constants::playerShape, customCols::player_col,
+        constants::playerScale, constants::playerEnginePower,
+        constants::playerTurnSpeed, constants::playerShotPower,
+        constants::playerMass, m_rng, constants::playerWarpLength,
+        constants::playerLives, constants::playerRespawnLength,
+        constants::playerFlashLength, constants::playerGunCooldown));
 
     return static_cast<Player&>(*physEntities.back());
 }

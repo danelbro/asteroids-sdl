@@ -5,10 +5,17 @@
 #include <SDL3/SDL_main.h>
 #include <stdexcept>
 #include <utl_SDLInterface.hpp>
+
+#ifndef NDEBUG
 #include <utl_utility.hpp>
+#endif
 
 int main(int, char**)
+#ifdef NDEBUG
+{
+#else
 try {
+#endif
     constexpr auto sdlFlags{SDL_INIT_VIDEO};
     utl::init(sdlFlags);
 
@@ -28,23 +35,29 @@ try {
 
     return 0;
 }
-catch (utl::SdlException& se) {
-    utl::errorLogger << "SDL exception: " << se.what() << '\n';
+#ifndef NDEBUG
+catch (utl::SdlException& se)
+{
+    ERRLOG("SDL exception: " << se.what() << '\n');
     utl::quit_sdl();
     return 1;
 }
-catch (std::runtime_error& re) {
-    utl::errorLogger << "exception: " << re.what() << '\n';
+catch (std::runtime_error& re)
+{
+    ERRLOG("exception: " << re.what() << '\n');
     utl::quit_sdl();
     return 2;
 }
-catch (std::out_of_range& oor) {
-    utl::errorLogger << "out of range: " << oor.what() << '\n';
+catch (std::out_of_range& oor)
+{
+    ERRLOG("out of range: " << oor.what() << '\n');
     utl::quit_sdl();
     return 3;
 }
-catch (...) {
-    utl::errorLogger << "unknown exception\n";
+catch (...)
+{
+    ERRLOG("unknown exception\n");
     utl::quit_sdl();
     return -1;
 }
+#endif

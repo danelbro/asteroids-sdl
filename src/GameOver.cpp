@@ -3,9 +3,11 @@
 #include "Colors.hpp"
 #include "Enemy.hpp"
 #include "PhysicsManager.hpp"
+#include "constants.hpp"
 #include "flags.hpp"
 
 #include <array>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <utl_GameWorld.hpp>
@@ -15,12 +17,8 @@
 #include <utl_VecGraphPhysEnt.hpp>
 #include <utl_utility.hpp>
 
-static const std::string fontPath{"data/Play-Regular.ttf"};
-static constexpr int titleFont_size{72};
-static constexpr int scoreFont_size{48};
-static constexpr double padding{250.0};
-
-static void reset_text_positions(utl::TextObject& title, utl::TextObject& score);
+static void reset_text_positions(utl::TextObject& title,
+                                 utl::TextObject& score);
 static void reset_title(utl::TextObject& title);
 static void reset_score(utl::TextObject& score);
 
@@ -29,9 +27,11 @@ GameOver::GameOver(
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
     : Stage{screen, windowID, rend, STAGE_MAP[STAGE_ID::GAME_OVER]},
-      m_gameWorld{screen, 0.1},
-      m_titleFont{utl::createFont(fontPath, titleFont_size)},
-      m_scoreFont{utl::createFont(fontPath, scoreFont_size)},
+      m_gameWorld{screen, constants::fluidDensity},
+      m_titleFont{utl::createFont(constants::fontPath,
+                                  constants::gameOverTitleFontSize)},
+      m_scoreFont{utl::createFont(constants::fontPath,
+                                  constants::gameOverScoreFontSize)},
       m_rng{utl::makeSeededRNG()}, m_physMan{m_gameWorld, m_rng},
       m_scoreMan{rend}, m_score{score},
       m_GameOverText{
@@ -93,7 +93,8 @@ static void reset_title(utl::TextObject& title)
 static void reset_score(utl::TextObject& score)
 {
     const double scoreXPos{score.screen().w / 2.0 - score.size().x / 2.0};
-    const double scoreYPos{score.screen().h - padding - score.size().y};
+    const double scoreYPos{score.screen().h - constants::gameOverPadding
+                           - score.size().y};
     score.setPos({scoreXPos, scoreYPos});
 }
 

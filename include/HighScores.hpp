@@ -5,6 +5,7 @@
 
 #include <array>
 #include <cstdint>
+#include <filesystem>
 #include <memory>
 #include <random>
 #include <string>
@@ -42,13 +43,11 @@ public:
     void stop_enemy_firing();
 
     void read_high_scores(std::vector<std::string>& highScores,
-                          const std::string& path);
-    NewHighScore
-    calculate_high_scores(const int& score,
-                          std::vector<std::string>& highScores);
-    void write_high_scores(
-        const std::vector<std::string>& highScores,
-        const std::string& path);
+                          const std::filesystem::path& path);
+    NewHighScore calculate_high_scores(const int& score,
+                                       std::vector<std::string>& highScores);
+    void write_high_scores(const std::vector<std::string>& highScores,
+                           const std::filesystem::path& path);
 
 private:
     utl::GameWorld m_gameWorld;
@@ -62,4 +61,3 @@ private:
     bool asteroidsRemain;
     utl::ScoreBoard m_scoreBoard;
 };
-

@@ -5,9 +5,11 @@
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
 #include "ScoreManager.hpp"
+#include "constants.hpp"
 #include "flags.hpp"
 
 #include <array>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <utl_Box.hpp>
@@ -17,28 +19,21 @@
 #include <utl_VecGraphPhysEnt.hpp>
 #include <utl_utility.hpp>
 
-static constexpr int startingAsteroids{3};
-static constexpr double asteroidScale{3.0};
-static constexpr int scoreboard_xPos{17};
-static constexpr int scoreboard_yPos{10};
-static constexpr int font_size{28};
-static const std::string font_path{"data/Play-Regular.ttf"};
-static constexpr double fluidDensity{0.1};
-
 MainLevel::MainLevel(utl::Box& new_screen, uint32_t windowID,
                      utl::Renderer& new_renderer)
     : utl::Stage{new_screen, windowID, new_renderer,
                  STAGE_MAP[STAGE_ID::PLAYING]},
-      font{utl::createFont(font_path, font_size)},
-      gameWorld{new_screen, fluidDensity}, rng{utl::makeSeededRNG()},
+      font{utl::createFont(constants::fontPath, constants::mainLevelScoreboardFontSize)},
+      gameWorld{new_screen, constants::fluidDensity}, rng{utl::makeSeededRNG()},
       physicsManager{gameWorld, rng}, player{physicsManager.player()},
       scoreManager{gameWorld,
-                   {scoreboard_xPos, scoreboard_yPos},
+                   {constants::mainLevelScoreboardXPos, constants::mainLevelscoreboardYPos},
                    font,
                    new_renderer,
                    player.lives()},
-      areAsteroidsRemaining{false}, numOfAsteroids{startingAsteroids},
-      areEnemiesRemaining{false}, enemyTimer{0.0}
+      areAsteroidsRemaining{false},
+      numOfAsteroids{constants::initialNumOfAsteroids}, areEnemiesRemaining{false},
+      enemyTimer{0.0}
 {
     utl::setRendererDrawColour(renderer(), customCols::bg);
 }
@@ -110,7 +105,8 @@ void MainLevel::progress_level()
         physicsManager.kill_entities_of_type(ENTITY_FLAG::ENEMY_BULLET,
                                              physicsManager.physEntities);
         enemyTimer = 0.0;
-        physicsManager.make_asteroids(numOfAsteroids++, asteroidScale, true);
+        physicsManager.make_asteroids(numOfAsteroids++,
+                                      constants::initialAsteroidScale, true);
     }
 }
 

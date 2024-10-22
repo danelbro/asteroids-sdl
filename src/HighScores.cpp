@@ -2,12 +2,14 @@
 
 #include "Colors.hpp"
 #include "Enemy.hpp"
+#include "constants.hpp"
 #include "flags.hpp"
 
 #include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <memory>
@@ -22,14 +24,6 @@
 #include <utl_utility.hpp>
 #include <vector>
 
-static const std::string fontPath{"data/Play-Regular.ttf"};
-static constexpr int titleFont_size{64};
-static constexpr int scoreFont_size{36};
-static constexpr double internPadding{25.0};
-static constexpr double externPadding{25.0};
-static const std::string highScoresPath{"data/highScores"};
-static constexpr size_t HIGH_SCORES_MAX{5};
-
 static void reset_text_positions(utl::TextObject& title,
                                  utl::ScoreBoard& scores);
 
@@ -38,16 +32,18 @@ HighScores::HighScores(
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
     : utl::Stage{screen, windowID, renderer, STAGE_MAP[STAGE_ID::HIGH_SCORES]},
-      m_gameWorld{screen, 0.1},
-      titleFont{utl::createFont(fontPath, titleFont_size)},
-      scoreFont{utl::createFont(fontPath, scoreFont_size)},
+      m_gameWorld{screen, constants::fluidDensity},
+      titleFont{utl::createFont(constants::fontPath,
+                                constants::highScoresTitleFontSize)},
+      scoreFont{utl::createFont(constants::fontPath,
+                                constants::highScoresScoreFontSize)},
       m_rng{utl::makeSeededRNG()}, m_physMan{m_gameWorld, m_rng},
       m_scoreMan{renderer}, m_score{score},
       m_highScoreTitle{
           m_gameWorld.screen, {}, titleFont, customCols::text_col, renderer},
       asteroidsRemain{false}, m_scoreBoard{screen,
                                            {},
-                                           internPadding,
+                                           constants::highScoresInternPadding,
                                            scoreFont,
                                            customCols::text_col,
                                            customCols::player_col,
@@ -79,16 +75,16 @@ HighScores::HighScores(
     }
 
     std::vector<std::string> highScores{};
-    highScores.reserve(HIGH_SCORES_MAX);
-    read_high_scores(highScores, highScoresPath);
+    highScores.reserve(constants::maxHighScores);
+    read_high_scores(highScores, constants::highScoresPath);
     NewHighScore newHighScore{calculate_high_scores(score, highScores)};
     if (newHighScore.isNewHighScore) {
         m_highScoreTitle.updateText("New High Score!");
-        write_high_scores(highScores, highScoresPath);
+        write_high_scores(highScores, constants::highScoresPath);
         m_scoreBoard.set_text(highScores, newHighScore.newHighScorePos);
     } else {
         m_highScoreTitle.updateText("High Scores");
-        write_high_scores(highScores, highScoresPath);
+        write_high_scores(highScores, constants::highScoresPath);
         m_scoreBoard.set_text(highScores);
     }
 
@@ -191,7 +187,7 @@ void HighScores::check_asteroids_cleared()
 }
 
 void HighScores::read_high_scores(std::vector<std::string>& highScores,
-                                  const std::string& path)
+                                  const std::filesystem::path& path)
 {
     highScores.clear();
 
@@ -220,7 +216,7 @@ HighScores::calculate_high_scores(const int& newScore,
     }
 
     std::vector<int> scores{};
-    scores.reserve(HIGH_SCORES_MAX + 1);
+    scores.reserve(constants::maxHighScores + 1);
 
     int listPosition{};
     char seperator{};
@@ -234,14 +230,14 @@ HighScores::calculate_high_scores(const int& newScore,
 
     std::ranges::sort(scores, std::ranges::greater());
     NewHighScore newHighScore{false, -1};
-    if (scores.size() >= HIGH_SCORES_MAX) {
+    if (scores.size() >= constants::maxHighScores) {
         for (size_t i{0}; i < scores.size(); i++) {
             if (newScore > scores[i]) {
                 newHighScore.isNewHighScore = true;
                 newHighScore.newHighScorePos = static_cast<int>(i);
                 scores.insert(scores.begin() + static_cast<unsigned>(i),
                               newScore);
-                while (scores.size() > HIGH_SCORES_MAX) {
+                while (scores.size() > constants::maxHighScores) {
                     scores.pop_back();
                 }
                 break;
@@ -251,13 +247,14 @@ HighScores::calculate_high_scores(const int& newScore,
         scores.emplace_back(newScore);
         std::ranges::sort(scores, std::ranges::greater());
 
-        auto pos{std::distance(scores.begin(), std::ranges::find(scores, newScore))};
+        auto pos{
+            std::distance(scores.begin(), std::ranges::find(scores, newScore))};
         newHighScore.isNewHighScore = true;
         newHighScore.newHighScorePos = static_cast<int>(pos);
     }
 
     highScores.clear();
-    highScores.reserve(HIGH_SCORES_MAX);
+    highScores.reserve(constants::maxHighScores);
 
     for (size_t i{0}; i < scores.size(); i++) {
         std::ostringstream lineStream{};
@@ -270,7 +267,7 @@ HighScores::calculate_high_scores(const int& newScore,
 }
 
 void HighScores::write_high_scores(const std::vector<std::string>& highScores,
-                                   const std::string& path)
+                                   const std::filesystem::path& path)
 {
     std::ofstream highScoresFile{path};
     if (!highScoresFile.good())
@@ -290,6 +287,7 @@ static void reset_text_positions(utl::TextObject& title,
 
     const double scoreBoardXPos{scores.screen().w / 2.0
                                 - scores.size().x / 2.0};
-    const double scoreBoardYPos{title.pos().y + title.size().y + externPadding};
+    const double scoreBoardYPos{title.pos().y + title.size().y
+                                + constants::highScoresExternPadding};
     scores.set_pos({scoreBoardXPos, scoreBoardYPos});
 }

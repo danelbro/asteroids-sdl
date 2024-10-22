@@ -12,6 +12,10 @@
 #include <utl_Box.hpp>
 #include <utl_StageManager.hpp>
 
+#ifndef NDEBUG
+#include <utl_utility.hpp>
+#endif
+
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                            int screenHeight, uint32_t windowFlags)
     : Application{title, screenWidth, screenHeight, windowFlags}
@@ -23,6 +27,8 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                                           m_renderer);
     m_stageManager.set_current_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
     m_stageManager.set_next_stage(STAGE_MAP[STAGE_ID::TITLE_SCREEN]);
+
+    LOG("Constructed AsteroidsApp\n");
 }
 
 void AsteroidsApp::trigger_stage_change(const std::string& next)
@@ -74,4 +80,6 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
     default:
         throw std::runtime_error("bad stage!\n");
     }
+
+    LOG("Added stage " << next << '\n');
 }

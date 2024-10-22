@@ -6,6 +6,7 @@ target_sources(${PROJECT_NAME} PRIVATE
   "asteroids.cpp"
   "../include/Bullet.hpp" "Bullet.cpp"
   "../include/Colors.hpp"
+  "../include/constants.hpp"
   "../include/Enemy.hpp" "Enemy.cpp"
   "../include/Engine.hpp" "Engine.cpp"
   "../include/flags.hpp" "flags.cpp"
