@@ -5,7 +5,6 @@
 #include "flags.hpp"
 
 #include <array>
-#include <filesystem>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_GameWorld.hpp>

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <filesystem>
+#include <utl_Vec2d.hpp>
+#include <vector>
+
 // some of these to eventually go in an options menu or something?
 
 namespace constants {

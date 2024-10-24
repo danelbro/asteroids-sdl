@@ -9,7 +9,6 @@
 #include "flags.hpp"
 
 #include <array>
-#include <filesystem>
 #include <memory>
 #include <string>
 #include <utl_Box.hpp>
