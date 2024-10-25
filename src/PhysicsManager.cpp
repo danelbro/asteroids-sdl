@@ -27,7 +27,7 @@ static void copyPhysicsProperties(const utl::VecGraphPhysComp& physIn,
 {
     physOut.setVelocity(physIn.velocity());
     physOut.setAcceleration(physIn.acceleration());
-    physOut.setAngle(physIn.facing());
+    physOut.set_facing_angle(physIn.facing());
     physOut.setFrameImpulse(physIn.impulse());
 }
 

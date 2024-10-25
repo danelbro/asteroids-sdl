@@ -26,7 +26,7 @@ Bullet::Bullet(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
                            fill},
       m_lifespan{lifespan}, m_wayward{true}
 {
-    physicsComponent.setAngle(angle);
+    physicsComponent.set_facing_angle(angle);
     physicsComponent.setFrameImpulse(power);
 
     LOG("Constructed Bullet (" << type() << " type)\n");
