@@ -29,7 +29,7 @@ Bullet::Bullet(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
     physicsComponent.set_facing_angle(angle);
     physicsComponent.setFrameImpulse(power);
 
-    LOG("Constructed Bullet (" << type() << " type)\n");
+    LOGF("Constructed Bullet (%s type)\n", type().c_str());
 }
 
 void Bullet::update(double, double dt)

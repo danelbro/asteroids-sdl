@@ -3,6 +3,7 @@
 #include "GameOver.hpp"
 #include "HighScores.hpp"
 #include "MainLevel.hpp"
+#include "SDL3/SDL_video.h"
 #include "TitleScreen.hpp"
 #include "flags.hpp"
 
@@ -13,9 +14,13 @@
 #include <utl_StageManager.hpp>
 #include <utl_utility.hpp>
 
-AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
-                           int screenHeight, uint32_t windowFlags)
-    : Application{title, screenWidth, screenHeight, windowFlags}
+const std::string asteroidsTitle{"Asteroids"};
+constexpr int asteroidsScreenWidth{960};
+constexpr int asteroidsScreenHeight{720};
+constexpr uint32_t sdlFlags{SDL_INIT_VIDEO};
+constexpr uint32_t sdlWindowFlags{SDL_WINDOW_RESIZABLE};
+
+void AsteroidsApp::init()
 {
     m_renderer.setVSync(1);
 
@@ -26,6 +31,27 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
     m_stageManager.set_next_stage(STAGE_MAP.at(STAGE_ID::TITLE_SCREEN));
 
     LOG("Constructed AsteroidsApp\n");
+}
+
+AsteroidsApp::AsteroidsApp()
+    : utl::Application(asteroidsTitle, asteroidsScreenWidth,
+                       asteroidsScreenHeight, sdlFlags, sdlWindowFlags)
+{
+    init();
+}
+
+AsteroidsApp::AsteroidsApp(const std::string& title)
+    : utl::Application(title, asteroidsScreenWidth, asteroidsScreenHeight,
+                       sdlFlags, sdlWindowFlags)
+{
+    init();
+}
+
+AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
+                           int screenHeight)
+    : Application{title, screenWidth, screenHeight, sdlFlags, sdlWindowFlags}
+{
+    init();
 }
 
 void AsteroidsApp::trigger_stage_change(const std::string& next)
@@ -78,5 +104,5 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
         throw std::runtime_error("bad stage!\n");
     }
 
-    LOG("Going to " << next << " stage\n");
+    LOGF("Going to %s stage\n", next.c_str());
 }
