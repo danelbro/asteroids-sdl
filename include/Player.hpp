@@ -3,7 +3,7 @@
 #include "Hyperdrive.hpp"
 #include "Ship.hpp"
 
-#include <random>
+#include <utl_random.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
@@ -14,7 +14,7 @@ public:
     Player(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,
            const std::vector<utl::Vec2d>& shape, const utl::Colour& color,
            const double& scale, const double& power, const double& turnSpeed,
-           const double& shotPower, const double& mass, std::mt19937& rng,
+           const double& shotPower, const double& mass, utl::RNG& rng,
            const double& warpTimer, int lives, const double& respawnLength,
            const double& flashLength, const double& cooldown);
 

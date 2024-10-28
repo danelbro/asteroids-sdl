@@ -31,7 +31,7 @@ GameOver::GameOver(
                                   constants::gameOverTitleFontSize)},
       m_scoreFont{utl::createFont(constants::fontPath,
                                   constants::gameOverScoreFontSize)},
-      m_rng{utl::makeSeededRNG()}, m_physMan{m_gameWorld, m_rng},
+      m_rng{}, m_physMan{m_gameWorld, m_rng},
       m_scoreMan{rend}, m_score{score},
       m_GameOverText{
           m_gameWorld.screen, {}, m_titleFont, customCols::text_col, rend},

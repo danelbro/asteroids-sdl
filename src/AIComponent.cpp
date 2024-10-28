@@ -5,15 +5,15 @@
 #include "Player.hpp"
 
 #include <cmath>
-#include <random>
+#include <utl_random.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
 #include <utl_random.hpp>
 
-static double genRandAngle(std::mt19937& rng);
+static double genRandAngle(utl::RNG& rng);
 
 AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan,
-                         std::mt19937& rng)
+                         utl::RNG& rng)
     : m_owner{new_owner}, m_physMan{physMan}, m_rng{rng}, m_turnTimeLower{1.5},
       m_turnTimeUpper{3.0}, m_turnTimeDist{m_turnTimeLower, m_turnTimeUpper},
       m_turnTime{m_turnTimeDist(m_rng)}, m_timeSinceTurn{0.0},
@@ -24,12 +24,12 @@ AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan,
 }
 
 static double genMoveTime(std::uniform_real_distribution<double> dist,
-                          std::mt19937& rng)
+                          utl::RNG& rng)
 {
     return dist(rng);
 }
 
-static double genRandAngle(std::mt19937& rng)
+static double genRandAngle(utl::RNG& rng)
 {
     std::uniform_real_distribution<double> angleDist{0.0, 360.0};
 

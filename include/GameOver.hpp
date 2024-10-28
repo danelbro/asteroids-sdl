@@ -6,12 +6,12 @@
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <random>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
+#include <utl_random.hpp>
 #include <utl_TextObject.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
 #include <vector>
@@ -41,7 +41,7 @@ private:
     utl::GameWorld m_gameWorld;
     utl::Font m_titleFont;
     utl::Font m_scoreFont;
-    std::mt19937 m_rng;
+    utl::RNG m_rng;
     PhysicsManager m_physMan;
     ScoreManager m_scoreMan;
     int m_score;

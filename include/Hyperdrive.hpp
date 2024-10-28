@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include <random>
+#include "utl_random.hpp"
 
 class Player;
 
 class Hyperdrive {
 public:
-    Hyperdrive(Player& new_owner, double warpLength, std::mt19937& rng);
+    Hyperdrive(Player& new_owner, double warpLength, utl::RNG& rng);
 
     void warp();
     void check_warp(double dt);
@@ -20,5 +20,5 @@ private:
     double m_warpLength;
     double m_warpTimer;
     Player& m_owner;
-    std::mt19937& m_rng;
+    utl::RNG& m_rng;
 };

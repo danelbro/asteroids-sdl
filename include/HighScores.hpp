@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <filesystem>
 #include <memory>
-#include <random>
 #include <string>
 #include <utl_Box.hpp>
 #include <utl_GameWorld.hpp>
@@ -16,6 +15,7 @@
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
+#include <utl_random.hpp>
 #include <vector>
 
 struct NewHighScore {
@@ -53,7 +53,7 @@ private:
     utl::GameWorld m_gameWorld;
     utl::Font titleFont;
     utl::Font scoreFont;
-    std::mt19937 m_rng;
+    utl::RNG m_rng;
     PhysicsManager m_physMan;
     ScoreManager m_scoreMan;
     int m_score;

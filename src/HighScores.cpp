@@ -38,7 +38,7 @@ HighScores::HighScores(
                                 constants::highScoresTitleFontSize)},
       scoreFont{utl::createFont(constants::fontPath,
                                 constants::highScoresScoreFontSize)},
-      m_rng{utl::makeSeededRNG()}, m_physMan{m_gameWorld, m_rng},
+      m_rng{}, m_physMan{m_gameWorld, m_rng},
       m_scoreMan{renderer}, m_score{score},
       m_highScoreTitle{
           m_gameWorld.screen, {}, titleFont, customCols::text_col, renderer},

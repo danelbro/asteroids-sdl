@@ -2,10 +2,9 @@
 
 #include "Player.hpp"
 
-#include <random>
 #include <utl_VecGraphPhysComp.hpp>
 
-Hyperdrive::Hyperdrive(Player& owner, double warpLength, std::mt19937& rng)
+Hyperdrive::Hyperdrive(Player& owner, double warpLength, utl::RNG& rng)
     : m_isWarping{false}, m_warpLength{warpLength}, m_warpTimer{0.0},
       m_owner{owner}, m_rng{rng}
 {}

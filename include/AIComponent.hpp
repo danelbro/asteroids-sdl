@@ -3,20 +3,20 @@
 #include "PhysicsManager.hpp"
 #include "Player.hpp"
 
-#include <random>
+#include <utl_random.hpp>
 
 class Enemy;
 
 class AIComponent {
 public:
-    AIComponent(Enemy& owner, PhysicsManager& physMan, std::mt19937& rng);
+    AIComponent(Enemy& owner, PhysicsManager& physMan, utl::RNG& rng);
 
     void update(double t, double dt, Player* plr, bool isScreenClear);
 
 private:
     Enemy& m_owner;
     PhysicsManager& m_physMan;
-    std::mt19937& m_rng;
+    utl::RNG& m_rng;
     double m_turnTimeLower;
     double m_turnTimeUpper;
     std::uniform_real_distribution<double> m_turnTimeDist;

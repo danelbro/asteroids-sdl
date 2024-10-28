@@ -4,8 +4,9 @@
 #include "PhysicsManager.hpp"
 #include "Ship.hpp"
 #include "flags.hpp"
+#include "utl_random.hpp"
 
-#include <random>
+#include <utl_random.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
@@ -17,7 +18,7 @@ Enemy::Enemy(utl::GameWorld& new_gameworld, const utl::Vec2d& pos,
              const double& minVel, const double& maxVel,
              const double& shotPower, const double& mass,
              const double& cooldown, Player* plr, PhysicsManager& physMan,
-             std::mt19937& rng)
+             utl::RNG& rng)
     : Ship{ENTITY_FLAG::ENEMY,
            new_gameworld,
            pos,

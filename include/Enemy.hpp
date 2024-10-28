@@ -3,7 +3,7 @@
 #include "AIComponent.hpp"
 #include "Ship.hpp"
 
-#include <random>
+#include <utl_random.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
@@ -19,7 +19,7 @@ public:
           const double& scale, const double& power, const double& turnSpeed,
           const double& minVel, const double& maxVel, const double& shotPower,
           const double& mass, const double& cooldown, Player* plr,
-          PhysicsManager& physMan, std::mt19937& rng);
+          PhysicsManager& physMan, utl::RNG& rng);
 
     ~Enemy() = default;
     Enemy(const Enemy&) = default;

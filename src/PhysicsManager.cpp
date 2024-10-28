@@ -8,6 +8,7 @@
 #include "ScoreManager.hpp"
 #include "constants.hpp"
 #include "flags.hpp"
+#include "utl_random.hpp"
 
 #include <memory>
 #include <random>
@@ -30,7 +31,7 @@ static void copyPhysicsProperties(const utl::VecGraphPhysComp& physIn,
     physOut.setFrameImpulse(physIn.impulse());
 }
 
-PhysicsManager::PhysicsManager(utl::GameWorld& gameWorld, std::mt19937& rng)
+PhysicsManager::PhysicsManager(utl::GameWorld& gameWorld, utl::RNG& rng)
     : physEntities{}, m_gameWorld{gameWorld}, m_rng{rng},
       m_player{make_player()}
 {
@@ -98,7 +99,7 @@ void PhysicsManager::make_asteroid(const utl::VecGraphPhysEnt& oldAsteroid)
                           physEntities.back()->physicsComponent);
 }
 
-static utl::Vec2d findRandomDistantPos(std::mt19937& rng, utl::Entity& distant,
+static utl::Vec2d findRandomDistantPos(utl::RNG& rng, utl::Entity& distant,
                                        double distance, int w, int h)
 {
     utl::Vec2d new_pos{};

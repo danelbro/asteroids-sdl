@@ -3,9 +3,10 @@
 // PhysicsManager class to create, store and destroy instances of PhysicsEntity
 
 #include "flags.hpp"
+#include "utl_random.hpp"
 
 #include <memory>
-#include <random>
+#include <utl_random.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
@@ -17,7 +18,7 @@ class ScoreManager;
 
 class PhysicsManager {
 public:
-    PhysicsManager(utl::GameWorld& gameWorld, std::mt19937& rng);
+    PhysicsManager(utl::GameWorld& gameWorld, utl::RNG& rng);
 
     void make_bullet(const utl::Vec2d& origin, const double& power,
                      const double& angle, const utl::Colour& col,
@@ -55,6 +56,6 @@ public:
 
 private:
     utl::GameWorld& m_gameWorld;
-    std::mt19937& m_rng;
+    utl::RNG& m_rng;
     Player& m_player;
 };
