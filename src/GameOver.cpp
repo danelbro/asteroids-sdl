@@ -22,7 +22,7 @@ static void reset_title(utl::TextObject& title);
 static void reset_score(utl::TextObject& score);
 
 GameOver::GameOver(
-    utl::Box& screen, uint32_t windowID, utl::Renderer& rend,
+    utl::Box& screen, uint32_t windowID, utl::Renderer& rend, utl::RNG& rng,
     const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
     int score)
     : Stage{screen, windowID, rend, STAGE_MAP.at(STAGE_ID::GAME_OVER)},
@@ -31,8 +31,8 @@ GameOver::GameOver(
                                   constants::gameOverTitleFontSize)},
       m_scoreFont{utl::createFont(constants::fontPath,
                                   constants::gameOverScoreFontSize)},
-      m_rng{}, m_physMan{m_gameWorld, m_rng},
-      m_scoreMan{rend}, m_score{score},
+      m_rng{rng}, m_physMan{m_gameWorld, m_rng}, m_scoreMan{rend},
+      m_score{score},
       m_GameOverText{
           m_gameWorld.screen, {}, m_titleFont, customCols::text_col, rend},
       m_ScoreText{

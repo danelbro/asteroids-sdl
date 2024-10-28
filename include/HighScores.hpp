@@ -30,6 +30,7 @@ class HighScores : public utl::Stage {
 public:
     HighScores(
         utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
+        utl::RNG& rng,
         const std::vector<std::unique_ptr<utl::VecGraphPhysEnt>>& physEntities,
         int score);
 
@@ -53,7 +54,7 @@ private:
     utl::GameWorld m_gameWorld;
     utl::Font titleFont;
     utl::Font scoreFont;
-    utl::RNG m_rng;
+    utl::RNG& m_rng;
     PhysicsManager m_physMan;
     ScoreManager m_scoreMan;
     int m_score;

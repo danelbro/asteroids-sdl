@@ -3,10 +3,10 @@
 #include "Hyperdrive.hpp"
 #include "Ship.hpp"
 
-#include <utl_random.hpp>
 #include <utl_GameWorld.hpp>
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
+#include <utl_random.hpp>
 #include <vector>
 
 class Player : public Ship {

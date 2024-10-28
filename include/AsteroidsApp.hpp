@@ -2,6 +2,7 @@
 
 #include <string>
 #include <utl_Application.hpp>
+#include <utl_random.hpp>
 
 class AsteroidsApp : public utl::Application {
 public:
@@ -13,4 +14,6 @@ public:
 
 private:
     void init();
+
+    utl::RNG m_rng;
 };

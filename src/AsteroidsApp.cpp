@@ -36,25 +36,29 @@ void AsteroidsApp::init()
 }
 
 AsteroidsApp::AsteroidsApp()
-    : utl::Application(asteroidsTitle, asteroidsVersion, asteroidsIdentifier, 
-                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags, 
-		       sdlWindowFlags)
+    : utl::Application(asteroidsTitle, asteroidsVersion, asteroidsIdentifier,
+                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags,
+                       sdlWindowFlags),
+      m_rng{}
 {
     init();
 }
 
 AsteroidsApp::AsteroidsApp(const std::string& title)
     : utl::Application(title, asteroidsVersion, asteroidsIdentifier,
-                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags, 
-		       sdlWindowFlags)
+                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags,
+                       sdlWindowFlags),
+      m_rng{}
 {
     init();
 }
 
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                            int screenHeight)
-    : Application{title, asteroidsVersion, asteroidsIdentifier, screenWidth, 
-                  screenHeight, sdlFlags, sdlWindowFlags}
+    : utl::Application{title,         asteroidsVersion, asteroidsIdentifier,
+                       screenWidth,   screenHeight,     sdlFlags,
+                       sdlWindowFlags},
+      m_rng{}
 {
     init();
 }
@@ -75,7 +79,8 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
         m_stageManager.add_stage<TitleScreen>(next, screen, windowID, renderer);
         break;
     case STAGE_ID::PLAYING:
-        m_stageManager.add_stage<MainLevel>(next, screen, windowID, renderer);
+        m_stageManager.add_stage<MainLevel>(next, screen, windowID, renderer,
+                                            m_rng);
         break;
     case STAGE_ID::GAME_OVER: {
         MainLevel* mlptr{nullptr};
@@ -88,7 +93,7 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
         mlptr = static_cast<MainLevel*>(m_stageManager.get_current_stage());
 
         m_stageManager.add_stage<GameOver>(next, screen, windowID, renderer,
-                                           mlptr->physMan().physEntities,
+                                           m_rng, mlptr->physMan().physEntities,
                                            mlptr->scoreMan().score);
 
         break;
@@ -103,9 +108,9 @@ void AsteroidsApp::trigger_stage_change(const std::string& next)
 
         goptr = static_cast<GameOver*>(m_stageManager.get_current_stage());
 
-        m_stageManager.add_stage<HighScores>(next, screen, windowID, renderer,
-                                             goptr->physMan().physEntities,
-                                             goptr->scoreMan().score);
+        m_stageManager.add_stage<HighScores>(
+            next, screen, windowID, renderer, m_rng,
+            goptr->physMan().physEntities, goptr->scoreMan().score);
         break;
     }
     case STAGE_ID::QUIT:

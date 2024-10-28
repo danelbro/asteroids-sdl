@@ -16,7 +16,8 @@ class Player;
 
 class MainLevel : public utl::Stage {
 public:
-    MainLevel(utl::Box& screen, uint32_t windowID, utl::Renderer& renderer);
+    MainLevel(utl::Box& screen, uint32_t windowID, utl::Renderer& renderer,
+              utl::RNG& random);
 
     MainLevel(const MainLevel&) = delete;
     MainLevel& operator=(const MainLevel&) = delete;
@@ -47,7 +48,7 @@ private:
 
     utl::Font font;
     utl::GameWorld gameWorld;
-    utl::RNG rng;
+    utl::RNG& rng;
     PhysicsManager physicsManager;
     Player& player;
     ScoreManager scoreManager;

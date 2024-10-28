@@ -19,12 +19,12 @@
 #include <utl_random.hpp>
 
 MainLevel::MainLevel(utl::Box& new_screen, uint32_t windowID,
-                     utl::Renderer& new_renderer)
+                     utl::Renderer& new_renderer, utl::RNG& newRng)
     : utl::Stage{new_screen, windowID, new_renderer,
                  STAGE_MAP.at(STAGE_ID::PLAYING)},
       font{utl::createFont(constants::fontPath,
                            constants::mainLevelScoreboardFontSize)},
-      gameWorld{new_screen, constants::fluidDensity}, rng{},
+      gameWorld{new_screen, constants::fluidDensity}, rng{newRng},
       physicsManager{gameWorld, rng}, player{physicsManager.player()},
       scoreManager{gameWorld,
                    {constants::mainLevelScoreboardXPos,
