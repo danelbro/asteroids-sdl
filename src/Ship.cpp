@@ -7,7 +7,6 @@
 #include <utl_GameWorld.hpp>
 #include <utl_Vec2d.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
-#include <utl_utility.hpp>
 
 Ship::Ship(const ENTITY_FLAG& new_type, utl::GameWorld& new_gameWorld,
            const utl::Vec2d& pos, const std::vector<utl::Vec2d>& shape,

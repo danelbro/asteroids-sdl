@@ -2,8 +2,8 @@
 
 #include "Ship.hpp"
 
+#include <utl_SDLInterface.hpp>
 #include <utl_VecGraphPhysComp.hpp>
-#include <utl_utility.hpp>
 
 Engine::Engine(Ship& newOwner, double newPower, double newTurnSpeed)
     : owner(newOwner), power(newPower), turnSpeed(newTurnSpeed)

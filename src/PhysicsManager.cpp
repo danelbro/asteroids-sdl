@@ -19,7 +19,6 @@
 #include <utl_VecGraphPhysComp.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
 #include <utl_VectorDraw.hpp>
-#include <utl_utility.hpp>
 #include <vector>
 
 static void copyPhysicsProperties(const utl::VecGraphPhysComp& physIn,

@@ -12,7 +12,7 @@
 #include <utl_Application.hpp>
 #include <utl_Box.hpp>
 #include <utl_StageManager.hpp>
-#include <utl_utility.hpp>
+#include <utl_random.hpp>
 
 const std::string asteroidsTitle{"Asteroids"};
 constexpr int asteroidsScreenWidth{960};
@@ -52,6 +52,11 @@ AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
     : Application{title, screenWidth, screenHeight, sdlFlags, sdlWindowFlags}
 {
     init();
+}
+
+AsteroidsApp::~AsteroidsApp()
+{
+    LOG("Destroying AsteroidsApp\n");
 }
 
 void AsteroidsApp::trigger_stage_change(const std::string& next)

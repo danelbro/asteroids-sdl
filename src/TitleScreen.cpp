@@ -11,7 +11,6 @@
 #include <utl_SDLInterface.hpp>
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
-#include <utl_utility.hpp>
 #include <vector>
 
 static std::vector<utl::TextObject> makeInstructions(utl::Box& screen,

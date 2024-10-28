@@ -16,7 +16,7 @@
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
-#include <utl_utility.hpp>
+#include <utl_random.hpp>
 
 MainLevel::MainLevel(utl::Box& new_screen, uint32_t windowID,
                      utl::Renderer& new_renderer)

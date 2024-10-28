@@ -6,8 +6,9 @@
 
 #include <cmath>
 #include <random>
+#include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
-#include <utl_utility.hpp>
+#include <utl_random.hpp>
 
 static double genRandAngle(std::mt19937& rng);
 

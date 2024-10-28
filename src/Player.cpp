@@ -9,7 +9,6 @@
 #include <utl_SDLInterface.hpp>
 #include <utl_Vec2d.hpp>
 #include <utl_VecGraphPhysComp.hpp>
-#include <utl_utility.hpp>
 #include <vector>
 
 Player::Player(utl::GameWorld& new_gameWorld, const utl::Vec2d& pos,

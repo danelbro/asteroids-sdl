@@ -10,6 +10,7 @@ public:
     AsteroidsApp(const std::string& title, int screenWidth, int screenHeight);
     ~AsteroidsApp() override;
     void trigger_stage_change(const std::string& new_stage) override;
+
 private:
     void init();
 };

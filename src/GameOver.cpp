@@ -14,7 +14,7 @@
 #include <utl_Stage.hpp>
 #include <utl_TextObject.hpp>
 #include <utl_VecGraphPhysEnt.hpp>
-#include <utl_utility.hpp>
+#include <utl_random.hpp>
 
 static void reset_text_positions(utl::TextObject& title,
                                  utl::TextObject& score);
