@@ -14,22 +14,22 @@ try {
     return 0;
 }
 catch (utl::SdlException& se) {
-    ERRLOG("SDL exception: %s\n", se.what());
+    ERRLOGF("SDL exception: %s\n", se.what());
     utl::quit_sdl();
     return 1;
 }
 catch (std::out_of_range& oor) {
-    ERRLOG("out of range: %s\n", oor.what());
+    ERRLOGF("out of range: %s\n", oor.what());
     utl::quit_sdl();
     return 2;
 }
 catch (std::runtime_error& re) {
-    ERRLOG("exception: %s\n", re.what());
+    ERRLOGF("exception: %s\n", re.what());
     utl::quit_sdl();
     return 3;
 }
 catch (...) {
-    ERRLOG("unknown exception\n", NULL);
+    ERRLOG("unknown exception\n");
     utl::quit_sdl();
     return -1;
 }

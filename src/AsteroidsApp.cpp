@@ -15,6 +15,8 @@
 #include <utl_random.hpp>
 
 const std::string asteroidsTitle{"Asteroids"};
+const std::string asteroidsVersion{"1.0.0"};
+const std::string asteroidsIdentifier{"com.asteroids.asteroids"};
 constexpr int asteroidsScreenWidth{960};
 constexpr int asteroidsScreenHeight{720};
 constexpr uint32_t sdlFlags{SDL_INIT_VIDEO};
@@ -34,22 +36,25 @@ void AsteroidsApp::init()
 }
 
 AsteroidsApp::AsteroidsApp()
-    : utl::Application(asteroidsTitle, asteroidsScreenWidth,
-                       asteroidsScreenHeight, sdlFlags, sdlWindowFlags)
+    : utl::Application(asteroidsTitle, asteroidsVersion, asteroidsIdentifier, 
+                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags, 
+		       sdlWindowFlags)
 {
     init();
 }
 
 AsteroidsApp::AsteroidsApp(const std::string& title)
-    : utl::Application(title, asteroidsScreenWidth, asteroidsScreenHeight,
-                       sdlFlags, sdlWindowFlags)
+    : utl::Application(title, asteroidsVersion, asteroidsIdentifier,
+                       asteroidsScreenWidth, asteroidsScreenHeight, sdlFlags, 
+		       sdlWindowFlags)
 {
     init();
 }
 
 AsteroidsApp::AsteroidsApp(const std::string& title, int screenWidth,
                            int screenHeight)
-    : Application{title, screenWidth, screenHeight, sdlFlags, sdlWindowFlags}
+    : Application{title, asteroidsVersion, asteroidsIdentifier, screenWidth, 
+                  screenHeight, sdlFlags, sdlWindowFlags}
 {
     init();
 }
