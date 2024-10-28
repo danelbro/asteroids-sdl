@@ -25,6 +25,9 @@ public:
     Enemy(const Enemy&) = default;
     Enemy& operator=(const Enemy&) = delete;
 
+    Enemy(Enemy&&) = default;
+    Enemy& operator=(Enemy&&) = delete;
+
     double minVel() const { return m_minVel; }
     double maxVel() const { return m_maxVel; }
 
