@@ -64,18 +64,18 @@ void PhysicsManager::make_asteroid(const double& scale, const utl::Vec2d& pos)
 {
     std::uniform_real_distribution<double> radiusDist{
         constants::asteroidRadiusMin, constants::asteroidRadiusMax};
-    double radius{radiusDist(m_rng)};
+    double radius{radiusDist(m_rng.rng())};
 
     std::uniform_real_distribution<double> impulseDist{
         constants::asteroidImpulseMin, constants::asteroidImpulseMax};
-    double impulse{impulseDist(m_rng)};
+    double impulse{impulseDist(m_rng.rng())};
 
     std::uniform_real_distribution<double> angleDist{0.0, 360.0};
-    double angle{angleDist(m_rng)};
+    double angle{angleDist(m_rng.rng())};
 
     std::uniform_int_distribution<int> vertexDist{
         constants::minAsteroidVertices, constants::maxAsteroidVertices};
-    int vertexes{vertexDist(m_rng)};
+    int vertexes{vertexDist(m_rng.rng())};
 
     std::vector<utl::Vec2d> shape{};
     shape.reserve(static_cast<size_t>(vertexes));

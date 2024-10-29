@@ -15,7 +15,7 @@ AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan,
                          utl::RNG& rng)
     : m_owner{new_owner}, m_physMan{physMan}, m_rng{rng}, m_turnTimeLower{1.5},
       m_turnTimeUpper{3.0}, m_turnTimeDist{m_turnTimeLower, m_turnTimeUpper},
-      m_turnTime{m_turnTimeDist(m_rng)}, m_timeSinceTurn{0.0},
+      m_turnTime{m_turnTimeDist(m_rng.rng())}, m_timeSinceTurn{0.0},
       m_targetAngle{genRandAngle(m_rng)}, m_enginePulse{1.0},
       m_timeSincePulse{0.0}
 {
@@ -25,14 +25,14 @@ AIComponent::AIComponent(Enemy& new_owner, PhysicsManager& physMan,
 static double genMoveTime(std::uniform_real_distribution<double> dist,
                           utl::RNG& rng)
 {
-    return dist(rng);
+    return dist(rng.rng());
 }
 
 static double genRandAngle(utl::RNG& rng)
 {
     std::uniform_real_distribution<double> angleDist{0.0, 360.0};
 
-    return angleDist(rng);
+    return angleDist(rng.rng());
 }
 
 /*
