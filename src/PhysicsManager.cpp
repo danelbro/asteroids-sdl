@@ -256,7 +256,7 @@ void PhysicsManager::check_bullet_hits(bool gameOver)
                     || (!gameOver
                         && target->type()
                                == ENTITY_MAP.at(ENTITY_FLAG::ENEMY))) {
-                    if (utl::isPointInPolygon(bul.collider()[0]))
+                    if (utl::isPointInPolygon(bul.pos(), target->collider())) {
                         target->kill_it();
                         bul.kill_it();
                         bul.wayward() = false;
