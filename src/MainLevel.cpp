@@ -157,11 +157,9 @@ std::string MainLevel::check_game_over()
 
 std::string MainLevel::update(double t, double dt)
 {
-    constexpr double enemyTimeSecs{5.0};
-
     check_targets_cleared();
     tick_enemy_timer(dt);
-    spawn_enemy(enemyTimeSecs);
+    spawn_enemy(constants::enemyTimeSecs);
     progress_level();
 
     update_physics(dt);

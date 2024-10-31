@@ -14,6 +14,7 @@ inline constexpr int titleScreenTitleFontSize{72};
 inline constexpr int titleScreenInstructionFontSize{36};
 inline constexpr double titleScreenPadding{150.0};
 
+inline constexpr double enemyTimeSecs{5.0};
 inline constexpr int initialNumOfAsteroids{3};
 inline constexpr double initialAsteroidScale{3.0};
 inline constexpr int mainLevelScoreboardXPos{17};
