@@ -1,4 +1,10 @@
-add_executable(${PROJECT_NAME})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release"
+   AND ${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+	add_executable(${PROJECT_NAME} WIN32)
+else()
+	add_executable(${PROJECT_NAME})
+endif()
+
 target_sources(${PROJECT_NAME} PRIVATE
   "../include/AIComponent.hpp" "AIComponent.cpp"
   "../include/Asteroid.hpp" "Asteroid.cpp"
