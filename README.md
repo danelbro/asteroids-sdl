@@ -7,12 +7,13 @@ A clone of Asteroids using C++ and SDL.
 ### Linux ###
 
 You need: 
-* git
+* git (2.13+ recommended)
+* ninja (recommend)
 * CMake (3.27+)
 * GCC 10.1+ (must support C++20 for \<numbers> and std::ranges)
 
 ```
-git clone --recursive https://github.com/danelbro/asteroids-sdl.git asteroids
+git clone --recurse-submodules -j8 https://github.com/danelbro/asteroids-sdl.git asteroids
 cd asteroids
 ./config.sh [Debug/Release]
 ./build.sh [Debug/Release]
