@@ -31,6 +31,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE asteroids_extern)
 target_link_libraries(${PROJECT_NAME} PRIVATE utilityKnife)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3_ttf::SDL3_ttf)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3_mixer::SDL3_mixer)
 target_link_options(${PROJECT_NAME} PRIVATE $<$<AND:$<PLATFORM_ID:Windows>,$<CONFIG:Release>>:-mwindows>)
 
 set(is_CC "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
